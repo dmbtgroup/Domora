@@ -1,0 +1,46 @@
+# Deploys Domora to Vercel (condo.dmbtgroup.com) on every push to master.
+# Needs one repository secret: VERCEL_TOKEN (a Vercel access token for the artedelara team).
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-production
+  cancel-in-progress: false
+
+env:
+  VERCEL_ORG_ID: team_nXwzNgaNC6ot9TwAgTTYmUkv
+  VERCEL_PROJECT_ID: prj_E7QfVGKavwvM5IJmeubSHdVlKmJe
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest -q
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for the Vercel token
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Add a VERCEL_TOKEN repository secret (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+      - run: npm install --global vercel@latest
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
