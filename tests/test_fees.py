@@ -242,7 +242,7 @@ def test_units_that_paid_before_the_portal(admin_client):
     sc = db.session.scalar(db.select(SpecialContribution))
     balance_before = unit("101").balance
     page = admin_client.get(f"/accounting/specials/{sc.id}").data.decode()
-    assert "Paid before the portal" in page, re.findall(r"<title>.*?</title>|flash[^<]*<", page)
+    assert "Paid before the portal" in page
     admin_client.post(f"/accounting/specials/{sc.id}/paid-before",
                       data={"paid_on": "2026-08-15", "unit_id": [str(unit("101").id), str(unit("102").id)]})
     rows = {r["unit"].number: r for r in sc.status_rows()}
