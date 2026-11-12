@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:09+0000\n"
+"POT-Creation-Date: 2026-11-12 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -153,6 +153,12 @@ msgstr "%(name)s — unité %(number)s"
 #, python-format
 msgid "%(name)s: %(description)s"
 msgstr "%(name)s : %(description)s"
+
+#, python-format
+msgid "%(num)s unit marked as paid before the portal."
+msgid_plural "%(num)s units marked as paid before the portal."
+msgstr[0] "%(num)s unité marquée comme payée avant le portail."
+msgstr[1] "%(num)s unités marquées comme payées avant le portail."
 
 #, python-format
 msgid "%(position)s has one holder: assigning replaces %(name)s."
@@ -2348,11 +2354,17 @@ msgstr "Payé"
 msgid "Paid back"
 msgstr "Remboursé"
 
+msgid "Paid before the portal"
+msgstr "Payé avant le portail"
+
 msgid "Paid for something for the building? Request it back here with the receipt. The president approves it, then accounting credits your account or pays you back."
 msgstr "Vous avez payé quelque chose pour l’immeuble? Demandez un remboursement ici avec le reçu. Le président l’approuve, puis la comptabilité crédite votre compte ou vous rembourse."
 
 msgid "Paid for something for the building? Request it back with the receipt."
 msgstr "Vous avez payé quelque chose pour l’immeuble? Demandez un remboursement avec le reçu."
+
+msgid "Paid on"
+msgstr "Payé le"
 
 msgid "Paid this month"
 msgstr "Payés ce mois-ci"
@@ -3310,6 +3322,9 @@ msgstr "Cette demande est fermée."
 
 msgid "This unit has billing history and cannot be deleted."
 msgstr "Cette unité a un historique de facturation et ne peut pas être supprimée."
+
+msgid "Tick the units that paid this contribution before the portal was in use. They count as paid here; no payment is added, so balances and the bank balance don't change."
+msgstr "Cochez les unités qui ont payé cette cotisation avant l’utilisation du portail. Elles comptent comme payées ici ; aucun paiement n’est ajouté, donc les soldes et le solde bancaire ne changent pas."
 
 msgid "Time to renew."
 msgstr "Il est temps de renouveler."

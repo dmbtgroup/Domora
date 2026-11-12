@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:09+0000\n"
+"POT-Creation-Date: 2026-11-12 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,6 +160,12 @@ msgstr ""
 #, python-format
 msgid "%(name)s: %(description)s"
 msgstr ""
+
+#, python-format
+msgid "%(num)s unit marked as paid before the portal."
+msgid_plural "%(num)s units marked as paid before the portal."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%(position)s has one holder: assigning replaces %(name)s."
@@ -2441,6 +2447,9 @@ msgstr ""
 msgid "Paid back"
 msgstr ""
 
+msgid "Paid before the portal"
+msgstr ""
+
 msgid ""
 "Paid for something for the building? Request it back here with the "
 "receipt. The president approves it, then accounting credits your account "
@@ -2448,6 +2457,9 @@ msgid ""
 msgstr ""
 
 msgid "Paid for something for the building? Request it back with the receipt."
+msgstr ""
+
+msgid "Paid on"
 msgstr ""
 
 msgid "Paid this month"
@@ -3450,6 +3462,12 @@ msgid "This request is closed."
 msgstr ""
 
 msgid "This unit has billing history and cannot be deleted."
+msgstr ""
+
+msgid ""
+"Tick the units that paid this contribution before the portal was in use. "
+"They count as paid here; no payment is added, so balances and the bank "
+"balance don't change."
 msgstr ""
 
 msgid "Time to renew."

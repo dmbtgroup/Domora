@@ -975,12 +975,12 @@ def special_allocations():
     whatever is left over after the last one counts for the last one."""
     specials = db.session.scalars(db.select(SpecialContribution).order_by(SpecialContribution.deadline,
                                                                           SpecialContribution.id)).all()
-    result = {sc.id: {} for sc in specials}
+    result = {sc.id: {sh.unit_id: sh.prepaid_cents for sh in sc.shares if sh.prepaid_cents} for sc in specials}
     for unit_id, special_id, total in db.session.execute(
             db.select(Payment.unit_id, Payment.special_id, func.sum(Payment.amount_cents))
             .where(Payment.special_id.is_not(None)).group_by(Payment.unit_id, Payment.special_id)):
         if special_id in result:
-            result[special_id][unit_id] = total
+            result[special_id][unit_id] = result[special_id].get(unit_id, 0) + total
     loose = {}
     for p in db.session.scalars(db.select(Payment).where(Payment.special_id.is_(None),
                                                          func.lower(Payment.notes).like("special contribution%"))):
@@ -1007,6 +1007,10 @@ class SpecialShare(db.Model):
     unit_id = db.Column(db.Integer, db.ForeignKey("unit.id"), nullable=False)
     amount_cents = db.Column(db.Integer, nullable=False)
     charge_id = db.Column(db.Integer, db.ForeignKey("charge.id"))
+    # Paid before the portal was in use (e.g. in August, before the Google Sheet log starts): it counts
+    # towards the contribution but isn't a payment in the app, so balances and the bank aren't changed.
+    prepaid_cents = db.Column(db.Integer)
+    prepaid_on = db.Column(db.Date)
 
     special = db.relationship("SpecialContribution", back_populates="shares")
     unit = db.relationship("Unit")

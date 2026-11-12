@@ -14,6 +14,8 @@ ADDED_COLUMNS = [
     ("unit", "ownership_share", "FLOAT"),
     ("charge", "origin", "VARCHAR(20)"),
     ("charge", "sheet_key", "VARCHAR(255)"),
+    ("special_share", "prepaid_cents", "INTEGER"),
+    ("special_share", "prepaid_on", "DATE"),
     ("payment", "sheet_key", "VARCHAR(255)"),
     ("expense", "sheet_key", "VARCHAR(255)"),
     ("payment", "origin", "VARCHAR(20)"),

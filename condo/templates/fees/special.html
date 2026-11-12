@@ -33,6 +33,20 @@
 </section>
 
 {% if current_user.can('accounting_edit') %}
+<form method="post" action="{{ url_for('fees.paid_before', special_id=sc.id) }}" class="card">
+  {{ csrf() }}
+  <h2>{% trans %}Paid before the portal{% endtrans %}</h2>
+  <p class="muted">{% trans %}Tick the units that paid this contribution before the portal was in use. They count as paid here; no payment is added, so balances and the bank balance don't change.{% endtrans %}</p>
+  <div class="checks paid-before">{% for r in rows %}
+    <label class="check"><input type="checkbox" name="unit_id" value="{{ r.unit.id }}" {{ 'checked' if r.share.prepaid_cents }}>
+      {% trans number=r.unit.number %}Unit {{ number }}{% endtrans %} <span class="muted">· {{ r.amount|money }}{% if r.share.prepaid_on %} · {{ r.share.prepaid_on|fdate('medium') }}{% endif %}</span></label>
+  {% endfor %}</div>
+  <div class="inline-form">
+    <label>{% trans %}Paid on{% endtrans %} <input type="date" name="paid_on" required style="width:auto"
+      value="{{ (rows|selectattr('share.prepaid_on')|map(attribute='share.prepaid_on')|first or today).isoformat() }}"></label>
+    <button class="btn primary small">{% trans %}Save{% endtrans %}</button>
+  </div>
+</form>
 <div class="grid two">
   <form method="post" action="{{ url_for('fees.change_deadline', special_id=sc.id) }}" class="card inline-form">
     {{ csrf() }}<strong>{% trans %}Deadline{% endtrans %}</strong>

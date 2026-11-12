@@ -233,3 +233,29 @@ def test_unit_page_shows_this_years_contributions_billed_or_not(admin_client):
     rows = {sc.title: r for sc, r in unit_summary(unit("102"), y)["specials"]}
     assert rows["Roof repair"]["status"] == "draft" and rows["Parking heaters"]["status"] == "unpaid"
     assert "Not billed yet" in admin_client.get(f"/accounting/?unit={unit('102').id}&year={y}").data.decode()
+
+
+def test_units_that_paid_before_the_portal(admin_client):
+    set_shares(0.5, 0.3, 0.2)
+    admin_client.post("/accounting/specials/new", data={"title": "Parking heaters", "method": "share", "total": "1,000",
+                                                        "deadline": (date.today() + timedelta(days=5)).isoformat()})
+    sc = db.session.scalar(db.select(SpecialContribution))
+    balance_before = unit("101").balance
+    page = admin_client.get(f"/accounting/specials/{sc.id}").data.decode()
+    assert "Paid before the portal" in page, re.findall(r"<title>.*?</title>|flash[^<]*<", page)
+    admin_client.post(f"/accounting/specials/{sc.id}/paid-before",
+                      data={"paid_on": "2026-08-15", "unit_id": [str(unit("101").id), str(unit("102").id)]})
+    rows = {r["unit"].number: r for r in sc.status_rows()}
+    assert rows["101"]["paid"] == 50000 and rows["101"]["status"] == "paid"
+    assert rows["102"]["status"] == "paid" and rows["201"]["left"] == 20000
+    assert unit("101").balance == balance_before  # not a payment: the balance is untouched
+    # A later sheet payment marked "Special contribution" isn't counted twice for a prepaid unit.
+    db.session.add(Payment(unit=unit("101"), amount_cents=10000, paid_on=date.today(), method="other",
+                           notes="Special contribution"))
+    db.session.commit()
+    assert {r["unit"].number: r for r in sc.status_rows()}["101"]["paid"] == 60000
+    # Unticking a unit takes it off again.
+    admin_client.post(f"/accounting/specials/{sc.id}/paid-before", data={"paid_on": "2026-08-15",
+                                                                         "unit_id": [str(unit("102").id)]})
+    rows = {r["unit"].number: r for r in sc.status_rows()}
+    assert rows["101"]["paid"] == 10000 and rows["102"]["status"] == "paid"

@@ -661,3 +661,4 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 @media (max-width: 600px) { .bank-figures { grid-template-columns: 1fr; } }
 .head-tools { display: inline-flex; align-items: center; gap: .6rem; }
 .sc-draft { color: var(--muted); }
+.paid-before { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .3rem 1rem; margin-bottom: .8rem; }

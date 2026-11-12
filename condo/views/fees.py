@@ -10,7 +10,7 @@ from ..extensions import db
 from ..models import (FEE_BASES, SPECIAL_STATUS_LABELS, add_months, SPLIT_METHODS, Charge, FeeOverride, FeeSchedule, SpecialContribution,
                       SpecialShare, Unit, split_by_weight, utcnow)
 from ..utils import money, parse_date, parse_money, permission_required
-from ..i18n import fdate, gettext as _, lazy_gettext as _l, lazy_date, lazy_money
+from ..i18n import fdate, gettext as _, lazy_gettext as _l, lazy_date, lazy_money, ngettext
 
 bp = Blueprint("fees", __name__, url_prefix="/accounting")
 
@@ -247,6 +247,32 @@ def special(special_id):
     sc = _get(special_id)
     return render_template("fees/special.html", sc=sc, rows=sc.status_rows(), labels=SPECIAL_STATUS_LABELS,
                            methods=SPLIT_METHODS, today=date.today())
+
+
+@bp.route("/specials/<int:special_id>/paid-before", methods=["POST"])
+@permission_required("accounting_edit")
+def paid_before(special_id):
+    """Mark the units that paid this contribution before the portal was in use. It counts towards the
+    contribution only: no payment is added, so unit balances and the bank balance don't change."""
+    sc = _get(special_id)
+    try:
+        when = parse_date(request.form.get("paid_on"), _("Date"))
+    except ValueError as e:
+        flash(str(e), "error")
+        return redirect(url_for("fees.special", special_id=sc.id))
+    chosen = set(request.form.getlist("unit_id"))
+    marked = 0
+    for sh in sc.shares:
+        if str(sh.unit_id) in chosen:
+            if not sh.prepaid_cents:
+                sh.prepaid_on = when
+            sh.prepaid_cents = sh.amount_cents
+            marked += 1
+        else:
+            sh.prepaid_cents = sh.prepaid_on = None
+    db.session.commit()
+    flash(ngettext("%(num)s unit marked as paid before the portal.", "%(num)s units marked as paid before the portal.", marked), "success")
+    return redirect(url_for("fees.special", special_id=sc.id))
 
 
 @bp.route("/specials/<int:special_id>/bill", methods=["POST"])
