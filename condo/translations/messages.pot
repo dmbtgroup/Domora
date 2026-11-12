@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 12:17+0000\n"
+"POT-Creation-Date: 2026-11-12 12:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1343,6 +1343,9 @@ msgstr ""
 msgid "Edit %(name)s"
 msgstr ""
 
+msgid "Edit charge"
+msgstr ""
+
 msgid "Edit cost"
 msgstr ""
 
@@ -1356,6 +1359,9 @@ msgid "Edit in the Google Sheet’s Owners tab"
 msgstr ""
 
 msgid "Edit notice"
+msgstr ""
+
+msgid "Edit payment"
 msgstr ""
 
 msgid "Edit routine task"

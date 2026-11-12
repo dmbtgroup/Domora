@@ -277,3 +277,28 @@ def test_only_bookkeepers_see_delete(alice_client):
     seed()
     page = alice_client.get("/accounting/").data.decode()
     assert "/delete" not in page
+
+
+def test_payments_charges_and_credits_can_be_edited(admin_client):
+    from datetime import date as _date
+    from condo.models import Charge, Payment
+    u = db.session.scalar(db.select(Unit).where(Unit.number == "101"))
+    pay = Payment(unit=u, amount_cents=29500, paid_on=_date(2026, 11, 6), method="bank transfer", origin="sheet", sheet_key="k1")
+    credit = Payment(unit=u, amount_cents=1034, paid_on=_date(2026, 10, 24), method="purchase credit", notes="Compost bags")
+    fee = Charge(unit=u, kind="dues", period="2026-11", due_date=_date(2026, 11, 1), amount_cents=66101, description="November")
+    db.session.add_all([pay, credit, fee])
+    db.session.commit()
+    page = admin_client.get("/accounting/?year=2026").data.decode()
+    assert f"/accounting/payments/{pay.id}/edit" in page and f"/accounting/payments/{credit.id}/edit" in page
+    form = admin_client.get(f"/accounting/payments/{pay.id}/edit").data.decode()
+    assert 'value="295.00"' in form and "Edit payment" in form
+    admin_client.post(f"/accounting/payments/{pay.id}/edit", data={"unit_id": u.id, "amount": "300", "paid_on": "2026-11-07",
+                                                                 "method": "bank transfer", "notes": "corrected"})
+    pay = db.session.get(Payment, pay.id)
+    assert pay.amount_cents == 30000 and pay.paid_on == _date(2026, 11, 7) and pay.sheet_key == "k1"
+    unit_page = admin_client.get(f"/accounting/?unit={u.id}&year=2026").data.decode()
+    assert f"/accounting/charges/{fee.id}/edit" in unit_page
+    admin_client.post(f"/accounting/charges/{fee.id}/edit", data={"unit_id": u.id, "description": "November fee",
+                                                                "amount": "650.00", "due_date": "2026-11-01"})
+    fee = db.session.get(Charge, fee.id)
+    assert fee.amount_cents == 65000 and fee.kind == "dues"

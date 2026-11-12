@@ -52,7 +52,7 @@
     {% if charges %}<table>
       <thead><tr>{% if can_edit %}<th class="row-actions-h"><span class="sr-only">{% trans %}Actions{% endtrans %}</span></th>{% endif %}<th>{% trans %}Date{% endtrans %}</th><th>{% trans %}Description{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th></tr></thead>
       <tbody>{% for c in charges %}
-        <tr>{% if can_edit %}<td class="row-actions">{{ icon_post('trash', url_for('billing.delete_charge', charge_id=c.id, back=here()), _('Delete'), cls='danger small', confirm=(_("Delete this charge? It came from the Google Sheet; the next sync won't add it again.") if c.origin == 'sheet' else _('Delete this charge?'))) }}</td>{% endif %}<td class="nowrap">{{ c.due_date|fdate('short' if period.view == 'month' else 'iso') }}</td>
+        <tr>{% if can_edit %}<td class="row-actions">{{ icon_link('pencil', url_for('billing.edit_charge', charge_id=c.id, back=here()), _('Edit'), cls='small') }}{{ icon_post('trash', url_for('billing.delete_charge', charge_id=c.id, back=here()), _('Delete'), cls='danger small', confirm=(_("Delete this charge? It came from the Google Sheet; the next sync won't add it again.") if c.origin == 'sheet' else _('Delete this charge?'))) }}</td>{% endif %}<td class="nowrap">{{ c.due_date|fdate('short' if period.view == 'month' else 'iso') }}</td>
           <td>{{ c.description|truncate(80) }}{% if c.kind == 'opening' %} <span class="tag">{% trans %}Opening balance{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ c.amount_cents|money }}</td></tr>
       {% endfor %}</tbody>
@@ -64,7 +64,7 @@
     {% if payments %}<table>
       <thead><tr>{% if can_edit %}<th class="row-actions-h"><span class="sr-only">{% trans %}Actions{% endtrans %}</span></th>{% endif %}<th>{% trans %}Date{% endtrans %}</th><th>{% trans %}Details{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th></tr></thead>
       <tbody>{% for p in payments %}
-        <tr>{% if can_edit %}<td class="row-actions">{{ icon_post('trash', url_for('billing.delete_payment', payment_id=p.id, back=here()), _('Delete'), cls='danger small', confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}</td>{% endif %}<td class="nowrap date-link"><a href="{{ url_for('billing.payment_detail', payment_id=p.id, back=here()) }}" title="{{ _('See all the details') }}">{{ p.paid_on|fdate('short' if period.view == 'month' else 'iso') }}</a></td>
+        <tr>{% if can_edit %}<td class="row-actions">{{ icon_link('pencil', url_for('billing.edit_payment', payment_id=p.id, back=here()), _('Edit'), cls='small') }}{{ icon_post('trash', url_for('billing.delete_payment', payment_id=p.id, back=here()), _('Delete'), cls='danger small', confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}</td>{% endif %}<td class="nowrap date-link"><a href="{{ url_for('billing.payment_detail', payment_id=p.id, back=here()) }}" title="{{ _('See all the details') }}">{{ p.paid_on|fdate('short' if period.view == 'month' else 'iso') }}</a></td>
           <td class="muted">{{ p.summary|truncate(50) }}{% if p.method == 'purchase credit' %} <span class="tag">{% trans %}credit{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ p.amount_cents|money }}</td></tr>
       {% endfor %}</tbody>

@@ -80,7 +80,7 @@
           <td>{{ p.unit.number }}</td>
           <td class="muted">{{ p.summary|truncate(40) }}{% if p.method == 'purchase credit' %} <span class="tag">{% trans %}credit{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ p.amount_cents|money }}</td>
-          {% if can_edit %}<td class="row-del">{{ del_payment(p) }}</td>{% endif %}</tr>
+          {% if can_edit %}<td class="row-del nowrap">{{ icon_link('pencil', url_for('billing.edit_payment', payment_id=p.id, back=here()), _('Edit'), cls='small') }} {{ del_payment(p) }}</td>{% endif %}</tr>
       {% endfor %}</tbody>
     </table>{% else %}<p class="muted">{% trans label=period.label %}No payments in {{ label }}.{% endtrans %}</p>{% endif %}
   </section>
@@ -96,7 +96,7 @@
         <tr><td class="nowrap date-link"><a href="{{ url_for('billing.payment_detail', payment_id=x.payment.id, back=here()) if x.origin == 'credit' else url_for('billing.cost_detail', cost_id=x.id, back=here()) }}" title="{{ _('See all the details') }}">{{ x.spent_on|fdate('short' if period.view == 'month' else 'iso') }}</a></td>
           <td class="muted">{{ x.summary|truncate(40) }}{% if x.origin == 'credit' %} <span class="tag">{% trans %}credit{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ x.cost_cents|money }}</td>
-          {% if can_edit %}<td class="row-del nowrap">{% if x.origin != 'credit' %}{{ icon_link('pencil', url_for('billing.edit_cost', cost_id=x.id, back=here()), _('Edit'), cls='small') }} {% endif %}{{ del_payment(x.payment) if x.origin == 'credit' else del_cost(x) }}</td>{% endif %}</tr>
+          {% if can_edit %}<td class="row-del nowrap">{{ icon_link('pencil', url_for('billing.edit_payment', payment_id=x.payment.id, back=here()) if x.origin == 'credit' else url_for('billing.edit_cost', cost_id=x.id, back=here()), _('Edit'), cls='small') }} {{ del_payment(x.payment) if x.origin == 'credit' else del_cost(x) }}</td>{% endif %}</tr>
       {% endfor %}</tbody>
     </table>{% else %}<p class="muted">{% trans label=period.label %}No costs in {{ label }}.{% endtrans %}</p>{% endif %}
   </section>

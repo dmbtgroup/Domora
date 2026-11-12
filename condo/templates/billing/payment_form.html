@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf %}
-{% block title %}{% trans %}Record payment{% endtrans %}{% endblock %}
+{% block title %}{{ _('Edit payment') if payment else _('Record payment') }}{% endblock %}
 {% block content %}
-<h1>{% trans %}Record a payment{% endtrans %}</h1>
+<h1>{{ _('Edit payment') if payment else _('Record a payment') }}</h1>
 <form method="post" class="card narrow" id="payment-form">
   {{ csrf() }}
+  {% if safe_back() %}<input type="hidden" name="back" value="{{ safe_back() }}">{% endif %}
   {% if special %}<input type="hidden" name="special_id" value="{{ special.id }}">
   <div class="flash flash-info">{% trans %}For the special contribution{% endtrans %} <strong>{{ special.title }}</strong> {% trans deadline=special.deadline|fdate('medium') %}(due {{ deadline }}){% endtrans %}</div>{% endif %}
   <label>{% trans %}Unit{% endtrans %}
@@ -24,8 +25,8 @@
   </div>
   <label>{% trans %}Note{% endtrans %} <span class="muted">{% trans %}(optional){% endtrans %}</span> <input name="notes" maxlength="255" placeholder="{{ _('e.g. November condo fee') }}" value="{{ form.get('notes', '') }}"></label>
   <div class="form-actions">
-    <button class="btn primary">{% trans %}Record payment{% endtrans %}</button>
-    <a href="{{ url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a>
+    <button class="btn primary">{{ _('Save') if payment else _('Record payment') }}</button>
+    <a href="{{ safe_back() or url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a>
   </div>
 </form>
 <script>

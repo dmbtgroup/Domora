@@ -345,17 +345,32 @@ def _unit_from_form(errors):
 @bp.route("/charges/new", methods=["GET", "POST"])
 @permission_required("accounting_edit")
 def new_charge():
+    return _charge_form(None)
+
+
+@bp.route("/charges/<int:charge_id>/edit", methods=["GET", "POST"])
+@permission_required("accounting_edit")
+def edit_charge(charge_id):
+    return _charge_form(db.session.get(Charge, charge_id) or abort(404))
+
+
+def _charge_form(charge):
+    """Add a charge, or change one. A monthly fee or opening balance keeps its type."""
+    kinds = _manual_kinds()
+    fixed_kind = charge is not None and charge.kind in SYSTEM_CHARGE_KINDS
+    kind_label = CHARGE_KINDS.get(charge.kind, charge.kind) if charge is not None else None
     if request.method == "POST":
         errors = []
         unit = _unit_from_form(errors)
-        kind = request.form.get("kind", "other")
-        if kind not in CHARGE_KINDS or kind in SYSTEM_CHARGE_KINDS:
+        kind = charge.kind if fixed_kind else request.form.get("kind", "other")
+        if not fixed_kind and kind not in kinds:
             errors.append(_("Choose a charge type."))
         description = request.form.get("description", "").strip()
         if not description:
             errors.append(_("Description is required."))
-        try:
-            amount = parse_money(request.form.get("amount"))
+        raw = (request.form.get("amount") or "").strip()
+        try:  # an opening balance can be a credit (negative)
+            amount = parse_money(raw.lstrip("-")) * (-1 if raw.startswith("-") and fixed_kind else 1)
         except ValueError as e:
             errors.append(str(e))
         try:
@@ -363,22 +378,44 @@ def new_charge():
         except ValueError as e:
             errors.append(str(e))
         if not errors:
-            db.session.add(Charge(unit=unit, kind=kind, description=description,
-                                  amount_cents=amount, due_date=due))
+            if charge is None:
+                db.session.add(Charge(unit=unit, kind=kind, description=description, amount_cents=amount, due_date=due))
+                flash(_("Charge added to unit %(number)s.", number=unit.number), "success")
+            else:
+                charge.unit, charge.kind, charge.description, charge.amount_cents, charge.due_date = (
+                    unit, kind, description, amount, due)
+                flash(_("Changes saved."), "success")
             db.session.commit()
-            flash(_("Charge added to unit %(number)s.", number=unit.number), "success")
-            return redirect(url_for("billing.index", unit=unit.id, year=due.year))
+            from ..navigation import safe_back
+            return redirect(safe_back() or url_for("billing.index", unit=unit.id, year=due.year))
         for e in errors:
             flash(e, "error")
-        return render_template("billing/charge_form.html", units=_units(), kinds=_manual_kinds(),
-                               form=request.form), 400
-    form = {"unit_id": request.args.get("unit_id", ""), "due_date": date.today().isoformat()}
-    return render_template("billing/charge_form.html", units=_units(), kinds=_manual_kinds(), form=form)
+        return render_template("billing/charge_form.html", units=_units(), kinds=kinds, charge=charge,
+                               fixed_kind=fixed_kind, kind_label=kind_label, form=request.form), 400
+    if charge is None:
+        form = {"unit_id": request.args.get("unit_id", ""), "due_date": date.today().isoformat()}
+    else:
+        form = {"unit_id": charge.unit_id, "kind": charge.kind, "description": charge.description or "",
+                "amount": f"{charge.amount_cents / 100:,.2f}", "due_date": charge.due_date.isoformat()}
+    return render_template("billing/charge_form.html", units=_units(), kinds=kinds, form=form, charge=charge,
+                           fixed_kind=fixed_kind, kind_label=kind_label)
 
 
 @bp.route("/payments/new", methods=["GET", "POST"])
 @permission_required("accounting_edit")
 def new_payment():
+    return _payment_form(None)
+
+
+@bp.route("/payments/<int:payment_id>/edit", methods=["GET", "POST"])
+@permission_required("accounting_edit")
+def edit_payment(payment_id):
+    return _payment_form(db.session.get(Payment, payment_id) or abort(404))
+
+
+def _payment_form(payment):
+    """Record a payment, or change one (including one from the Google Sheet: the sync only adds new
+    rows, so the change stays)."""
     if request.method == "POST":
         errors = []
         unit = _unit_from_form(errors)
@@ -398,23 +435,38 @@ def new_payment():
             notes = request.form.get("notes", "").strip()[:255] or None
             if special is not None and not notes:
                 notes = f"Special contribution — {special.title}"[:255]
-            db.session.add(Payment(unit=unit, amount_cents=amount, paid_on=paid_on, method=method,
-                                   reference=request.form.get("reference", "").strip()[:80] or None,
-                                   notes=notes, special_id=special.id if special else None,
-                                   recorded_by_id=current_user.id))
+            values = dict(unit=unit, amount_cents=amount, paid_on=paid_on, method=method,
+                          reference=request.form.get("reference", "").strip()[:80] or None,
+                          notes=notes, special_id=special.id if special else None)
+            if payment is None:
+                db.session.add(Payment(recorded_by_id=current_user.id, **values))
+                flash(_("Payment recorded for unit %(number)s.", number=unit.number), "success")
+            else:
+                for k, v in values.items():
+                    setattr(payment, k, v)
+                flash(_("Changes saved."), "success")
             db.session.commit()
-            flash(_("Payment recorded for unit %(number)s.", number=unit.number), "success")
+            from ..navigation import safe_back
+            if safe_back():
+                return redirect(safe_back())
             if special is not None:
                 return redirect(url_for("fees.special", special_id=special.id))
-            return redirect(url_for("billing.ledger", unit_id=unit.id))
+            return redirect(url_for("billing.index", unit=unit.id, year=paid_on.year))
         for e in errors:
             flash(e, "error")
-        return render_template("billing/payment_form.html", units=_units(), methods=PAYMENT_METHOD_LABELS,
+        return render_template("billing/payment_form.html", units=_units(), methods=PAYMENT_METHOD_LABELS, payment=payment,
                                form=request.form, special=_special_from(request.form)), 400
-    form = {"unit_id": request.args.get("unit_id", ""), "paid_on": date.today().isoformat(), "method": "bank transfer",
-            "amount": request.args.get("amount", ""), "special_id": request.args.get("special_id", "")}
+    if payment is None:
+        form = {"unit_id": request.args.get("unit_id", ""), "paid_on": date.today().isoformat(), "method": "bank transfer",
+                "amount": request.args.get("amount", ""), "special_id": request.args.get("special_id", "")}
+        special = _special_from(request.args)
+    else:
+        form = {"unit_id": payment.unit_id, "paid_on": payment.paid_on.isoformat(), "method": payment.method,
+                "amount": f"{payment.amount_cents / 100:,.2f}", "reference": payment.reference or "",
+                "notes": payment.notes or "", "special_id": payment.special_id or ""}
+        special = payment.special
     return render_template("billing/payment_form.html", units=_units(), methods=PAYMENT_METHOD_LABELS, form=form,
-                           special=_special_from(request.args))
+                           payment=payment, special=special)
 
 
 @bp.route("/charges/<int:charge_id>/delete", methods=["POST"])

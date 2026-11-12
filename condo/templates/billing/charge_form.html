@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf %}
-{% block title %}{% trans %}Add charge{% endtrans %}{% endblock %}
+{% block title %}{{ _('Edit charge') if charge else _('Add charge') }}{% endblock %}
 {% block content %}
-<h1>{% trans %}Add a charge{% endtrans %}</h1>
+<h1>{{ _('Edit charge') if charge else _('Add a charge') }}</h1>
 <form method="post" class="card narrow">
   {{ csrf() }}
+  {% if safe_back() %}<input type="hidden" name="back" value="{{ safe_back() }}">{% endif %}
   <div class="row">
     <label>{% trans %}Unit{% endtrans %} <select name="unit_id" required><option value="">{% trans %}Select…{% endtrans %}</option>
       {% for u in units %}<option value="{{ u.id }}" {{ 'selected' if form.get('unit_id')|string == u.id|string }}>{{ u.number }}</option>{% endfor %}</select></label>
-    <label>{% trans %}Type{% endtrans %} <select name="kind">{% for k, label in kinds.items() %}<option value="{{ k }}" {{ 'selected' if form.get('kind') == k }}>{{ label }}</option>{% endfor %}</select></label>
+    {% if fixed_kind %}<label>{% trans %}Type{% endtrans %} <input value="{{ kind_label }}" disabled></label>
+    {% else %}<label>{% trans %}Type{% endtrans %} <select name="kind">{% for k, label in kinds.items() %}<option value="{{ k }}" {{ 'selected' if form.get('kind') == k }}>{{ label }}</option>{% endfor %}</select></label>{% endif %}
   </div>
   <label>{% trans %}Description{% endtrans %} <input name="description" required value="{{ form.get('description', '') }}" placeholder="{{ _('e.g. Roof replacement assessment') }}"></label>
   <div class="row">
     <label>{% trans %}Amount{% endtrans %} <span class="money-input"><input name="amount" inputmode="decimal" placeholder="0.00" required value="{{ form.get('amount', '') }}"></span></label>
     <label>{% trans %}Due date{% endtrans %} <input type="date" name="due_date" required value="{{ form.get('due_date', '') }}"></label>
   </div>
-  <div class="form-actions"><button class="btn primary">{% trans %}Add charge{% endtrans %}</button>
-  <a href="{{ url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a></div>
+  <div class="form-actions"><button class="btn primary">{{ _('Save') if charge else _('Add charge') }}</button>
+  <a href="{{ safe_back() or url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a></div>
 </form>
 {% endblock %}

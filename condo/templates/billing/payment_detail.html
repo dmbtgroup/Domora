@@ -5,8 +5,9 @@
 {% block content %}
 <div class="head"><h1>{% trans %}Payment{% endtrans %} <span class="credit">{{ p.amount_cents|money }}</span></h1>
   {% if current_user.can('accounting_edit') %}
+    <span class="head-tools">{{ icon_link('pencil', url_for('billing.edit_payment', payment_id=p.id, back=here()), _('Edit')) }}
     {{ icon_post('trash', url_for('billing.delete_payment', payment_id=p.id, back=safe_back()), _('Delete'), cls='danger',
-       confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}
+       confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}</span>
   {% endif %}</div>
 <div class="grid two wide-left">
   <section class="card">

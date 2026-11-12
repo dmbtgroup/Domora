@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 12:17+0000\n"
+"POT-Creation-Date: 2026-11-12 12:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1289,6 +1289,9 @@ msgstr "Modifier"
 msgid "Edit %(name)s"
 msgstr "Modifier %(name)s"
 
+msgid "Edit charge"
+msgstr "Modifier le frais"
+
 msgid "Edit cost"
 msgstr "Modifier la dépense"
 
@@ -1303,6 +1306,9 @@ msgstr "Modifier dans l’onglet Owners de la feuille Google"
 
 msgid "Edit notice"
 msgstr "Modifier l’avis"
+
+msgid "Edit payment"
+msgstr "Modifier le paiement"
 
 msgid "Edit routine task"
 msgstr "Modifier la tâche d’entretien courant"
