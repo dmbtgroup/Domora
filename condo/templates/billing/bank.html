@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon_post %}
+{% from "_macros.html" import csrf %}
+{% block title %}{% trans %}Bank account{% endtrans %}{% endblock %}
+{% block content %}
+{% set can_edit = current_user.can('accounting_edit') %}
+<div class="head"><h1>{% trans %}Bank account{% endtrans %}</h1></div>
+
+{% if bank.last %}
+<div class="stats">
+  <div class="stat"><span>{{ bank.today|money }}</span>{% trans %}Bank balance today{% endtrans %}</div>
+  <div class="stat"><span>{{ bank.last.amount_cents|money }}</span>{% trans when=bank.last.as_of|fdate('medium') %}Per the bank on {{ when }}{% endtrans %}</div>
+  <div class="stat"><span class="{{ 'credit' if bank.since >= 0 else 'owed' }}">{{ '+' if bank.since > 0 }}{{ bank.since|money }}</span>{% trans %}Payments − costs since{% endtrans %}</div>
+</div>
+{% endif %}
+
+<div class="grid two">
+  {% if can_edit %}
+  <form method="post" class="card" novalidate>
+    {{ csrf() }}
+    <h2>{{ _('Record the bank balance') if bank.last else _('Opening balance') }}</h2>
+    {% for e in errors %}<div class="flash flash-error">{{ e }}</div>{% endfor %}
+    <div class="row">
+      <label>{% trans %}Date{% endtrans %} <input type="date" name="as_of" required value="{{ form.get('as_of', '') }}"></label>
+      <label>{% trans %}Balance in the bank{% endtrans %} <input name="amount" inputmode="decimal" required placeholder="25,050.39" value="{{ form.get('amount', '') }}"></label>
+    </div>
+    <label>{% trans %}Note{% endtrans %} <input name="note" maxlength="255" placeholder="{{ _('e.g. RBC statement') }}" value="{{ form.get('note', '') }}"></label>
+    <p class="muted">{% trans %}The balance at the end of that day, as the bank shows it. Payments and costs dated after it are added to it.{% endtrans %}</p>
+    <button class="btn primary">{% trans %}Save{% endtrans %}</button>
+  </form>
+  {% endif %}
+
+  <section class="card">
+    <h2>{% trans %}Balances from the bank{% endtrans %}</h2>
+    {% if bank.rows %}<table>
+      <thead><tr>{% if can_edit %}<th class="row-actions-h"><span class="sr-only">{% trans %}Actions{% endtrans %}</span></th>{% endif %}<th>{% trans %}Date{% endtrans %}</th><th class="num">{% trans %}Bank{% endtrans %}</th><th class="num">{% trans %}App expected{% endtrans %}</th><th class="num">{% trans %}Difference{% endtrans %}</th></tr></thead>
+      <tbody>{% for r in bank.rows|reverse %}
+        <tr>{% if can_edit %}<td class="row-actions">{{ icon_post('trash', url_for('billing.delete_bank_balance', record_id=r.record.id), _('Delete'), cls='danger small', confirm=_('Delete this bank balance?')) }}</td>{% endif %}
+          <td><span class="nowrap">{{ r.record.as_of|fdate('medium') }}</span>{% if loop.last %}<div><span class="tag">{% trans %}Opening balance{% endtrans %}</span></div>{% endif %}
+            {% if r.record.note %}<div class="muted small">{{ r.record.note }}</div>{% endif %}</td>
+          <td class="num">{{ r.record.amount_cents|money }}</td>
+          <td class="num muted">{{ r.expected|money if r.expected is not none else '—' }}</td>
+          <td class="num">{% if r.difference is none %}—{% elif r.difference == 0 %}<span class="credit">{% trans %}Matches{% endtrans %}</span>{% else %}<span class="owed">{{ '+' if r.difference > 0 }}{{ r.difference|money }}</span>{% endif %}</td></tr>
+      {% endfor %}</tbody>
+    </table>
+    <p class="muted small">{% trans %}A difference means a payment or cost is missing, or dated differently, in the app.{% endtrans %}</p>
+    {% else %}<p class="muted">{% trans %}No bank balance yet.{% endtrans %}</p>{% endif %}
+  </section>
+</div>
+{% endblock %}

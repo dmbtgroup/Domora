@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 
 from ..extensions import db
 from ..models import (CHARGE_KINDS, COST_CATEGORIES, PAYMENT_METHOD_LABELS, PAYMENT_METHODS, SYSTEM_CHARGE_KINDS, Charge, Expense, Payment,
-                      Setting, Unit, guess_cost_category)
+                      BankBalance, Setting, Unit, bank_summary, guess_cost_category)
 from ..utils import admin_required, can_access_unit, permission_required, parse_date, parse_money
 from ..i18n import fdate, gettext as _
 
@@ -165,6 +165,7 @@ def index():
     from ..models import Reimbursement
     pending = db.session.scalar(db.select(db.func.count(Reimbursement.id)).where(
         Reimbursement.status.in_(("submitted", "approved"))))
+    bank = bank_summary() if current_user.can("accounting") else None
     sheet_clashes = 0
     if current_user.is_admin:
         from .. import sheet_sync
@@ -172,7 +173,7 @@ def index():
         plan = _latest_plan()
         sheet_clashes = len(sheet_sync.clashing_entries(plan)) if plan else 0
     return render_template("billing/index.html", period=period, pending_reimbursements=pending, scope=scope,
-                           sheet_clashes=sheet_clashes,
+                           sheet_clashes=sheet_clashes, bank=bank,
                            all_units=units, unit=None, payments=payments, costs=costs,
                            paid_total=paid_total, cost_total=cost_total, categories=categories, months=months,
                            rows=rows, outstanding=outstanding, today=date.today(), sheet=sheet,
@@ -465,3 +466,45 @@ def my_account():
         flash(_("Your account is not linked to a unit."), "info")
         return redirect(url_for("dashboard.index"))
     return redirect(url_for("billing.ledger", unit_id=current_user.unit_id))
+
+
+@bp.route("/bank", methods=["GET", "POST"])
+@permission_required("accounting")
+def bank():
+    """The condo's bank account: balances read from the bank, and the running balance worked out since."""
+    form, errors = {"as_of": date.today().isoformat()}, []
+    if request.method == "POST":
+        if not current_user.can("accounting_edit"):
+            abort(403)
+        form = request.form
+        try:
+            as_of = parse_date(form.get("as_of"), _("Date"))
+            if as_of > date.today():
+                errors.append(_("The date can't be in the future."))
+        except ValueError as exc:
+            errors.append(str(exc))
+        raw = (form.get("amount") or "").strip()
+        negative = raw.startswith("-")
+        try:
+            amount = parse_money(raw.lstrip("-")) * (-1 if negative else 1)
+        except ValueError:
+            amount = 0 if raw.lstrip("-").strip("$ ") in ("0", "0.00", "0,00") else None
+            if amount is None:
+                errors.append(_("Enter the balance shown by the bank, e.g. 25,050.39."))
+        if not errors:
+            db.session.add(BankBalance(as_of=as_of, amount_cents=amount, note=(form.get("note") or "").strip()[:255] or None,
+                                       recorded_by_id=current_user.id))
+            db.session.commit()
+            flash(_("Bank balance recorded."), "success")
+            return redirect(url_for("billing.bank"))
+    return render_template("billing/bank.html", bank=bank_summary(), form=form, errors=errors), 400 if errors else 200
+
+
+@bp.route("/bank/<int:record_id>/delete", methods=["POST"])
+@permission_required("accounting_edit")
+def delete_bank_balance(record_id):
+    record = db.session.get(BankBalance, record_id) or abort(404)
+    db.session.delete(record)
+    db.session.commit()
+    flash(_("Bank balance deleted."), "success")
+    return redirect(url_for("billing.bank"))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 03:42+0000\n"
+"POT-Creation-Date: 2026-11-12 04:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,6 +272,11 @@ msgid "<span class=\"muted\">No accounts</span>"
 msgstr ""
 
 msgid "<span class=\"muted\">Vacant</span>"
+msgstr ""
+
+msgid ""
+"A difference means a payment or cost is missing, or dated differently, in"
+" the app."
 msgstr ""
 
 msgid "A modern platform for smarter condominium management."
@@ -549,6 +554,9 @@ msgstr ""
 msgid "Anyone with the link → Viewer"
 msgstr ""
 
+msgid "App expected"
+msgstr ""
+
 msgid "Appliance"
 msgstr ""
 
@@ -662,6 +670,9 @@ msgstr ""
 msgid "Balance from transactions"
 msgstr ""
 
+msgid "Balance in the bank"
+msgstr ""
+
 msgid "Balance today"
 msgstr ""
 
@@ -671,10 +682,31 @@ msgstr ""
 msgid "Balances as of (optional)"
 msgstr ""
 
+msgid "Balances from the bank"
+msgstr ""
+
 msgid "Balances tab"
 msgstr ""
 
 msgid "Ballots"
+msgstr ""
+
+msgid "Bank"
+msgstr ""
+
+msgid "Bank account"
+msgstr ""
+
+msgid "Bank balance deleted."
+msgstr ""
+
+msgid "Bank balance recorded."
+msgstr ""
+
+msgid "Bank balance today"
+msgstr ""
+
+msgid "Bank balances"
 msgstr ""
 
 msgid "Bedrooms"
@@ -1143,6 +1175,9 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Delete this bank balance?"
+msgstr ""
+
 msgid "Delete this charge?"
 msgstr ""
 
@@ -1364,6 +1399,9 @@ msgid "Enter a valid amount."
 msgstr ""
 
 msgid "Enter the amount for at least one unit."
+msgstr ""
+
+msgid "Enter the balance shown by the bank, e.g. 25,050.39."
 msgstr ""
 
 msgid "Enter the deadline date and time."
@@ -1816,6 +1854,9 @@ msgstr ""
 msgid "Marked as done. Next due %(when)s."
 msgstr ""
 
+msgid "Matches"
+msgstr ""
+
 msgid "Max hours"
 msgstr ""
 
@@ -2020,6 +2061,9 @@ msgid "No amenities configured."
 msgstr ""
 
 msgid "No areas yet. Ask the board to give you access."
+msgstr ""
+
+msgid "No bank balance yet."
 msgstr ""
 
 msgid ""
@@ -2466,11 +2510,18 @@ msgstr ""
 msgid "Payments received · %(label)s"
 msgstr ""
 
+msgid "Payments − costs since"
+msgstr ""
+
 msgid ""
 "People you hire, such as a cleaner, a contractor or an outside "
 "accountant, who aren't owners or tenants. Give each one only the access "
 "they need. Owners' and tenants' logins are managed in the Owners and "
 "Tenants tabs."
+msgstr ""
+
+#, python-format
+msgid "Per the bank on %(when)s"
 msgstr ""
 
 msgid "Percentages are weighted by how much each vote counts."
@@ -2675,6 +2726,17 @@ msgid "Record payback"
 msgstr ""
 
 msgid "Record payment"
+msgstr ""
+
+msgid "Record the bank balance"
+msgstr ""
+
+msgid "Record the opening balance"
+msgstr ""
+
+msgid ""
+"Record what the bank account holds today; from then on its balance "
+"follows the payments and costs entered here."
 msgstr ""
 
 #, python-format
@@ -3206,6 +3268,11 @@ msgid ""
 "come from the sheet's"
 msgstr ""
 
+msgid ""
+"The balance at the end of that day, as the bank shows it. Payments and "
+"costs dated after it are added to it."
+msgstr ""
+
 msgid "The board asked the owner to get a quote."
 msgstr ""
 
@@ -3225,6 +3292,9 @@ msgid "The board was reminded to renew on %(renewal_notified_at)s."
 msgstr ""
 
 msgid "The cost was added to Accounting."
+msgstr ""
+
+msgid "The date can't be in the future."
 msgstr ""
 
 msgid "The deadline has already passed. Edit the draft and choose a later one."
@@ -3852,6 +3922,9 @@ msgid "e.g. Please get two quotes from licensed plumbers"
 msgstr ""
 
 msgid "e.g. Plumber — garage drain"
+msgstr ""
+
+msgid "e.g. RBC statement"
 msgstr ""
 
 msgid "e.g. Roof replacement"

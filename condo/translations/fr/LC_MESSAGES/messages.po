@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 03:42+0000\n"
+"POT-Creation-Date: 2026-11-12 04:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -261,6 +261,9 @@ msgstr "<span class=\"muted\">Aucun compte</span>"
 
 msgid "<span class=\"muted\">Vacant</span>"
 msgstr "<span class=\"muted\">Vacant</span>"
+
+msgid "A difference means a payment or cost is missing, or dated differently, in the app."
+msgstr "Un écart signifie qu'un paiement ou une dépense manque dans l'application, ou n'y a pas la même date."
 
 msgid "A modern platform for smarter condominium management."
 msgstr "Une plateforme moderne pour une gestion de copropriété plus intelligente."
@@ -527,6 +530,9 @@ msgstr "Tous les statuts"
 msgid "Anyone with the link → Viewer"
 msgstr "Tous les utilisateurs qui ont le lien → Lecteur"
 
+msgid "App expected"
+msgstr "Prévu par l'application"
+
 msgid "Appliance"
 msgstr "Électroménager"
 
@@ -638,6 +644,9 @@ msgstr "Solde"
 msgid "Balance from transactions"
 msgstr "Solde selon les transactions"
 
+msgid "Balance in the bank"
+msgstr "Solde à la banque"
+
 msgid "Balance today"
 msgstr "Solde à ce jour"
 
@@ -647,11 +656,32 @@ msgstr "Soldes"
 msgid "Balances as of (optional)"
 msgstr "Soldes en date du (facultatif)"
 
+msgid "Balances from the bank"
+msgstr "Soldes relevés à la banque"
+
 msgid "Balances tab"
 msgstr "Onglet Soldes"
 
 msgid "Ballots"
 msgstr "Bulletins"
+
+msgid "Bank"
+msgstr "Banque"
+
+msgid "Bank account"
+msgstr "Compte bancaire"
+
+msgid "Bank balance deleted."
+msgstr "Solde bancaire supprimé."
+
+msgid "Bank balance recorded."
+msgstr "Solde bancaire enregistré."
+
+msgid "Bank balance today"
+msgstr "Solde bancaire aujourd'hui"
+
+msgid "Bank balances"
+msgstr "Soldes bancaires"
 
 msgid "Bedrooms"
 msgstr "Chambres"
@@ -1108,6 +1138,9 @@ msgstr "Refusé. Le copropriétaire a été informé de la raison."
 msgid "Delete"
 msgstr "Supprimer"
 
+msgid "Delete this bank balance?"
+msgstr "Supprimer ce solde bancaire ?"
+
 msgid "Delete this charge?"
 msgstr "Supprimer ce frais ?"
 
@@ -1315,6 +1348,9 @@ msgstr "Entrez un montant valide."
 
 msgid "Enter the amount for at least one unit."
 msgstr "Entrez le montant d’au moins une unité."
+
+msgid "Enter the balance shown by the bank, e.g. 25,050.39."
+msgstr "Entrez le solde indiqué par la banque, p. ex. 25 050,39."
 
 msgid "Enter the deadline date and time."
 msgstr "Entrez la date et l’heure de l’échéance."
@@ -1749,6 +1785,9 @@ msgstr "Marquer comme fait"
 msgid "Marked as done. Next due %(when)s."
 msgstr "Marqué comme fait. Prochaine échéance : %(when)s."
 
+msgid "Matches"
+msgstr "Concorde"
+
 msgid "Max hours"
 msgstr "Heures max."
 
@@ -1950,6 +1989,9 @@ msgstr "Aucun équipement configuré."
 
 msgid "No areas yet. Ask the board to give you access."
 msgstr "Aucune section pour l’instant. Demandez au conseil de vous donner accès."
+
+msgid "No bank balance yet."
+msgstr "Aucun solde bancaire pour l'instant."
 
 msgid "No board member has an account yet, so the temporary administrator can set accounts up for now."
 msgstr "Aucun membre du conseil n’a encore de compte : l’administrateur temporaire peut configurer les comptes pour l’instant."
@@ -2372,8 +2414,15 @@ msgstr "Paiements"
 msgid "Payments received · %(label)s"
 msgstr "Paiements reçus · %(label)s"
 
+msgid "Payments − costs since"
+msgstr "Paiements − dépenses depuis"
+
 msgid "People you hire, such as a cleaner, a contractor or an outside accountant, who aren't owners or tenants. Give each one only the access they need. Owners' and tenants' logins are managed in the Owners and Tenants tabs."
 msgstr "Les personnes que vous engagez, comme un service d’entretien ménager, un entrepreneur ou un comptable externe, qui ne sont ni copropriétaires ni locataires. Donnez à chacune seulement les accès dont elle a besoin. Les accès des copropriétaires et des locataires se gèrent dans les onglets Copropriétaires et Locataires."
+
+#, python-format
+msgid "Per the bank on %(when)s"
+msgstr "Selon la banque le %(when)s"
 
 msgid "Percentages are weighted by how much each vote counts."
 msgstr "Les pourcentages tiennent compte du poids de chaque voix."
@@ -2576,6 +2625,15 @@ msgstr "Enregistrer le remboursement"
 
 msgid "Record payment"
 msgstr "Enregistrer le paiement"
+
+msgid "Record the bank balance"
+msgstr "Enregistrer le solde bancaire"
+
+msgid "Record the opening balance"
+msgstr "Enregistrer le solde d'ouverture"
+
+msgid "Record what the bank account holds today; from then on its balance follows the payments and costs entered here."
+msgstr "Enregistrez ce que contient le compte bancaire aujourd'hui ; ensuite, son solde suit les paiements et les dépenses saisis ici."
 
 #, python-format
 msgid "Recorded as “%(owner_name)s”, but no contact details yet."
@@ -3091,6 +3149,9 @@ msgstr "L’onglet Owners ne contient aucune ligne."
 msgid "The app can mirror the condo's transaction log in Google Sheets. Opening balances, monthly fees, payments, purchase credits and building expenses come from the sheet's"
 msgstr "L’application peut refléter le registre des transactions du condo tenu dans Google Sheets. Les soldes d’ouverture, frais mensuels, paiements, crédits d’achat et dépenses de l’immeuble proviennent de l’onglet"
 
+msgid "The balance at the end of that day, as the bank shows it. Payments and costs dated after it are added to it."
+msgstr "Le solde à la fin de cette journée, tel que la banque l'indique. Les paiements et dépenses datés après s'y ajoutent."
+
 msgid "The board asked the owner to get a quote."
 msgstr "Le conseil a demandé au copropriétaire d’obtenir une soumission."
 
@@ -3107,6 +3168,9 @@ msgstr "Le conseil a reçu le rappel de renouvellement le %(renewal_notified_at)
 
 msgid "The cost was added to Accounting."
 msgstr "Le coût a été ajouté à la comptabilité."
+
+msgid "The date can't be in the future."
+msgstr "La date ne peut pas être dans le futur."
 
 msgid "The deadline has already passed. Edit the draft and choose a later one."
 msgstr "L’échéance est déjà passée. Modifiez le brouillon et choisissez une date plus tardive."
@@ -3693,6 +3757,9 @@ msgstr "p. ex. Veuillez obtenir deux soumissions de plombiers certifiés"
 
 msgid "e.g. Plumber — garage drain"
 msgstr "p. ex. Plombier — drain du garage"
+
+msgid "e.g. RBC statement"
+msgstr "p. ex. relevé RBC"
 
 msgid "e.g. Roof replacement"
 msgstr "p. ex. Réfection de la toiture"

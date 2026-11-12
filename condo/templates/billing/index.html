@@ -40,6 +40,23 @@
   <div class="stat"><span class="{{ 'owed' if outstanding }}">{{ outstanding|money }}</span>{% trans %}Owed by units today{% endtrans %}</div>
 </div>
 
+{% if bank is not none %}
+<section class="card bank-card">
+  <div class="card-head"><h2>{% trans %}Bank account{% endtrans %}</h2>
+    <a class="btn small" href="{{ url_for('billing.bank') }}">{% trans %}Bank balances{% endtrans %}</a></div>
+  {% if bank.last %}
+  <div class="bank-figures">
+    <div><span class="bank-big">{{ bank.today|money }}</span><span class="muted">{% trans %}Bank balance today{% endtrans %}</span></div>
+    <div><span>{{ bank.last.amount_cents|money }}</span><span class="muted">{% trans when=bank.last.as_of|fdate('medium') %}Per the bank on {{ when }}{% endtrans %}</span></div>
+    <div><span class="{{ 'credit' if bank.since >= 0 else 'owed' }}">{{ '+' if bank.since > 0 }}{{ bank.since|money }}</span><span class="muted">{% trans %}Payments − costs since{% endtrans %}</span></div>
+  </div>
+  {% else %}
+  <p class="muted">{% trans %}Record what the bank account holds today; from then on its balance follows the payments and costs entered here.{% endtrans %}
+    {% if can_edit %}<a href="{{ url_for('billing.bank') }}">{% trans %}Record the opening balance{% endtrans %}</a>{% endif %}</p>
+  {% endif %}
+</section>
+{% endif %}
+
 <section class="card">
   <h2>{% trans %}Units{% endtrans %}</h2>
   <table>

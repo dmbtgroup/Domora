@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 from flask_login import UserMixin
 from sqlalchemy import func
@@ -441,6 +441,46 @@ def guess_cost_category(text):
         if any(w in t for w in words):
             return key
     return "other"
+
+
+class BankBalance(db.Model):
+    """What the condo's bank account held at the end of a day, as the board read it from the bank.
+    The first one is the opening balance; later ones are checks against the app's own running total."""
+    id = db.Column(db.Integer, primary_key=True)
+    as_of = db.Column(db.Date, nullable=False, index=True)
+    amount_cents = db.Column(db.Integer, nullable=False)
+    note = db.Column(db.String(255))
+    recorded_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    recorded_by = db.relationship("User")
+
+
+def bank_movement(after, until=None):
+    """Cash in minus cash out of the bank after a day (and up to `until`, inclusive): payments received
+    (not purchase credits, where the owner paid the supplier directly) and building costs or refunds."""
+    pay = db.select(func.coalesce(func.sum(Payment.amount_cents), 0)).where(
+        Payment.paid_on > after, Payment.method != "purchase credit")
+    exp = db.select(func.coalesce(func.sum(Expense.amount_cents), 0)).where(Expense.spent_on > after)
+    if until is not None:
+        pay, exp = pay.where(Payment.paid_on <= until), exp.where(Expense.spent_on <= until)
+    return db.session.scalar(pay) + db.session.scalar(exp)
+
+
+def bank_summary(today=None):
+    """The bank records with what the app expected at each one, and the balance worked out for today."""
+    today = today or date.today()
+    records = db.session.scalars(db.select(BankBalance).order_by(BankBalance.as_of, BankBalance.id)).all()
+    rows, prev = [], None
+    for r in records:
+        expected = None if prev is None else prev.amount_cents + bank_movement(prev.as_of, r.as_of)
+        rows.append({"record": r, "expected": expected,
+                     "difference": None if expected is None else r.amount_cents - expected})
+        prev = r
+    if prev is None:
+        return {"rows": [], "last": None, "today": None, "since": 0}
+    since = bank_movement(prev.as_of)
+    return {"rows": rows, "last": prev, "since": since, "today": prev.amount_cents + since}
 
 
 class Expense(db.Model):

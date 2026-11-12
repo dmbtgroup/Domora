@@ -652,3 +652,10 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .status-pick select { min-width: 11rem; max-width: 16rem; }
 @media (max-width: 600px) { .filter-bar { gap: .6rem; } .status-pick, .status-pick select { width: 100%; max-width: none; } }
 .home-brand strong.wordmark { color: #B08A45; font-size: 1.3rem; letter-spacing: .08em; font-weight: 800; }
+
+/* Bank account card in Accounting */
+.bank-figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: end; }
+.bank-figures > div { display: flex; flex-direction: column; gap: .15rem; }
+.bank-figures span:first-child { font-size: 1.15rem; font-weight: 700; }
+.bank-figures span.bank-big { font-size: 1.6rem; }
+@media (max-width: 600px) { .bank-figures { grid-template-columns: 1fr; } }
