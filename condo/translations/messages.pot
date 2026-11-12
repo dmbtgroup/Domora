@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-08 15:17+0000\n"
+"POT-Creation-Date: 2026-11-12 03:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,16 @@ msgstr ""
 #, python-format
 msgid "%(count)s old entry blocks the sheet"
 msgid_plural "%(count)s old entries block the sheet"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid ""
+"%(count)s old entry from before the Google Sheet makes balances differ "
+"from the sheet."
+msgid_plural ""
+"%(count)s old entries from before the Google Sheet make balances differ "
+"from the sheet."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1131,6 +1141,9 @@ msgid "Declined. The owner has been told why."
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Delete this charge?"
 msgstr ""
 
 msgid "Delete this cost?"
@@ -2870,6 +2883,9 @@ msgstr ""
 
 #, python-format
 msgid "Results are shown after the deadline, %(when)s."
+msgstr ""
+
+msgid "Review and remove them"
 msgstr ""
 
 msgid "Role"

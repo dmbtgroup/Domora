@@ -165,7 +165,14 @@ def index():
     from ..models import Reimbursement
     pending = db.session.scalar(db.select(db.func.count(Reimbursement.id)).where(
         Reimbursement.status.in_(("submitted", "approved"))))
+    sheet_clashes = 0
+    if current_user.is_admin:
+        from .. import sheet_sync
+        from .sheet import _latest_plan
+        plan = _latest_plan()
+        sheet_clashes = len(sheet_sync.clashing_entries(plan)) if plan else 0
     return render_template("billing/index.html", period=period, pending_reimbursements=pending, scope=scope,
+                           sheet_clashes=sheet_clashes,
                            all_units=units, unit=None, payments=payments, costs=costs,
                            paid_total=paid_total, cost_total=cost_total, categories=categories, months=months,
                            rows=rows, outstanding=outstanding, today=date.today(), sheet=sheet,
@@ -395,7 +402,8 @@ def delete_charge(charge_id):
     db.session.delete(charge)
     db.session.commit()
     flash(_("Charge removed."), "success")
-    return redirect(url_for("billing.ledger", unit_id=unit_id))
+    from ..navigation import safe_back
+    return redirect(safe_back() or url_for("billing.ledger", unit_id=unit_id))
 
 
 @bp.route("/payments/<int:payment_id>/delete", methods=["POST"])

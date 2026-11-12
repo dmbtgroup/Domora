@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-08 15:17+0000\n"
+"POT-Creation-Date: 2026-11-12 03:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -31,6 +31,12 @@ msgid "%(count)s old entry blocks the sheet"
 msgid_plural "%(count)s old entries block the sheet"
 msgstr[0] "%(count)s ancienne entrée bloque la feuille"
 msgstr[1] "%(count)s anciennes entrées bloquent la feuille"
+
+#, python-format
+msgid "%(count)s old entry from before the Google Sheet makes balances differ from the sheet."
+msgid_plural "%(count)s old entries from before the Google Sheet make balances differ from the sheet."
+msgstr[0] "%(count)s ancienne entrée d'avant la feuille Google fait différer les soldes de la feuille."
+msgstr[1] "%(count)s anciennes entrées d'avant la feuille Google font différer les soldes de la feuille."
 
 #, python-format
 msgid "%(entries)s rows"
@@ -1101,6 +1107,9 @@ msgstr "Refusé. Le copropriétaire a été informé de la raison."
 
 msgid "Delete"
 msgstr "Supprimer"
+
+msgid "Delete this charge?"
+msgstr "Supprimer ce frais ?"
 
 msgid "Delete this cost?"
 msgstr "Supprimer cette dépense?"
@@ -2771,6 +2780,9 @@ msgstr "Résultats disponibles : %(title)s"
 #, python-format
 msgid "Results are shown after the deadline, %(when)s."
 msgstr "Les résultats seront affichés après l’échéance, le %(when)s."
+
+msgid "Review and remove them"
+msgstr "Les vérifier et les supprimer"
 
 msgid "Role"
 msgstr "Rôle"

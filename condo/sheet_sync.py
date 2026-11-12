@@ -484,14 +484,23 @@ def month_name(period):
 
 def clashing_entries(plan):
     """Charges entered in the app (e.g. by the Excel import) that block the sheet's own
-    opening balance or monthly fee for the same unit and month."""
-    wanted = set()
+    opening balance or monthly fee for the same unit and month.
+
+    The sheet is the book of record: once it gives a unit's opening balance, any opening balance
+    entered in the app for that unit up to that month is superseded, even when the sheet's is $0
+    (the sheet skips zero lines, so the old one would otherwise stay and be counted on top)."""
+    wanted, opening_month = set(), {}
     for e in plan.get("entries", []):
-        if e["category"] in ("opening", "dues") and e["amount_cents"]:
-            kind = "opening" if e["category"] == "opening" else "dues"
-            wanted.add((e["unit"], kind, e["date"][:7]))
-    if not wanted:
+        if e["category"] == "dues" and e["amount_cents"]:
+            wanted.add((e["unit"], "dues", e["date"][:7]))
+        elif e["category"] == "opening":
+            opening_month[e["unit"]] = max(opening_month.get(e["unit"], ""), e["date"][:7])
+    for u in plan.get("units", []):  # units the sheet lists with no opening line start from $0
+        if u.get("sheet_balance_cents") is not None and opening_month:
+            opening_month.setdefault(u["number"], min(opening_month.values()))
+    if not wanted and not opening_month:
         return []
     rows = db.session.scalars(db.select(Charge).join(Unit).where(Charge.origin.is_(None), Charge.period.is_not(None),
                                                                 Charge.kind.in_(("opening", "dues")))).all()
-    return [c for c in rows if (c.unit.number, c.kind, c.period) in wanted]
+    return [c for c in rows if (c.unit.number, c.kind, c.period) in wanted
+            or (c.kind == "opening" and c.period <= opening_month.get(c.unit.number, ""))]

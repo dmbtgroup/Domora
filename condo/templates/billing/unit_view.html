@@ -2,6 +2,7 @@
 {% from "_icons.html" import icon_link, icon_post %}
 {% from "_macros.html" import balance %}
 {% block title %}{% trans number=unit.number, label=period.label %}Accounting · Unit {{ number }} · {{ label }}{% endtrans %}{% endblock %}
+{% set can_edit = current_user.can('accounting_edit') %}
 {% block content %}
 <div class="head"><h1>{% trans %}Accounting{% endtrans %} <span class="muted">{% trans number=unit.number %}· Unit {{ number }}{% endtrans %}</span></h1>
   <div class="actions">
@@ -49,9 +50,9 @@
     <div class="card-head"><h2>{% trans %}Charges{% endtrans %} <span class="muted count">{{ charges|length }}</span></h2>
       <span>{{ (billed + opening)|money }}</span></div>
     {% if charges %}<table>
-      <thead><tr><th>{% trans %}Date{% endtrans %}</th><th>{% trans %}Description{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th></tr></thead>
+      <thead><tr>{% if can_edit %}<th class="row-actions-h"><span class="sr-only">{% trans %}Actions{% endtrans %}</span></th>{% endif %}<th>{% trans %}Date{% endtrans %}</th><th>{% trans %}Description{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th></tr></thead>
       <tbody>{% for c in charges %}
-        <tr><td class="nowrap">{{ c.due_date|fdate('short' if period.view == 'month' else 'iso') }}</td>
+        <tr>{% if can_edit %}<td class="row-actions">{% if c.origin != 'sheet' %}{{ icon_post('trash', url_for('billing.delete_charge', charge_id=c.id, back=here()), _('Delete'), cls='danger small', confirm=_('Delete this charge?')) }}{% endif %}</td>{% endif %}<td class="nowrap">{{ c.due_date|fdate('short' if period.view == 'month' else 'iso') }}</td>
           <td>{{ c.description|truncate(80) }}{% if c.kind == 'opening' %} <span class="tag">{% trans %}Opening balance{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ c.amount_cents|money }}</td></tr>
       {% endfor %}</tbody>

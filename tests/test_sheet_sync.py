@@ -250,3 +250,43 @@ def test_resolve_clashes_with_imported_openings(admin_client):
     admin_client.post("/sheet/resolve-clashes")
     assert db.session.get(Unit, u101.id).balance == 5000  # now matches the Balances tab
     assert "block the sheet" not in admin_client.get("/sheet/").data.decode()
+
+
+def test_imported_opening_is_replaced_even_when_the_sheet_opens_at_zero(admin_client):
+    """Unit 169's case: the sheet opens the unit at $0, the old Excel import had $2,247.66 owed."""
+    u101 = db.session.scalar(db.select(Unit).where(Unit.number == "101"))
+    u102 = db.session.scalar(db.select(Unit).where(Unit.number == "102"))
+    for unit, cents in ((u101, 88421), (u102, 1083)):
+        db.session.add(Charge(unit=unit, kind="opening", period="2026-09", due_date=date(2026, 9, 30), amount_cents=cents,
+                              description="Opening balance (owed) from spreadsheet, end of September 2026"))
+    db.session.commit()
+    rows = [[datetime(2026, 9, 23), "#101", "Alice Chen", "Opening balance", 0, "n/a", "Update", ""]]
+    data = make_sheet(rows)
+    # Drop the sheet's own non-zero opening for 101, so 101 opens at $0 like 169.
+    from openpyxl import load_workbook
+    wb = load_workbook(io.BytesIO(data))
+    ws = wb["Transactions"]
+    ws.delete_rows(2)
+    buf = io.BytesIO()
+    wb.save(buf)
+    resp = admin_client.post("/sheet/preview", data={"workbook": (io.BytesIO(buf.getvalue()), "log.xlsx")},
+                             content_type="multipart/form-data")
+    admin_client.post(resp.headers["Location"] + "/apply")
+    assert "2 old entries from before the Google Sheet" in admin_client.get("/accounting/").data.decode()
+    page = admin_client.get("/sheet/").data.decode()
+    assert "2 old entries block the sheet" in page and "$884.21" in page and "$10.83" in page
+    admin_client.post("/sheet/resolve-clashes")
+    assert not db.session.scalars(db.select(Charge).where(Charge.kind == "opening", Charge.origin.is_(None))).all()
+    assert db.session.get(Unit, u101.id).balance == 40000 - 40000 - 5000  # fee 400 − paid 400 − contribution 50
+    assert "old entries from before" not in admin_client.get("/accounting/").data.decode()
+
+
+def test_board_can_delete_a_charge_from_the_unit_page(admin_client):
+    u101 = db.session.scalar(db.select(Unit).where(Unit.number == "101"))
+    c = Charge(unit=u101, kind="other", due_date=date(2026, 10, 2), amount_cents=1234, description="Old entry")
+    db.session.add(c)
+    db.session.commit()
+    page = admin_client.get(f"/accounting/?unit={u101.id}&year=2026").data.decode()
+    assert f"/accounting/charges/{c.id}/delete" in page
+    admin_client.post(f"/accounting/charges/{c.id}/delete")
+    assert db.session.get(Charge, c.id) is None
