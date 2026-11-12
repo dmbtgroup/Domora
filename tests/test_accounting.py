@@ -75,7 +75,7 @@ def test_sheet_costs_can_be_deleted_with_a_warning(admin_client):
     sheet_cost = db.session.scalar(db.select(Expense).where(Expense.origin == "sheet"))
     page = admin_client.post(f"/accounting/costs/{sheet_cost.id}/delete", follow_redirects=True).data.decode()
     assert db.session.get(Expense, sheet_cost.id) is None
-    assert "delete the row there too" in page
+    assert "the next sync won&#39;t add it again" in page or "the next sync won't add it again" in page
 
 
 def test_cost_validation(admin_client):

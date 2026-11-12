@@ -4,9 +4,9 @@
 {% block title %}{% trans label=period.label %}Accounting · {{ label }}{% endtrans %}{% endblock %}
 {% set can_edit = current_user.can('accounting_edit') %}
 {% macro del_payment(p) %}{{ icon_post('trash', url_for('billing.delete_payment', payment_id=p.id, back=here()), _('Delete'), cls='danger small',
-  confirm=(_('Delete this payment? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync.') if p.origin == 'sheet' else _('Delete this payment?'))) }}{% endmacro %}
+  confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}{% endmacro %}
 {% macro del_cost(x) %}{{ icon_post('trash', url_for('billing.delete_cost', cost_id=x.id, back=here()), _('Delete'), cls='danger small',
-  confirm=(_('Delete this cost? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync.') if x.origin == 'sheet' else _('Delete this cost?'))) }}{% endmacro %}
+  confirm=(_("Delete this cost? It came from the Google Sheet; the next sync won't add it again.") if x.origin == 'sheet' else _('Delete this cost?'))) }}{% endmacro %}
 {% block content %}
 <div class="head"><h1>{% trans %}Accounting{% endtrans %}</h1>
   <div class="actions">
@@ -96,7 +96,7 @@
         <tr><td class="nowrap date-link"><a href="{{ url_for('billing.payment_detail', payment_id=x.payment.id, back=here()) if x.origin == 'credit' else url_for('billing.cost_detail', cost_id=x.id, back=here()) }}" title="{{ _('See all the details') }}">{{ x.spent_on|fdate('short' if period.view == 'month' else 'iso') }}</a></td>
           <td class="muted">{{ x.summary|truncate(40) }}{% if x.origin == 'credit' %} <span class="tag">{% trans %}credit{% endtrans %}</span>{% endif %}</td>
           <td class="num">{{ x.cost_cents|money }}</td>
-          {% if can_edit %}<td class="row-del">{{ del_payment(x.payment) if x.origin == 'credit' else del_cost(x) }}</td>{% endif %}</tr>
+          {% if can_edit %}<td class="row-del nowrap">{% if x.origin != 'credit' %}{{ icon_link('pencil', url_for('billing.edit_cost', cost_id=x.id, back=here()), _('Edit'), cls='small') }} {% endif %}{{ del_payment(x.payment) if x.origin == 'credit' else del_cost(x) }}</td>{% endif %}</tr>
       {% endfor %}</tbody>
     </table>{% else %}<p class="muted">{% trans label=period.label %}No costs in {{ label }}.{% endtrans %}</p>{% endif %}
   </section>

@@ -162,15 +162,59 @@ def test_cron_records_fetch_errors(app, client, monkeypatch):
     assert "refused" in Setting.get("sheet_last_error")["message"]
 
 
-def test_sheet_entries_can_be_deleted_but_come_back_at_the_next_sync(admin_client):
+def test_sheet_entries_deleted_or_edited_in_the_app_stay_that_way(admin_client):
     sheet_sync.apply(sheet_sync.parse(make_sheet()))
     pay = db.session.scalar(db.select(Payment).where(Payment.origin == "sheet"))
     pay_id, amount = pay.id, pay.amount_cents
     assert b"from sheet" in admin_client.get(f"/accounting/unit/{pay.unit_id}").data
     admin_client.post(f"/accounting/payments/{pay_id}/delete")
     assert db.session.get(Payment, pay_id) is None
+    cost = db.session.scalar(db.select(Expense))
+    admin_client.post(f"/accounting/costs/{cost.id}/edit", data={"kind": "cost", "category": "repairs",
+                                                               "description": "Parking heaters (2)", "amount": "1,900.00",
+                                                               "spent_on": "2026-11-05"})
+    summary = sheet_sync.apply(sheet_sync.parse(make_sheet()))
+    assert summary["added"] == 0
+    assert not db.session.scalar(db.select(Payment).where(Payment.origin == "sheet", Payment.amount_cents == amount))
+    cost = db.session.scalar(db.select(Expense))
+    assert cost.amount_cents == -190000 and cost.description == "Parking heaters (2)"
+    assert db.session.scalar(db.select(db.func.count(Expense.id))) == 1
+
+
+def test_sync_adds_only_new_rows(app):
+    first = sheet_sync.apply(sheet_sync.parse(make_sheet()))
+    n = db.session.scalar(db.select(db.func.count(Payment.id)))
+    new_row = [datetime(2026, 11, 20), "#102", "Bob Okafor", "Fee payment", 350.0, "n/a", "Interac", None]
+    summary = sheet_sync.apply(sheet_sync.parse(make_sheet([new_row])))
+    assert first["added"] > 0 and summary["added"] == 1
+    assert db.session.scalar(db.select(db.func.count(Payment.id))) == n + 1
+    # The same line twice in the sheet is two entries.
+    summary = sheet_sync.apply(sheet_sync.parse(make_sheet([new_row, new_row])))
+    assert summary["added"] == 1 and db.session.scalar(db.select(db.func.count(Payment.id))) == n + 2
+
+
+def test_entries_synced_before_keys_get_them_once(app):
     sheet_sync.apply(sheet_sync.parse(make_sheet()))
-    assert db.session.scalar(db.select(Payment).where(Payment.origin == "sheet", Payment.amount_cents == amount))
+    for model in (Charge, Payment, Expense):
+        db.session.execute(db.update(model).values(sheet_key=None).where(model.origin == "sheet"))
+    db.session.commit()
+    sheet_sync.apply(sheet_sync.parse(make_sheet()))
+    assert db.session.scalar(db.select(db.func.count(Charge.id)).where(Charge.sheet_key.is_(None))) == 0
+    assert db.session.scalar(db.select(db.func.count(Charge.id)).where(Charge.origin == "sheet")) == 4
+
+
+def test_unit_page_adds_and_deletes_charges_and_payments(admin_client):
+    sheet_sync.apply(sheet_sync.parse(make_sheet()))
+    u101 = db.session.scalar(db.select(Unit).where(Unit.number == "101"))
+    page = admin_client.get(f"/accounting/?unit={u101.id}&year=2026").data.decode()
+    assert f"/accounting/charges/new?unit_id={u101.id}" in page and f"/accounting/payments/new?unit_id={u101.id}" in page
+    charge = db.session.scalar(db.select(Charge).where(Charge.unit_id == u101.id, Charge.kind == "dues"))
+    pay = db.session.scalar(db.select(Payment).where(Payment.unit_id == u101.id))
+    assert f"/accounting/charges/{charge.id}/delete" in page and f"/accounting/payments/{pay.id}/delete" in page
+    admin_client.post(f"/accounting/charges/{charge.id}/delete")  # from the sheet, and it stays deleted
+    assert db.session.get(Charge, charge.id) is None
+    sheet_sync.apply(sheet_sync.parse(make_sheet()))
+    assert not db.session.scalar(db.select(Charge).where(Charge.unit_id == u101.id, Charge.kind == "dues"))
 
 
 def add_owners_tab(data, rows):

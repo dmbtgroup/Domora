@@ -5,7 +5,7 @@
 <h1>{% trans %}Google Sheet sync{% endtrans %}</h1>
 <p class="muted">{% trans %}The app can mirror the condo's transaction log in Google Sheets. Opening balances, monthly fees, payments,
   purchase credits and building expenses come from the sheet's{% endtrans %} <strong>{% trans %}Transactions{% endtrans %}</strong> {% trans %}tab, and owner contacts from an optional{% endtrans %} <strong>{% trans %}Owners{% endtrans %}</strong> {% trans %}tab; the{% endtrans %} <strong>{% trans %}Balances{% endtrans %}</strong> {% trans %}tab is used as a cross-check.
-  Each sync replaces only what came from the sheet. Entries typed into the app by hand are kept.{% endtrans %}</p>
+  Each sync adds only the rows that haven't been synced yet, so entries you edit or delete in the app stay that way. Entries typed into the app by hand are kept.{% endtrans %}</p>
 
 {% if clashes %}
 <form method="post" action="{{ url_for('sheet.resolve_clashes') }}" class="card building-insurance"

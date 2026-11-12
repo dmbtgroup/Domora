@@ -240,6 +240,7 @@ class Charge(db.Model):
     amount_cents = db.Column(db.Integer, nullable=False)
     due_date = db.Column(db.Date, nullable=False)
     origin = db.Column(db.String(20))  # 'sheet' = synced from the Google Sheet; None = entered in the app
+    sheet_key = db.Column(db.String(255), index=True)  # which sheet row it came from (see sheet_sync.entry_keys)
     created_at = db.Column(db.DateTime, default=utcnow)
 
     unit = db.relationship("Unit", back_populates="charges")
@@ -262,6 +263,7 @@ class Payment(db.Model):
     reference = db.Column(db.String(80))
     notes = db.Column(db.String(255))
     origin = db.Column(db.String(20))  # 'sheet' = synced from the Google Sheet; None = entered in the app
+    sheet_key = db.Column(db.String(255), index=True)  # which sheet row it came from (see sheet_sync.entry_keys)
     special_id = db.Column(db.Integer, db.ForeignKey("special_contribution.id"))  # paying a special contribution
     recorded_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     source_data = db.Column(db.JSON)  # the full Google Sheet row it came from (tab, row number and every column)
@@ -495,6 +497,7 @@ class Expense(db.Model):
     source = db.Column(db.String(255))
     notes = db.Column(db.Text)
     origin = db.Column(db.String(20))
+    sheet_key = db.Column(db.String(255), index=True)  # which sheet row it came from (see sheet_sync.entry_keys)
     recorded_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     source_data = db.Column(db.JSON)  # the full Google Sheet row it came from
     created_at = db.Column(db.DateTime, default=utcnow)

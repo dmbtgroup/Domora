@@ -5,8 +5,9 @@
 {% block content %}
 <div class="head"><h1>{% if x.cost_cents < 0 %}{% trans %}Refund{% endtrans %} <span class="credit">{{ (-x.cost_cents)|money }}</span>{% else %}{% trans %}Cost{% endtrans %} <span class="owed">{{ x.cost_cents|money }}</span>{% endif %}</h1>
   {% if current_user.can('accounting_edit') %}
+    <span class="head-tools">{{ icon_link('pencil', url_for('billing.edit_cost', cost_id=x.id, back=here()), _('Edit')) }}
     {{ icon_post('trash', url_for('billing.delete_cost', cost_id=x.id, back=safe_back()), _('Delete'), cls='danger',
-       confirm=(_('Delete this cost? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync.') if x.origin == 'sheet' else _('Delete this cost?'))) }}
+       confirm=(_("Delete this cost? It came from the Google Sheet; the next sync won't add it again.") if x.origin == 'sheet' else _('Delete this cost?'))) }}</span>
   {% endif %}</div>
 <div class="grid two wide-left">
   <section class="card">

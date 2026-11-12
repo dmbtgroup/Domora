@@ -207,6 +207,18 @@ def _unit_view(unit, period, scope):
 @bp.route("/costs/new", methods=["GET", "POST"])
 @permission_required("accounting_edit")
 def new_cost():
+    return _cost_form(None)
+
+
+@bp.route("/costs/<int:cost_id>/edit", methods=["GET", "POST"])
+@permission_required("accounting_edit")
+def edit_cost(cost_id):
+    return _cost_form(db.session.get(Expense, cost_id) or abort(404))
+
+
+def _cost_form(cost):
+    """Add a building cost (or refund), or change one, including one that came from the Google Sheet:
+    the sync only adds new rows, so the change stays."""
     if request.method == "POST":
         errors = []
         description = request.form.get("description", "").strip()
@@ -225,20 +237,31 @@ def new_cost():
         except ValueError as e:
             errors.append(str(e))
         if not errors:
-            db.session.add(Expense(spent_on=spent_on, category=category, description=description[:255],
-                                   amount_cents=amount if refund else -amount,
-                                   approved_by=request.form.get("approved_by", "").strip()[:255] or None,
-                                   source=request.form.get("source", "").strip()[:255] or None,
-                                   recorded_by_id=current_user.id,
-                                   notes=request.form.get("notes", "").strip() or None))
+            values = dict(spent_on=spent_on, category=category, description=description[:255],
+                          amount_cents=amount if refund else -amount,
+                          approved_by=request.form.get("approved_by", "").strip()[:255] or None,
+                          source=request.form.get("source", "").strip()[:255] or None,
+                          notes=request.form.get("notes", "").strip() or None)
+            if cost is None:
+                db.session.add(Expense(recorded_by_id=current_user.id, **values))
+                flash(_("Refund recorded.") if refund else _("Cost recorded."), "success")
+            else:
+                for k, v in values.items():
+                    setattr(cost, k, v)
+                flash(_("Changes saved."), "success")
             db.session.commit()
-            flash(_("Refund recorded.") if refund else _("Cost recorded."), "success")
-            return redirect(url_for("billing.index", view="month", year=spent_on.year, month=spent_on.month))
+            from ..navigation import safe_back
+            return redirect(safe_back() or url_for("billing.index", view="month", year=spent_on.year, month=spent_on.month))
         for e in errors:
             flash(e, "error")
-        return render_template("billing/cost_form.html", form=request.form, categories=COST_CATEGORIES), 400
-    return render_template("billing/cost_form.html", categories=COST_CATEGORIES,
-                           form={"spent_on": date.today().isoformat(), "category": "maintenance", "kind": "cost"})
+        return render_template("billing/cost_form.html", form=request.form, categories=COST_CATEGORIES, cost=cost), 400
+    if cost is None:
+        form = {"spent_on": date.today().isoformat(), "category": "maintenance", "kind": "cost"}
+    else:
+        form = {"spent_on": cost.spent_on.isoformat(), "category": cost.category_key, "kind": "refund" if cost.amount_cents > 0 else "cost",
+                "description": cost.description, "amount": f"{abs(cost.amount_cents) / 100:,.2f}",
+                "approved_by": cost.approved_by or "", "source": cost.source or "", "notes": cost.notes or ""}
+    return render_template("billing/cost_form.html", categories=COST_CATEGORIES, form=form, cost=cost)
 
 
 @bp.route("/costs/<int:cost_id>/delete", methods=["POST"])
@@ -247,9 +270,11 @@ def delete_cost(cost_id):
     cost = db.session.get(Expense, cost_id) or abort(404)
     _unlink(expense_id=cost.id)
     from_sheet = cost.origin == "sheet"
+    from ..sheet_sync import forget
+    forget(cost)
     db.session.delete(cost)
     db.session.commit()
-    flash(_("Cost deleted.") + (" " + _("It came from the Google Sheet: delete the row there too, or it comes back at the next sync.")
+    flash(_("Cost deleted.") + (" " + _("It came from the Google Sheet; the next sync won't add it again.")
                                 if from_sheet else ""), "success" if not from_sheet else "info")
     return redirect(_back_after_delete())
 
@@ -342,7 +367,7 @@ def new_charge():
                                   amount_cents=amount, due_date=due))
             db.session.commit()
             flash(_("Charge added to unit %(number)s.", number=unit.number), "success")
-            return redirect(url_for("billing.ledger", unit_id=unit.id))
+            return redirect(url_for("billing.index", unit=unit.id, year=due.year))
         for e in errors:
             flash(e, "error")
         return render_template("billing/charge_form.html", units=_units(), kinds=_manual_kinds(),
@@ -397,9 +422,8 @@ def new_payment():
 def delete_charge(charge_id):
     charge = db.session.get(Charge, charge_id) or abort(404)
     unit_id = charge.unit_id
-    if charge.origin == "sheet":
-        flash(_("This entry comes from the Google Sheet. Change it there; the next sync updates the app."), "error")
-        return redirect(url_for("billing.ledger", unit_id=unit_id))
+    from ..sheet_sync import forget
+    forget(charge)
     db.session.delete(charge)
     db.session.commit()
     flash(_("Charge removed."), "success")
@@ -413,9 +437,11 @@ def delete_payment(payment_id):
     payment = db.session.get(Payment, payment_id) or abort(404)
     _unlink(payment_id=payment.id)
     from_sheet = payment.origin == "sheet"
+    from ..sheet_sync import forget
+    forget(payment)
     db.session.delete(payment)
     db.session.commit()
-    flash(_("Payment deleted.") + (" " + _("It came from the Google Sheet: delete the row there too, or it comes back at the next sync.")
+    flash(_("Payment deleted.") + (" " + _("It came from the Google Sheet; the next sync won't add it again.")
                                    if from_sheet else ""), "success" if not from_sheet else "info")
     return redirect(_back_after_delete())
 

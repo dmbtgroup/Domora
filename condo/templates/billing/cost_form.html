@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf %}
-{% block title %}{% trans %}Add cost{% endtrans %}{% endblock %}
+{% block title %}{{ _('Edit cost') if cost else _('Add cost') }}{% endblock %}
 {% block content %}
-<h1>{% trans %}Add a cost{% endtrans %}</h1>
+<h1>{{ _('Edit cost') if cost else _('Add a cost') }}</h1>
 <form method="post" class="card narrow">
   {{ csrf() }}
+  {% if safe_back() %}<input type="hidden" name="back" value="{{ safe_back() }}">{% endif %}
   <div class="row">
     <label>{% trans %}Type{% endtrans %} <select name="kind">
       <option value="cost" {{ 'selected' if form.get('kind') != 'refund' }}>{% trans %}Cost (money paid out){% endtrans %}</option>
@@ -22,6 +23,6 @@
   </div>
   <label>{% trans %}Notes{% endtrans %} <textarea name="notes" rows="2">{{ form.get('notes', '') }}</textarea></label>
   <div class="form-actions"><button class="btn primary">{% trans %}Save{% endtrans %}</button>
-  <a href="{{ url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a></div>
+  <a href="{{ safe_back() or url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a></div>
 </form>
 {% endblock %}

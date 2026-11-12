@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 04:14+0000\n"
+"POT-Creation-Date: 2026-11-12 12:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -801,6 +801,9 @@ msgstr "Changer le mot de passe (facultatif)"
 msgid "Change your own password from My profile."
 msgstr "Changez votre propre mot de passe dans Mon profil."
 
+msgid "Changes saved."
+msgstr "Modifications enregistrées."
+
 msgid "Charge"
 msgstr "Frais"
 
@@ -1144,11 +1147,14 @@ msgstr "Supprimer ce solde bancaire ?"
 msgid "Delete this charge?"
 msgstr "Supprimer ce frais ?"
 
+msgid "Delete this charge? It came from the Google Sheet; the next sync won't add it again."
+msgstr "Supprimer ce frais ? Il vient de la feuille Google ; la prochaine synchronisation ne le rajoutera pas."
+
 msgid "Delete this cost?"
 msgstr "Supprimer cette dépense?"
 
-msgid "Delete this cost? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync."
-msgstr "Supprimer cette dépense? Elle vient de la feuille Google : supprimez aussi la ligne dans la feuille, sinon elle reviendra à la prochaine synchronisation."
+msgid "Delete this cost? It came from the Google Sheet; the next sync won't add it again."
+msgstr "Supprimer cette dépense ? Elle vient de la feuille Google ; la prochaine synchronisation ne la rajoutera pas."
 
 msgid "Delete this document?"
 msgstr "Supprimer ce document?"
@@ -1162,8 +1168,8 @@ msgstr "Supprimer cet avis?"
 msgid "Delete this payment?"
 msgstr "Supprimer ce paiement?"
 
-msgid "Delete this payment? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync."
-msgstr "Supprimer ce paiement? Il vient de la feuille Google : supprimez aussi la ligne dans la feuille, sinon il reviendra à la prochaine synchronisation."
+msgid "Delete this payment? It came from the Google Sheet; the next sync won't add it again."
+msgstr "Supprimer ce paiement ? Il vient de la feuille Google ; la prochaine synchronisation ne le rajoutera pas."
 
 msgid "Delete this project? Its updates and quote are deleted too."
 msgstr "Supprimer ce projet? Son suivi et sa soumission seront aussi supprimés."
@@ -1282,6 +1288,9 @@ msgstr "Modifier"
 #, python-format
 msgid "Edit %(name)s"
 msgstr "Modifier %(name)s"
+
+msgid "Edit cost"
+msgstr "Modifier la dépense"
 
 msgid "Edit document"
 msgstr "Modifier le document"
@@ -1646,8 +1655,8 @@ msgstr "Courriel ou mot de passe invalide."
 msgid "Is this bigger planned work for the building?"
 msgstr "S’agit-il de travaux planifiés plus importants pour l’immeuble?"
 
-msgid "It came from the Google Sheet: delete the row there too, or it comes back at the next sync."
-msgstr "Elle venait de la feuille Google : supprimez aussi la ligne dans la feuille, sinon elle reviendra à la prochaine synchronisation."
+msgid "It came from the Google Sheet; the next sync won't add it again."
+msgstr "Il venait de la feuille Google ; la prochaine synchronisation ne le rajoutera pas."
 
 msgid "It won't be shown again."
 msgstr "Il ne sera plus affiché."
@@ -3272,9 +3281,6 @@ msgstr "Cet équipement n’est pas offert à la réservation pour le moment."
 msgid "This contribution has been billed; it can't be deleted."
 msgstr "Cette cotisation a été facturée; elle ne peut pas être supprimée."
 
-msgid "This entry comes from the Google Sheet. Change it there; the next sync updates the app."
-msgstr "Cette entrée vient de la feuille Google. Modifiez-la là; la prochaine synchronisation mettra l’application à jour."
-
 msgid "This is a draft: nobody is notified until you publish it."
 msgstr "Ceci est un brouillon : personne n’est avisé tant que vous ne le publiez pas."
 
@@ -3836,8 +3842,8 @@ msgstr "pour que le site puisse la lire."
 msgid "sq ft"
 msgstr "pi²"
 
-msgid "tab is used as a cross-check. Each sync replaces only what came from the sheet. Entries typed into the app by hand are kept."
-msgstr "sert de vérification croisée. Chaque synchronisation remplace seulement ce qui vient de la feuille. Les entrées saisies à la main dans l’application sont conservées."
+msgid "tab is used as a cross-check. Each sync adds only the rows that haven't been synced yet, so entries you edit or delete in the app stay that way. Entries typed into the app by hand are kept."
+msgstr "sert de vérification croisée. Chaque synchronisation ajoute seulement les lignes pas encore synchronisées ; les entrées modifiées ou supprimées dans l’application restent ainsi. Les entrées saisies à la main dans l’application sont conservées."
 
 msgid "tab, and owner contacts from an optional"
 msgstr "et les contacts des copropriétaires d’un onglet facultatif"

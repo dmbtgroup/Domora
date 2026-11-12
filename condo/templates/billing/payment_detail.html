@@ -6,7 +6,7 @@
 <div class="head"><h1>{% trans %}Payment{% endtrans %} <span class="credit">{{ p.amount_cents|money }}</span></h1>
   {% if current_user.can('accounting_edit') %}
     {{ icon_post('trash', url_for('billing.delete_payment', payment_id=p.id, back=safe_back()), _('Delete'), cls='danger',
-       confirm=(_('Delete this payment? It comes from the Google Sheet, so also delete the row there or it comes back at the next sync.') if p.origin == 'sheet' else _('Delete this payment?'))) }}
+       confirm=(_("Delete this payment? It came from the Google Sheet; the next sync won't add it again.") if p.origin == 'sheet' else _('Delete this payment?'))) }}
   {% endif %}</div>
 <div class="grid two wide-left">
   <section class="card">

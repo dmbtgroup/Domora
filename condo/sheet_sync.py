@@ -1,9 +1,10 @@
 """Keep the app's ledger in step with the condo's Google Sheet transaction log.
 
-The sheet is the source of truth for everything it contains. A sync rebuilds
-every entry that came from the sheet (origin = "sheet"): opening balances,
-monthly fees, payments, purchase credits and building expenses. Entries typed
-into the app by hand are never touched.
+The sheet is the transaction log. A sync adds the rows that haven't been synced yet
+(opening balances, monthly fees, payments, purchase credits and building expenses),
+recognising each row by its key (see entry_keys). Rows already synced are left as
+they are in the app, so an entry edited or deleted in the app stays that way.
+Entries typed into the app by hand are never touched.
 
 Expected tabs:
   Transactions  Date | Unit | Owner | Type | Amount | Approved by ... | Source | Notes
@@ -39,6 +40,30 @@ FETCH_TIMEOUT = 20
 
 class SyncError(ValueError):
     """The sheet couldn't be fetched or doesn't have the expected layout."""
+
+
+REMOVED_SETTING = "sheet_removed_keys"
+
+
+def entry_keys(entries):
+    """Give each sheet row a key that stays the same when rows are added below it: its date, unit,
+    type, amount and notes, plus a counter when the sheet has the same line twice."""
+    seen = {}
+    for e in entries:
+        base = "|".join([e["date"], e.get("unit") or "", e["category"], str(e["amount_cents"]),
+                         (e.get("kind") or "").strip().lower(), (e.get("notes") or "").strip().lower()])
+        seen[base] = seen.get(base, 0) + 1
+        e["key"] = (base if seen[base] == 1 else f"{base}#{seen[base]}")[:255]
+    return entries
+
+
+def forget(item):
+    """An entry that came from the sheet was deleted in the app: remember it so the next sync
+    doesn't add that row again."""
+    if getattr(item, "origin", None) == ORIGIN and getattr(item, "sheet_key", None):
+        removed = Setting.get(REMOVED_SETTING) or []
+        if item.sheet_key not in removed:
+            Setting.put(REMOVED_SETTING, removed + [item.sheet_key])
 
 
 # --- fetching ----------------------------------------------------------------
@@ -221,6 +246,7 @@ def parse(data):
     counts = {c: sum(1 for e in entries if e["category"] == c)
               for c in ("opening", "dues", "payment", "credit", "expense")}
     counts["owners"] = len(contacts) if contacts is not None else None
+    entry_keys(entries)
     return {"kind": "sheet", "hash": hashlib.sha256(data).hexdigest(), "entries": entries, "owners": contacts,
             "units": [{"number": u, "owner": owners.get(u, ""), "fee_cents": fees.get(u),
                        "balance_cents": computed[u], "sheet_balance_cents": expected.get(u)} for u in units],
@@ -361,10 +387,21 @@ def apply(plan):
             unit.monthly_fee_cents = u["fee_cents"]
     db.session.flush()
 
+    entries = plan["entries"]
+    if any("key" not in e for e in entries):  # a preview saved before rows had keys
+        entry_keys(entries)
+    legacy = any(db.session.scalar(db.select(db.func.count(m.id)).where(m.origin == ORIGIN, m.sheet_key.is_(None)))
+                 for m in (Charge, Payment, Expense))
+    if legacy:
+        # Entries synced before rows had keys: rebuild them once, so each one gets its key.
+        for model in (Charge, Payment, Expense):
+            db.session.execute(db.delete(model).where(model.origin == ORIGIN))
+        db.session.flush()
+        db.session.expire_all()  # bulk deletes bypass the session; drop stale relationship caches
+    known = set(Setting.get(REMOVED_SETTING) or [])
     for model in (Charge, Payment, Expense):
-        db.session.execute(db.delete(model).where(model.origin == ORIGIN))
-    db.session.flush()
-    db.session.expire_all()  # bulk deletes bypass the session; drop stale relationship caches
+        known |= set(db.session.scalars(db.select(model.sheet_key).where(model.sheet_key.is_not(None))))
+    added = 0
 
     if plan.get("owners") is not None:
         _sync_owners(plan["owners"], existing)
@@ -373,14 +410,17 @@ def apply(plan):
     taken = set(db.session.execute(
         db.select(Charge.unit_id, Charge.kind, Charge.period).where(Charge.period.is_not(None))).all())
     skipped = []
-    for e in plan["entries"]:
+    for e in entries:
+        if e["key"] in known:
+            continue  # synced before (and maybe edited or deleted in the app since)
         when = date.fromisoformat(e["date"])
         note = " — ".join(x for x in (e["kind"], e["notes"]) if x)
         row = {"tab": "Transactions", "row": e.get("row"), "date": e["date"], "type": e["kind"], "unit": e["unit"],
                "amount_cents": e["amount_cents"], "owner": e.get("owner") or None, "approved": e.get("approved") or None,
                "source": e.get("source") or None, "notes": e.get("notes") or None}
         if e["category"] == "expense":
-            db.session.add(Expense(spent_on=when, amount_cents=e["amount_cents"], origin=ORIGIN,
+            added += 1
+            db.session.add(Expense(spent_on=when, amount_cents=e["amount_cents"], origin=ORIGIN, sheet_key=e["key"],
                                    category=guess_cost_category(f"{e['notes']} {e['kind']}"),
                                    description=_truncate(e["notes"] or e["kind"], 255),
                                    approved_by=_truncate(e["approved"], 255) or None,
@@ -397,13 +437,15 @@ def apply(plan):
                 skipped.append(f"Row {e['row']}: unit {unit.number} already has a {kind} entry for {period}; skipped.")
                 continue
             taken.add((unit.id, kind, period))
-            db.session.add(Charge(unit=unit, kind=kind, period=period, due_date=when, origin=ORIGIN,
+            added += 1
+            db.session.add(Charge(unit=unit, kind=kind, period=period, due_date=when, origin=ORIGIN, sheet_key=e["key"],
                                   amount_cents=e["amount_cents"], description=_truncate(note, 255)))
         else:
             method = "purchase credit" if e["category"] == "credit" else (
                 "bank transfer" if "interac" in e["source"].lower() else "other")
+            added += 1
             db.session.add(Payment(unit=unit, amount_cents=e["amount_cents"], paid_on=when, method=method,
-                                   origin=ORIGIN, notes=_truncate(note, 255), source_data=row))
+                                   origin=ORIGIN, sheet_key=e["key"], notes=_truncate(note, 255), source_data=row))
     db.session.flush()
 
     mismatches = []
@@ -413,7 +455,7 @@ def apply(plan):
             mismatches.append(f"Unit {u['number']}: the app shows {cents_str(existing[u['number']].balance)} "
                               f"but the sheet's Balances tab says {cents_str(expected)}.")
     summary = {"at": utcnow().isoformat(timespec="seconds"), "hash": plan["hash"], "counts": plan["counts"],
-               "units_created": created, "skipped": skipped, "mismatches": mismatches,
+               "units_created": created, "skipped": skipped, "mismatches": mismatches, "added": added,
                "warnings": plan["warnings"]}
     Setting.put("sheet_last_sync", summary)
     db.session.commit()

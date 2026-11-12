@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 04:14+0000\n"
+"POT-Creation-Date: 2026-11-12 12:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -831,6 +831,9 @@ msgstr ""
 msgid "Change your own password from My profile."
 msgstr ""
 
+msgid "Changes saved."
+msgstr ""
+
 msgid "Charge"
 msgstr ""
 
@@ -1181,12 +1184,17 @@ msgstr ""
 msgid "Delete this charge?"
 msgstr ""
 
+msgid ""
+"Delete this charge? It came from the Google Sheet; the next sync won't "
+"add it again."
+msgstr ""
+
 msgid "Delete this cost?"
 msgstr ""
 
 msgid ""
-"Delete this cost? It comes from the Google Sheet, so also delete the row "
-"there or it comes back at the next sync."
+"Delete this cost? It came from the Google Sheet; the next sync won't add "
+"it again."
 msgstr ""
 
 msgid "Delete this document?"
@@ -1202,8 +1210,8 @@ msgid "Delete this payment?"
 msgstr ""
 
 msgid ""
-"Delete this payment? It comes from the Google Sheet, so also delete the "
-"row there or it comes back at the next sync."
+"Delete this payment? It came from the Google Sheet; the next sync won't "
+"add it again."
 msgstr ""
 
 msgid "Delete this project? Its updates and quote are deleted too."
@@ -1333,6 +1341,9 @@ msgstr ""
 
 #, python-format
 msgid "Edit %(name)s"
+msgstr ""
+
+msgid "Edit cost"
 msgstr ""
 
 msgid "Edit document"
@@ -1711,9 +1722,7 @@ msgstr ""
 msgid "Is this bigger planned work for the building?"
 msgstr ""
 
-msgid ""
-"It came from the Google Sheet: delete the row there too, or it comes back"
-" at the next sync."
+msgid "It came from the Google Sheet; the next sync won't add it again."
 msgstr ""
 
 msgid "It won't be shown again."
@@ -3411,11 +3420,6 @@ msgstr ""
 msgid "This contribution has been billed; it can't be deleted."
 msgstr ""
 
-msgid ""
-"This entry comes from the Google Sheet. Change it there; the next sync "
-"updates the app."
-msgstr ""
-
 msgid "This is a draft: nobody is notified until you publish it."
 msgstr ""
 
@@ -4003,8 +4007,9 @@ msgid "sq ft"
 msgstr ""
 
 msgid ""
-"tab is used as a cross-check. Each sync replaces only what came from the "
-"sheet. Entries typed into the app by hand are kept."
+"tab is used as a cross-check. Each sync adds only the rows that haven't "
+"been synced yet, so entries you edit or delete in the app stay that way. "
+"Entries typed into the app by hand are kept."
 msgstr ""
 
 msgid "tab, and owner contacts from an optional"
