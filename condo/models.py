@@ -937,9 +937,10 @@ class SpecialContribution(db.Model):
     created_by = db.relationship("User")
 
     def paid_by_unit(self):
-        rows = db.session.execute(db.select(Payment.unit_id, db.func.sum(Payment.amount_cents))
-                                  .where(Payment.special_id == self.id).group_by(Payment.unit_id)).all()
-        return {unit_id: total for unit_id, total in rows}
+        """What each unit has paid towards this contribution: payments recorded for it, plus its part of
+        the unit's "Special contribution" payments that aren't linked to one (e.g. from the Google Sheet),
+        which go to the contributions in deadline order."""
+        return special_allocations().get(self.id, {})
 
     def status_rows(self, today=None):
         from datetime import date
@@ -951,6 +952,8 @@ class SpecialContribution(db.Model):
             left = max(sh.amount_cents - p, 0)
             if sh.amount_cents == 0 or left == 0:
                 status = "paid"
+            elif self.billed_at is None and not p:
+                status = "draft"
             elif today > self.deadline:
                 status = "overdue"
             else:
@@ -964,7 +967,38 @@ class SpecialContribution(db.Model):
         return min(sum(self.paid_by_unit().values()), self.total_cents)
 
 
-SPECIAL_STATUS_LABELS = {"paid": _l("Paid"), "partial": _l("Partly paid"), "unpaid": _l("Not paid yet"), "overdue": _l("Overdue")}
+def special_allocations():
+    """{contribution id: {unit id: cents paid}} for every special contribution.
+
+    Payments recorded for a contribution count for it. A unit's other payments described as a special
+    contribution (the Google Sheet's "Special contribution" type) fill its shares in deadline order;
+    whatever is left over after the last one counts for the last one."""
+    specials = db.session.scalars(db.select(SpecialContribution).order_by(SpecialContribution.deadline,
+                                                                          SpecialContribution.id)).all()
+    result = {sc.id: {} for sc in specials}
+    for unit_id, special_id, total in db.session.execute(
+            db.select(Payment.unit_id, Payment.special_id, func.sum(Payment.amount_cents))
+            .where(Payment.special_id.is_not(None)).group_by(Payment.unit_id, Payment.special_id)):
+        if special_id in result:
+            result[special_id][unit_id] = total
+    loose = {}
+    for p in db.session.scalars(db.select(Payment).where(Payment.special_id.is_(None),
+                                                         func.lower(Payment.notes).like("special contribution%"))):
+        loose[p.unit_id] = loose.get(p.unit_id, 0) + p.amount_cents
+    for unit_id, cents in loose.items():
+        mine = [(sc, sh) for sc in specials for sh in sc.shares if sh.unit_id == unit_id]
+        for i, (sc, sh) in enumerate(mine):
+            if cents <= 0:
+                break
+            have = result[sc.id].get(unit_id, 0)
+            take = cents if i == len(mine) - 1 else min(cents, max(sh.amount_cents - have, 0))
+            result[sc.id][unit_id] = have + take
+            cents -= take
+    return result
+
+
+SPECIAL_STATUS_LABELS = {"paid": _l("Paid"), "partial": _l("Partly paid"), "unpaid": _l("Not paid yet"), "overdue": _l("Overdue"),
+                         "draft": _l("Not billed yet")}
 
 
 class SpecialShare(db.Model):

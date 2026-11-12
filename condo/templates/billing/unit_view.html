@@ -40,7 +40,7 @@
         <tr><td>{% if current_user.can('accounting') %}<a href="{{ url_for('fees.special', special_id=sc.id) }}">{{ sc.title }}</a>{% else %}{{ sc.title }}{% endif %}</td>
           <td class="nowrap">{{ sc.deadline|fdate('medium') }}</td><td class="num">{{ r.amount|money }}</td>
           <td class="num">{{ r.left|money if r.left else '—' }}</td>
-          <td><span class="badge sc-{{ r.status }}">{{ {'paid': _('Paid'), 'partial': _('Partly paid'), 'unpaid': _('Not paid yet'), 'overdue': _('Overdue')}[r.status] }}</span></td></tr>
+          <td><span class="badge sc-{{ r.status }}">{{ {'paid': _('Paid'), 'partial': _('Partly paid'), 'unpaid': _('Not paid yet'), 'overdue': _('Overdue'), 'draft': _('Not billed yet')}[r.status] }}</span></td></tr>
       {% endfor %}</tbody>
     </table>{% else %}<p class="muted">{% trans %}None.{% endtrans %}</p>{% endif %}
   </section>

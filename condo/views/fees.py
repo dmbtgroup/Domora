@@ -321,9 +321,12 @@ def unit_summary(unit, year=None):
     if schedule:
         fee = next((r for r in schedule.unit_fees(_units()) if r["unit"].id == unit.id), None)
     specials = []
-    for sc in db.session.scalars(db.select(SpecialContribution).where(SpecialContribution.billed_at.is_not(None))
-                                 .order_by(SpecialContribution.deadline.desc())):
+    for sc in db.session.scalars(db.select(SpecialContribution).order_by(SpecialContribution.deadline.desc())):
+        # The year's contributions (deadline or creation that year), billed or not, and any still owed.
+        in_year = sc.deadline.year == year or (sc.created_at and sc.created_at.year == year)
         row = next((r for r in sc.status_rows() if r["unit"].id == unit.id), None)
+        if row and not in_year and not (sc.billed_at and row["left"]):
+            continue
         if row:
             specials.append((sc, row))
     return {"year": year, "fee": fee, "specials": specials, "schedule": schedule}

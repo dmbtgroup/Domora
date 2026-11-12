@@ -205,3 +205,31 @@ def test_cron_runs_renewal_check(app, client, monkeypatch):
     monkeypatch.setattr("condo.views.fees.check_renewals", lambda: calls.append(1) or 0)
     assert client.get("/sheet/cron", headers={"Authorization": "Bearer s3cret"}).status_code == 200
     assert calls == [1]
+
+
+def test_unit_page_shows_this_years_contributions_billed_or_not(admin_client):
+    """Two contributions this year, one billed and one not; the unit's sheet payment marked
+    "Special contribution" isn't linked to either, and counts towards the earliest first."""
+    set_shares(0.5, 0.3, 0.2)
+    y = date.today().year
+    soon, later = date.today() + timedelta(days=5), date.today() + timedelta(days=40)
+    admin_client.post("/accounting/specials/new", data={"title": "Parking heaters", "method": "share", "total": "1,000",
+                                                        "deadline": soon.isoformat()})
+    admin_client.post("/accounting/specials/new", data={"title": "Roof repair", "method": "share", "total": "2,000",
+                                                        "deadline": later.isoformat()})
+    heaters, roof = db.session.scalars(db.select(SpecialContribution).order_by(SpecialContribution.id)).all()
+    admin_client.post(f"/accounting/specials/{heaters.id}/bill")
+    u = unit("101")  # 50%: owes 500 + 1,000
+    db.session.add(Payment(unit=u, amount_cents=70000, paid_on=date.today(), method="other", origin="sheet",
+                           notes="Special contribution"))
+    db.session.commit()
+    rows = {sc.title: r for sc, r in unit_summary(u, y)["specials"]}
+    assert rows["Parking heaters"]["paid"] == 50000 and rows["Parking heaters"]["status"] == "paid"
+    assert rows["Roof repair"]["amount"] == 100000 and rows["Roof repair"]["paid"] == 20000
+    assert rows["Roof repair"]["left"] == 80000 and rows["Roof repair"]["status"] == "partial"
+    page = admin_client.get(f"/accounting/?unit={u.id}&year={y}").data.decode()
+    assert "Parking heaters" in page and "Roof repair" in page and "$1,000.00" in page and "$800.00" in page
+    # A unit that paid nothing yet towards a contribution that isn't billed yet.
+    rows = {sc.title: r for sc, r in unit_summary(unit("102"), y)["specials"]}
+    assert rows["Roof repair"]["status"] == "draft" and rows["Parking heaters"]["status"] == "unpaid"
+    assert "Not billed yet" in admin_client.get(f"/accounting/?unit={unit('102').id}&year={y}").data.decode()

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 12:50+0000\n"
+"POT-Creation-Date: 2026-11-12 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -2122,6 +2122,9 @@ msgstr "Normale"
 
 msgid "Not applied yet: units still use their current monthly fee."
 msgstr "Pas encore appliqué : les unités utilisent encore leurs frais mensuels actuels."
+
+msgid "Not billed yet"
+msgstr "Pas encore facturée"
 
 msgid "Not billed yet, so it can still be deleted."
 msgstr "Pas encore facturée : elle peut encore être supprimée."

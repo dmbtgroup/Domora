@@ -660,3 +660,4 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .bank-figures span.bank-big { font-size: 1.6rem; }
 @media (max-width: 600px) { .bank-figures { grid-template-columns: 1fr; } }
 .head-tools { display: inline-flex; align-items: center; gap: .6rem; }
+.sc-draft { color: var(--muted); }
