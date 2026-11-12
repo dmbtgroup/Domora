@@ -12,6 +12,7 @@
     <a class="btn primary" href="{{ url_for('billing.new_payment', unit_id=unit.id) }}">{% trans %}Record payment{% endtrans %}</a>
     {% endif %}
   </div></div>
+{% if scope == 'all' %}{% include "billing/_tabs.html" %}{% endif %}
 {% include "billing/_period_bar.html" %}
 {% if unit.owner_display %}<p class="muted">{{ unit.owner_display }}{% if unit.ownership_share %} {% trans f=(unit.ownership_share * 100)|pct %}· {{ f }} of the building{% endtrans %}{% endif %}</p>{% endif %}
 

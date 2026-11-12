@@ -46,7 +46,7 @@ def test_staff_accounting_view_vs_record(app, client):
     staff(["accounting"])
     login(client, "staff@x.com")
     page = client.get("/accounting/").data.decode()
-    assert "All units" in page and "Add payment" not in page
+    assert "By unit" in page and "Add payment" not in page
     assert client.get("/accounting/payments/new").status_code == 403
     client.post("/logout")
     staff(["accounting_edit"], email="book@x.com")

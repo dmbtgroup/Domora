@@ -1,7 +1,7 @@
 import calendar
 from datetime import date
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 
 from ..extensions import db
@@ -122,6 +122,16 @@ def index():
     else:
         raw = request.args.get("unit", "")
         unit = db.session.get(Unit, int(raw)) if raw.isdigit() else None
+        if unit is None and request.args.get("tab") == "unit":
+            # The "By unit" tab: the unit looked at last, else the first one.
+            last = session.get("accounting_unit")
+            unit = (db.session.get(Unit, last) if last else None) or db.session.scalar(
+                db.select(Unit).order_by(Unit.number))
+            if unit is None:
+                flash(_("Add the building's units first."), "info")
+                return redirect(url_for("billing.index"))
+        if unit is not None:
+            session["accounting_unit"] = unit.id
     if unit is not None and scope == "all":
         for key in ("prev", "next"):
             period[key] = {**period[key], "unit": unit.id}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:13+0000\n"
+"POT-Creation-Date: 2026-11-12 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -419,6 +419,9 @@ msgstr "Ajouter le renouvellement"
 msgid "Add tenant"
 msgstr "Ajouter un locataire"
 
+msgid "Add the building's units first."
+msgstr "Ajoutez d’abord les unités de l’immeuble."
+
 #, python-format
 msgid "Add the unit's %(group)s first; the policy names one of them as policyholder."
 msgstr "Ajoutez d’abord les %(group)s de l’unité; la police désigne l’une de ces personnes comme titulaire."
@@ -459,9 +462,6 @@ msgstr "Tous les avis →"
 
 msgid "All owners"
 msgstr "Tous les copropriétaires"
-
-msgid "All units"
-msgstr "Toutes les unités"
 
 msgid "All units are paid up."
 msgstr "Toutes les unités sont à jour."
@@ -773,6 +773,9 @@ msgstr "Selon la quote-part"
 
 msgid "By ownership share (a unit's owners split its share)"
 msgstr "Selon la quote-part (les copropriétaires d’une unité se partagent sa quote-part)"
+
+msgid "By unit"
+msgstr "Par unité"
 
 msgid "CRON_SECRET isn't set on the server, so scheduled checks can't run yet."
 msgstr "CRON_SECRET n’est pas défini sur le serveur : les vérifications planifiées ne peuvent pas encore s’exécuter."

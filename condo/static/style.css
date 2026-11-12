@@ -662,3 +662,10 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .head-tools { display: inline-flex; align-items: center; gap: .6rem; }
 .sc-draft { color: var(--muted); }
 .paid-before { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .3rem 1rem; margin-bottom: .8rem; }
+
+/* Accounting → By unit: one button per unit */
+.unit-picker { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; }
+.unit-picker a { min-width: 3.2rem; text-align: center; padding: .35rem .7rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); font-weight: 600; }
+.unit-picker a:hover { border-color: var(--brand); text-decoration: none; }
+.unit-picker a.active { background: var(--primary); border-color: var(--primary); color: #fff; }

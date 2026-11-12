@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:13+0000\n"
+"POT-Creation-Date: 2026-11-12 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -437,6 +437,9 @@ msgstr ""
 msgid "Add tenant"
 msgstr ""
 
+msgid "Add the building's units first."
+msgstr ""
+
 #, python-format
 msgid ""
 "Add the unit's %(group)s first; the policy names one of them as "
@@ -480,9 +483,6 @@ msgid "All notices →"
 msgstr ""
 
 msgid "All owners"
-msgstr ""
-
-msgid "All units"
 msgstr ""
 
 msgid "All units are paid up."
@@ -802,6 +802,9 @@ msgid "By ownership share"
 msgstr ""
 
 msgid "By ownership share (a unit's owners split its share)"
+msgstr ""
+
+msgid "By unit"
 msgstr ""
 
 msgid "CRON_SECRET isn't set on the server, so scheduled checks can't run yet."

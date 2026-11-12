@@ -14,10 +14,8 @@
     <input type="hidden" name="view" value="{{ period.view }}">
     <select name="year" aria-label="{{ _('Year') }}">{% for y in range(today.year + 1, 2014, -1) %}<option {{ 'selected' if y == period.year }}>{{ y }}</option>{% endfor %}</select>
     {% if period.view == 'month' %}<select name="month" aria-label="{{ _('Month') }}">{% for m in range(1, 13) %}<option value="{{ m }}" {{ 'selected' if m == period.month }}>{{ months_names[m-1] }}</option>{% endfor %}</select>{% endif %}
-    {% if scope == 'all' %}
-    <select name="unit" aria-label="{{ _('Unit') }}"><option value="">{% trans %}All units{% endtrans %}</option>
-      {% for u in all_units %}<option value="{{ u.id }}" {{ 'selected' if unit and unit.id == u.id }}>{% trans number=u.number %}Unit {{ number }}{% endtrans %}</option>{% endfor %}</select>
-    {% else %}<span class="tag">{% trans number=unit.number %}Unit {{ number }}{% endtrans %}</span>{% endif %}
+    {% if scope == 'all' %}{% if unit %}<input type="hidden" name="unit" value="{{ unit.id }}">{% endif %}
+    {% elif unit %}<span class="tag">{% trans number=unit.number %}Unit {{ number }}{% endtrans %}</span>{% endif %}
     <button class="btn small">{% trans %}Go{% endtrans %}</button>
   </form>
 </div>

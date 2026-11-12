@@ -120,10 +120,10 @@ def test_manager_unit_filter(admin_client):
     u = unit("101")
     page = admin_client.get(f"/accounting/?view=year&year=2026&unit={u.id}").data.decode()
     assert "· Unit 101" in page and "<h2>Charges" in page and "Hydra" not in page
-    assert f'value="{u.id}" selected' in page
+    assert f'aria-current="page">101<' in page  # the By unit tab, with 101 picked
     assert f"unit={u.id}" in page.split('aria-label="Previous"')[0].split("period-nav")[1]  # arrows keep the unit
     allpage = admin_client.get("/accounting/?view=year&year=2026").data.decode()
-    assert "All units" in allpage and "Hydra" in allpage
+    assert "By unit" in allpage and "Hydra" in allpage
 
 
 def test_board_member_manages_accounting(app, client):
@@ -136,7 +136,7 @@ def test_board_member_manages_accounting(app, client):
     seed()
     login(client, "alice@test.com")
     page = client.get("/accounting/").data.decode()
-    assert "All units" in page and "Hydra" in page and "Add cost" in page and "Add charge" in page
+    assert "By unit" in page and "Hydra" in page and "Add cost" in page and "Add charge" in page
     assert client.get("/accounting/costs/new").status_code == 200
 
 
@@ -302,3 +302,17 @@ def test_payments_charges_and_credits_can_be_edited(admin_client):
                                                                 "amount": "650.00", "due_date": "2026-11-01"})
     fee = db.session.get(Charge, fee.id)
     assert fee.amount_cents == 65000 and fee.kind == "dues"
+
+
+def test_building_and_by_unit_tabs(admin_client):
+    page = admin_client.get("/accounting/?year=2026").data.decode()
+    tabs = page.split('class="section-tabs"')[1].split("</nav>")[0]
+    assert "Building" in tabs and "By unit" in tabs and "All units" not in page
+    resp = admin_client.get("/accounting/?tab=unit&view=year&year=2026")
+    first = db.session.scalar(db.select(Unit).order_by(Unit.number))
+    page = resp.data.decode()
+    assert f"Unit {first.number}" in page and 'class="unit-picker"' in page
+    u102 = db.session.scalar(db.select(Unit).where(Unit.number == "102"))
+    admin_client.get(f"/accounting/?unit={u102.id}&year=2026")
+    page = admin_client.get("/accounting/?tab=unit&view=year&year=2026").data.decode()  # remembers the last unit
+    assert f'aria-current="page">102<' in page

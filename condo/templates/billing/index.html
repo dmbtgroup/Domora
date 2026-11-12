@@ -21,6 +21,7 @@
 
 {% if sheet_clashes %}<div class="flash flash-info">{% trans count=sheet_clashes %}{{ count }} old entry from before the Google Sheet makes balances differ from the sheet.{% pluralize %}{{ count }} old entries from before the Google Sheet make balances differ from the sheet.{% endtrans %}
   <a href="{{ url_for('sheet.index') }}">{% trans %}Review and remove them{% endtrans %}</a></div>{% endif %}
+{% if scope == 'all' %}{% include "billing/_tabs.html" %}{% endif %}
 {% include "billing/_period_bar.html" %}
 
 {% if not sheet.get('url') and current_user.can('accounting_edit') %}

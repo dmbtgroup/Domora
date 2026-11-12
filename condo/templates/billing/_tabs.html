@@ -1,0 +1,11 @@
+{# Accounting for the whole building, or for one unit. Keeps the period that's being looked at. #}
+{% set pargs = {'view': period.view, 'year': period.year} %}{% if period.view == 'month' %}{% set _ignored = pargs.update({'month': period.month}) %}{% endif %}
+<nav class="section-tabs">
+  <a href="{{ url_for('billing.index', **pargs) }}" class="{{ 'active' if unit is none }}">{% trans %}Building{% endtrans %}</a>
+  <a href="{{ url_for('billing.index', tab='unit', **pargs) if unit is none else url_for('billing.index', unit=unit.id, **pargs) }}" class="{{ 'active' if unit is not none }}">{% trans %}By unit{% endtrans %}</a>
+</nav>
+{% if unit is not none %}
+<nav class="unit-picker" aria-label="{{ _('Unit') }}">
+  {% for u in all_units %}<a href="{{ url_for('billing.index', unit=u.id, **pargs) }}" class="{{ 'active' if u.id == unit.id }}"{% if u.id == unit.id %} aria-current="page"{% endif %}>{{ u.number }}</a>{% endfor %}
+</nav>
+{% endif %}
