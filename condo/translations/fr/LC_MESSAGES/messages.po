@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 01:54+0000\n"
+"POT-Creation-Date: 2026-11-13 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1530,6 +1530,10 @@ msgstr "Début"
 msgid "From %(filename)s, read %(created_at)s UTC. Confirming replaces every entry that previously came from the sheet with the ones below."
 msgstr "Tiré de %(filename)s, lu le %(created_at)s UTC. Confirmer remplace toutes les entrées venant auparavant de la feuille par celles ci-dessous."
 
+#, python-format
+msgid "From maintenance request #%(num)s. Saving closes the request."
+msgstr "À partir de la demande d’entretien nº %(num)s. L’enregistrement ferme la demande."
+
 msgid "Full name"
 msgstr "Nom complet"
 
@@ -1677,8 +1681,8 @@ msgstr "Virement Interac / virement bancaire"
 msgid "Invalid email or password."
 msgstr "Courriel ou mot de passe invalide."
 
-msgid "Is this bigger planned work for the building?"
-msgstr "S’agit-il de travaux planifiés plus importants pour l’immeuble?"
+msgid "Is this bigger planned work, or upkeep that comes back on a schedule?"
+msgstr "S’agit-il de travaux planifiés plus importants, ou d’un entretien qui revient selon un calendrier?"
 
 msgid "It came from the Google Sheet; the next sync won't add it again."
 msgstr "Il venait de la feuille Google ; la prochaine synchronisation ne le rajoutera pas."
@@ -1878,6 +1882,9 @@ msgstr "Déplacer vers Entretien"
 
 msgid "Move to Projects"
 msgstr "Déplacer vers Projets"
+
+msgid "Move to Routine"
+msgstr "Déplacer vers l’entretien courant"
 
 msgid "Moved to Maintenance."
 msgstr "Déplacé vers Entretien."
@@ -3274,6 +3281,9 @@ msgstr "Une soumission a été demandée au copropriétaire."
 
 msgid "The password must be at least 8 characters."
 msgstr "Le mot de passe doit contenir au moins 8 caractères."
+
+msgid "The request was closed and points to it."
+msgstr "La demande a été fermée et y renvoie."
 
 msgid "The sheet couldn't be read as a spreadsheet."
 msgstr "La feuille n’a pas pu être lue comme un tableur."

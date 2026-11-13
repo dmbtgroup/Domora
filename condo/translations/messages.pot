@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 01:54+0000\n"
+"POT-Creation-Date: 2026-11-13 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1593,6 +1593,10 @@ msgid ""
 "entry that previously came from the sheet with the ones below."
 msgstr ""
 
+#, python-format
+msgid "From maintenance request #%(num)s. Saving closes the request."
+msgstr ""
+
 msgid "Full name"
 msgstr ""
 
@@ -1744,7 +1748,7 @@ msgstr ""
 msgid "Invalid email or password."
 msgstr ""
 
-msgid "Is this bigger planned work for the building?"
+msgid "Is this bigger planned work, or upkeep that comes back on a schedule?"
 msgstr ""
 
 msgid "It came from the Google Sheet; the next sync won't add it again."
@@ -1948,6 +1952,9 @@ msgid "Move to Maintenance"
 msgstr ""
 
 msgid "Move to Projects"
+msgstr ""
+
+msgid "Move to Routine"
 msgstr ""
 
 msgid "Moved to Maintenance."
@@ -3398,6 +3405,9 @@ msgid "The owner has been asked for a quote."
 msgstr ""
 
 msgid "The password must be at least 8 characters."
+msgstr ""
+
+msgid "The request was closed and points to it."
 msgstr ""
 
 msgid "The sheet couldn't be read as a spreadsheet."

@@ -211,7 +211,8 @@ def detail(request_id):
     return render_template("maintenance/detail.html", req=req, statuses=REQUEST_STATUSES,
                            priorities=REQUEST_PRIORITIES, can_decide=can_decide(req), owner_accounts=owners,
                            board=is_board(), unit_owner=is_unit_owner(req), accept=files.ACCEPT,
-                           can_projects=can_add_projects(), can_delete=can_delete(req))
+                           can_projects=can_add_projects(), can_delete=can_delete(req),
+                           can_routine=can_manage_routine())
 
 
 def is_unit_owner(req, user=None):
@@ -607,13 +608,22 @@ def routine_new():
     if not can_manage_routine():
         abort(403)
     task = RoutineTask()
+    # "Move to Routine" from a maintenance request: the form starts from the request, which is closed once saved.
+    raw = request.values.get("from_request", "")
+    source = db.session.get(MaintenanceRequest, int(raw)) if raw.isdigit() else None
     if request.method == "POST":
         errors = _routine_form(task, request.form)
         if not errors:
             task.created_by_id = current_user.id
             db.session.add(task)
+            if source is not None:
+                db.session.flush()
+                source.status = "closed"
+                db.session.add(MaintenanceComment(request=source, author_id=current_user.id,
+                                                  body=f"Moved to routine maintenance: {task.title} ({current_user.name})"))
             db.session.commit()
-            flash(_("Routine task added: %(title)s.", title=task.title), "success")
+            flash(_("Routine task added: %(title)s.", title=task.title)
+                  + (" " + _("The request was closed and points to it.") if source is not None else ""), "success")
             return redirect(url_for("maintenance.routine_detail", task_id=task.id))
         for e in errors:
             flash(e, "error")
@@ -627,6 +637,9 @@ def routine_new():
             "category": request.args.get("category", "Other"), "next_due": due.isoformat(),
             "season_from": request.args.get("season_from", ""), "season_to": request.args.get("season_to", ""),
             "active": True}
+    if source is not None:
+        form.update(title=source.title, category=source.category if source.category in REQUEST_CATEGORIES else "Other",
+                    description=source.description, from_request=source.id)
     return _render_routine_form(task, form)
 
 

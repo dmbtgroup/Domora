@@ -5,6 +5,8 @@
 <h1>{{ _('Edit routine task') if task.id else _('New routine task') }}</h1>
 <form method="post" class="card narrow">
   {{ csrf() }}
+  {% if form.get('from_request') %}<input type="hidden" name="from_request" value="{{ form.get('from_request') }}">
+  <div class="flash flash-info">{% trans num=form.get('from_request') %}From maintenance request #{{ num }}. Saving closes the request.{% endtrans %}</div>{% endif %}
   <label>{% trans %}Task{% endtrans %} <input name="title" required maxlength="200" value="{{ form.get('title', '') }}" placeholder="{{ _('e.g. Snow removal') }}"></label>
   <label>{% trans %}Details{% endtrans %} <span class="muted">{% trans %}(optional){% endtrans %}</span><textarea name="description" rows="3" placeholder="{{ _('What is included, access instructions…') }}">{{ form.get('description', '') }}</textarea></label>
   <div class="row">

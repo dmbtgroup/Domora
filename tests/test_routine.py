@@ -105,3 +105,24 @@ def test_back_link_returns_to_routine(admin_client):
     make(admin_client)
     t = db.session.scalar(db.select(RoutineTask))
     assert "← Back to Routine" in admin_client.get(f"/maintenance/routine/{t.id}").data.decode()
+
+
+def test_move_a_maintenance_request_to_routine(admin_client):
+    from condo.models import MaintenanceComment, MaintenanceRequest
+    admin = db.session.scalar(db.select(User).where(User.email == "admin@test.com"))
+    req = MaintenanceRequest(title="Clean the dryer vents", description="Lint builds up every year.", category="Appliance",
+                             submitted_by=admin, kind="maintenance")
+    db.session.add(req)
+    db.session.commit()
+    page = admin_client.get(f"/maintenance/{req.id}").data.decode()
+    assert "Move to Routine" in page and f"/maintenance/routine/new?from_request={req.id}" in page
+    form = admin_client.get(f"/maintenance/routine/new?from_request={req.id}").data.decode()
+    assert 'value="Clean the dryer vents"' in form and "Lint builds up" in form and "Saving closes the request" in form
+    resp = admin_client.post(f"/maintenance/routine/new?from_request={req.id}",
+                             data={"title": "Clean the dryer vents", "frequency": "yearly", "category": "Appliance",
+                                   "next_due": "2027-03-01", "from_request": str(req.id)})
+    task = db.session.scalar(db.select(RoutineTask))
+    assert resp.status_code == 302 and task.title == "Clean the dryer vents"
+    req = db.session.get(MaintenanceRequest, req.id)
+    assert req.status == "closed"
+    assert any("Moved to routine maintenance" in c.body for c in req.comments)

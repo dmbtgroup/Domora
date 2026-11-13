@@ -143,8 +143,11 @@
       {{ post_button(url_for('maintenance.project_details', request_id=req.id), _('Move to Maintenance'), cls='link-btn', extra={'kind': 'maintenance'}) }}
       {% else %}
       <h2>{% trans %}Filed under Maintenance{% endtrans %}</h2>
-      <p class="muted">{% trans %}Is this bigger planned work for the building?{% endtrans %}</p>
-      {{ post_button(url_for('maintenance.project_details', request_id=req.id), _('Move to Projects'), cls='btn', extra={'kind': 'project'}) }}
+      <p class="muted">{% trans %}Is this bigger planned work, or upkeep that comes back on a schedule?{% endtrans %}</p>
+      <div class="actions">
+        {{ post_button(url_for('maintenance.project_details', request_id=req.id), _('Move to Projects'), cls='btn', extra={'kind': 'project'}) }}
+        {% if can_routine %}<a class="btn" href="{{ url_for('maintenance.routine_new', from_request=req.id) }}">{% trans %}Move to Routine{% endtrans %}</a>{% endif %}
+      </div>
       {% endif %}
     </div>
     {% endif %}
