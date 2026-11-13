@@ -6,6 +6,7 @@ from flask_login import current_user
 from ..extensions import db
 from ..models import ACTIVE_STATUSES, Announcement, Booking, MaintenanceRequest, Owner, Unit
 from ..models import Reimbursement
+from ..i18n import gettext as _
 from .directory import board_members
 from .reimbursements import is_accounting, is_president
 from .documents import current_building_insurance
@@ -47,7 +48,7 @@ def index():
         awaiting = [r for r in open_requests if r.awaiting_owner]
         insurance_alerts = []
         for u in units:
-            for group, label in (("owners", "Owners"), ("tenants", "Tenants")):
+            for group, label in (("owners", _("Owners")), ("tenants", _("Tenants"))):
                 state = u.group_insurance(group)
                 if state in ("missing", "expired", "expiring"):
                     insurance_alerts.append((u, label, state))

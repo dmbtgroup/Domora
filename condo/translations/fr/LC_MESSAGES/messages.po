@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:54+0000\n"
+"POT-Creation-Date: 2026-11-13 00:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1197,6 +1197,12 @@ msgstr "Supprimer cette unité?"
 
 msgid "Delete this vote and all its ballots? This cannot be undone."
 msgstr "Supprimer ce vote et tous ses bulletins? Cette action est irréversible."
+
+msgid "Demo accounts"
+msgstr "Comptes de démonstration"
+
+msgid "Demo: a made-up condo to try the portal. Changes may be reset at any time."
+msgstr "Démo : une copropriété fictive pour essayer le portail. Les changements peuvent être effacés à tout moment."
 
 msgid "Describe the cost."
 msgstr "Décrivez la dépense."
@@ -2393,6 +2399,9 @@ msgstr "Payée en partie"
 
 msgid "Password"
 msgstr "Mot de passe"
+
+msgid "Password for every account:"
+msgstr "Mot de passe de tous les comptes :"
 
 msgid "Password must be at least 8 characters."
 msgstr "Le mot de passe doit contenir au moins 8 caractères."
@@ -3731,6 +3740,9 @@ msgstr "les soldes ne correspondent pas à la feuille"
 msgid "board only"
 msgstr "conseil seulement"
 
+msgid "board president (sees everything)"
+msgstr "présidente du conseil (voit tout)"
+
 #, python-format
 msgid "by %(name)s"
 msgstr "par %(name)s"
@@ -3860,6 +3872,12 @@ msgstr "facultative"
 msgid "owed %(owed)s · credit %(credit)s"
 msgstr "dû %(owed)s · crédit %(credit)s"
 
+msgid "owner"
+msgstr "copropriétaire"
+
+msgid "owner and treasurer"
+msgstr "copropriétaire et trésorier"
+
 msgid "so owners and tenants can see it."
 msgstr "pour que les copropriétaires et les locataires puissent la consulter."
 
@@ -3883,6 +3901,9 @@ msgstr "temporaire"
 
 msgid "temporary password"
 msgstr "mot de passe temporaire"
+
+msgid "tenant"
+msgstr "locataire"
 
 msgid "the previous page"
 msgstr "la page précédente"

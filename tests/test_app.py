@@ -311,3 +311,21 @@ def test_installable_as_an_app_and_branded_dmbt(client):
     page = client.get("/login").data.decode()
     assert 'rel="manifest"' in page and "apple-touch-icon" in page
     assert "Domora" in page and "by DMBT Group" in page and "support@dmbtgroup.com" in page
+
+
+def test_french_demo_condo_loads_through_the_portal(app):
+    from condo import demo
+    from condo.models import Payment, Poll, PollVoter, RoutineTask, SpecialContribution
+    db.session.remove()
+    db.drop_all()
+    db.create_all()
+    assert demo.load_if_empty(app) and not demo.load_if_empty(app)
+    assert db.session.scalar(db.select(db.func.count(Unit.id))) >= 8
+    assert db.session.scalar(db.select(SpecialContribution)).billed_at is not None
+    poll = db.session.scalar(db.select(Poll))
+    assert poll.status == "open" and db.session.scalar(db.select(db.func.count(PollVoter.id)).where(
+        PollVoter.option_id.is_not(None))) == 4
+    assert db.session.scalar(db.select(db.func.count(RoutineTask.id))) == 3
+    assert db.session.scalar(db.select(db.func.count(Payment.id))) > 20
+    board = db.session.scalar(db.select(User).where(User.email == demo.BOARD_EMAIL))
+    assert board.is_board and board.check_password(demo.DEMO_PASSWORD)

@@ -43,3 +43,15 @@ jobs:
       - run: npm install --global vercel@latest
       - name: Deploy (Vercel builds it, like a Git deploy)
         run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+  # The French demo condo (Vercel project domora-demo): the same code with DEMO=1 and no database.
+  deploy-demo:
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_PROJECT_ID: prj_eoJN8ti0ApsDHU0XyWFIgAOkrhmI
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install --global vercel@latest
+      - name: Deploy the demo
+        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}

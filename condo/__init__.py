@@ -89,6 +89,7 @@ def create_app(test_config=None):
 
         from .navigation import back_link
         return {"condo_name": app.config["CONDO_NAME"], "ephemeral_db": app.config["EPHEMERAL_DB"],
+                "demo": app.config.get("DEMO"),
                 "back": back_link(), "unread": _unread(),
                 "today": date.today(), "nav_board": _nav_board(),
                 "STATUS_LABELS": models.REQUEST_STATUSES, "CATEGORY_LABELS": models.CATEGORY_LABELS, "PRIORITY_LABELS": models.REQUEST_PRIORITIES}
@@ -132,5 +133,11 @@ def create_app(test_config=None):
         from .cli import bootstrap
         with app.app_context():
             bootstrap()
+    from . import demo
+    app.config["DEMO"] = demo.enabled()
+    if app.config["DEMO"]:
+        with app.app_context():
+            db.create_all()
+            demo.load_if_empty(app)
 
     return app

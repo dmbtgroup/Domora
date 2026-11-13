@@ -1,0 +1,12 @@
+{% if demo %}
+<div class="demo-login">
+  <strong>{% trans %}Demo accounts{% endtrans %}</strong>
+  <p class="muted small">{% trans %}Password for every account:{% endtrans %} <code>Demo2026!</code></p>
+  <ul>
+    <li><code>conseil@jardinsduparc.example</code> · {% trans %}board president (sees everything){% endtrans %}</li>
+    <li><code>marc.gagnon@demo.example</code> · {% trans %}owner and treasurer{% endtrans %}</li>
+    <li><code>isabelle.cote@demo.example</code> · {% trans %}owner{% endtrans %}</li>
+    <li><code>locataire@demo.example</code> · {% trans %}tenant{% endtrans %}</li>
+  </ul>
+</div>
+{% endif %}

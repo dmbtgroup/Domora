@@ -101,7 +101,8 @@ document.addEventListener('keydown', function (e) {
   <a class="page-top-user" href="{{ url_for('auth.account') }}"><strong>{{ current_user.name }}</strong> <span class="tag">{{ current_user.role_label }}</span></a></span>
 </div>
 {% endif %}
-{% if ephemeral_db %}<div class="banner">{% trans %}No database is connected, so changes are temporary and will be lost. Connect a Postgres database (DATABASE_URL) to keep data.{% endtrans %}</div>{% endif %}
+{% if demo %}<div class="banner">{% trans %}Demo: a made-up condo to try the portal. Changes may be reset at any time.{% endtrans %}</div>
+{% elif ephemeral_db %}<div class="banner">{% trans %}No database is connected, so changes are temporary and will be lost. Connect a Postgres database (DATABASE_URL) to keep data.{% endtrans %}</div>{% endif %}
 {% if current_user.is_authenticated and current_user.is_temp_admin and not current_user.is_board %}
 <div class="banner">{% trans %}You're using the temporary administrator account. To make it your own: add yourself in{% endtrans %}
   <a href="{{ url_for('directory.contacts', group='owners') }}">{% trans %}Directory → Owners{% endtrans %}</a> {% trans email=current_user.email %}with the email {{ email }},

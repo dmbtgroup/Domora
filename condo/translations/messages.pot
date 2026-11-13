@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-12 13:54+0000\n"
+"POT-Creation-Date: 2026-11-13 00:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1239,6 +1239,12 @@ msgid "Delete this unit?"
 msgstr ""
 
 msgid "Delete this vote and all its ballots? This cannot be undone."
+msgstr ""
+
+msgid "Demo accounts"
+msgstr ""
+
+msgid "Demo: a made-up condo to try the portal. Changes may be reset at any time."
 msgstr ""
 
 msgid "Describe the cost."
@@ -2488,6 +2494,9 @@ msgid "Partly paid"
 msgstr ""
 
 msgid "Password"
+msgstr ""
+
+msgid "Password for every account:"
 msgstr ""
 
 msgid "Password must be at least 8 characters."
@@ -3898,6 +3907,9 @@ msgstr ""
 msgid "board only"
 msgstr ""
 
+msgid "board president (sees everything)"
+msgstr ""
+
 #, python-format
 msgid "by %(name)s"
 msgstr ""
@@ -4027,6 +4039,12 @@ msgstr ""
 msgid "owed %(owed)s · credit %(credit)s"
 msgstr ""
 
+msgid "owner"
+msgstr ""
+
+msgid "owner and treasurer"
+msgstr ""
+
 msgid "so owners and tenants can see it."
 msgstr ""
 
@@ -4052,6 +4070,9 @@ msgid "temporary"
 msgstr ""
 
 msgid "temporary password"
+msgstr ""
+
+msgid "tenant"
 msgstr ""
 
 msgid "the previous page"
