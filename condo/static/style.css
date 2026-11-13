@@ -709,3 +709,4 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .stat .badge.ins-missing, .stat .badge.ins-expired { color: var(--danger); }
 .stat .badge.ins-expiring { color: var(--warn); }
 .stat .badge.ins-valid { color: var(--ok); }
+.group-email { display: inline-flex; align-items: center; gap: .6rem; flex-wrap: wrap; }

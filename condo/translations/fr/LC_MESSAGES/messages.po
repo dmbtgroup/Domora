@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 01:29+0000\n"
+"POT-Creation-Date: 2026-11-13 01:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -2268,6 +2268,9 @@ msgstr "Ouvert de %(open)s à %(close)s · réservations jusqu’à %(max_hours)
 msgid "Open %(open)s–%(close)s · max %(max_hours)sh"
 msgstr "Ouvert de %(open)s à %(close)s · max. %(max_hours)s h"
 
+msgid "Open in the mail app on this device instead"
+msgstr "Ouvrir plutôt dans l’application de courriel de cet appareil"
+
 msgid "Open requests"
 msgstr "Demandes ouvertes"
 
@@ -3873,6 +3876,9 @@ msgstr "dont intérêts de retard"
 
 msgid "optional"
 msgstr "facultative"
+
+msgid "other mail app"
+msgstr "autre application de courriel"
 
 #, python-format
 msgid "owed %(owed)s · credit %(credit)s"

@@ -11,7 +11,7 @@
     <button class="btn">{% trans %}Search{% endtrans %}</button>
   </form>
   <div class="actions">
-    {% if emails %}<a class="btn" href="mailto:?bcc={{ emails|join(',') }}">{% if q or role %}{% trans n=emails|length %}Email these ({{ n }}){% endtrans %}{% else %}{% trans n=emails|length %}Email all ({{ n }}){% endtrans %}{% endif %}</a>{% endif %}
+    {% if emails %}{% from "_group_email.html" import group_email %}{{ group_email(emails, _('Email these (%(n)s)', n=emails|length) if q or role else _('Email all (%(n)s)', n=emails|length)) }}{% endif %}
     <a class="btn" href="{{ url_for('directory.export', group=group, q=q, role=role) }}">{% trans %}Download CSV{% endtrans %}</a>
     {% if current_user.is_admin %}{{ icon_link('plus', url_for('owners.new_from_directory', group=group, back=here()), _('Add tenant') if group == 'tenants' else _('Add owner'), cls='primary') }}{% endif %}
   </div>

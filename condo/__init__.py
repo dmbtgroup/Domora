@@ -64,6 +64,18 @@ def create_app(test_config=None):
     from .utils import initials, money, one_line, phone_display, phone_href
     from .navigation import here, safe_back
     app.jinja_env.globals.update(here=here, safe_back=safe_back)
+
+    def gmail_compose(bcc=(), to=()):
+        """A Gmail "new message" link (opens in the browser) with these recipients."""
+        from urllib.parse import urlencode
+        params = {"view": "cm", "fs": "1"}
+        if to:
+            params["to"] = ",".join(to)
+        if bcc:
+            params["bcc"] = ",".join(bcc)
+        return "https://mail.google.com/mail/?" + urlencode(params)
+
+    app.jinja_env.globals.update(gmail_compose=gmail_compose)
     app.jinja_env.filters.update(money=money, phone=phone_display, tel=phone_href, one_line=one_line,
                                  initials=initials)
 

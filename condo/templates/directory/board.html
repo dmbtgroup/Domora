@@ -6,7 +6,7 @@
 {% include "directory/_tabs.html" %}
 <div class="head">
   <p class="muted" style="margin:0">{% trans %}The syndicate's board of directors. Assign positions here. Only co-owners sit on the board; an outside contact can be listed for Accounting.{% endtrans %}</p>
-  {% if emails %}<a class="btn" href="mailto:?bcc={{ emails|join(',') }}">{% trans emails=emails|length %}Email the board ({{ emails }}){% endtrans %}</a>{% endif %}
+  {% if emails %}{% from "_group_email.html" import group_email %}{{ group_email(emails, _('Email the board (%(emails)s)', emails=emails|length)) }}{% endif %}
 </div>
 <div class="card">
 <table class="board-table">

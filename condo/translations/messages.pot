@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 01:29+0000\n"
+"POT-Creation-Date: 2026-11-13 01:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2357,6 +2357,9 @@ msgstr ""
 msgid "Open %(open)s–%(close)s · max %(max_hours)sh"
 msgstr ""
 
+msgid "Open in the mail app on this device instead"
+msgstr ""
+
 msgid "Open requests"
 msgstr ""
 
@@ -4039,6 +4042,9 @@ msgid "of which late interest"
 msgstr ""
 
 msgid "optional"
+msgstr ""
+
+msgid "other mail app"
 msgstr ""
 
 #, python-format

@@ -13,7 +13,7 @@
     <button class="btn">{% trans %}Search{% endtrans %}</button>
   </form>
   <div class="actions">
-    {% if emails %}<a class="btn" href="mailto:?bcc={{ emails|join(',') }}">{% trans emails=emails|length %}Email all ({{ emails }}){% endtrans %}</a>{% endif %}
+    {% if emails %}{% from "_group_email.html" import group_email %}{{ group_email(emails, _('Email all (%(emails)s)', emails=emails|length)) }}{% endif %}
     <a class="btn" href="{{ url_for('directory.export', group='accounts', q=q, role=role) }}">{% trans %}Download CSV{% endtrans %}</a>
     {{ icon_link('plus', url_for('residents.new', back=here()), _('Add account'), cls='primary') }}
   </div>

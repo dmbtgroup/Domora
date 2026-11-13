@@ -1,0 +1,7 @@
+{# A group email button: opens a new Gmail message with everyone in Bcc, plus the device's mail app as an option. #}
+{% macro group_email(emails, label) %}
+<span class="group-email">
+  <a class="btn" href="{{ gmail_compose(bcc=emails) }}" target="_blank" rel="noopener">{{ label }}</a>
+  <a class="muted small" href="mailto:?bcc={{ emails|join(',') }}" title="{{ _('Open in the mail app on this device instead') }}">{% trans %}other mail app{% endtrans %}</a>
+</span>
+{% endmacro %}

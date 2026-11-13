@@ -127,6 +127,7 @@ def test_board_tab_and_dashboards(admin_client, client):
     assign(admin_client, ben, "treasurer")
     page = admin_client.get("/directory/board").data.decode()
     assert "mailto:?bcc=ann@x.com,ben@x.com" in page
+    assert "https://mail.google.com/mail/?view=cm&amp;fs=1&amp;bcc=ann%40x.com%2Cben%40x.com" in page  # Gmail, new tab
     assert "Board role" in admin_client.get("/directory/owners/export.csv").data.decode()
     admin_client.post("/logout")
     login(client, "bob@test.com")  # tenant sees whom to contact
