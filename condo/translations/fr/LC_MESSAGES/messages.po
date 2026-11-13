@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 01:41+0000\n"
+"POT-Creation-Date: 2026-11-13 01:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1658,10 +1658,6 @@ msgstr "Assurances"
 msgid "Insurance policy removed."
 msgstr "Police d’assurance supprimée."
 
-#, python-format
-msgid "Insurance saved for the %(group)s of unit %(number)s."
-msgstr "Assurance enregistrée pour les %(group)s de l’unité %(number)s."
-
 msgid "Insurance to follow up"
 msgstr "Assurances à suivre"
 
@@ -2367,6 +2363,10 @@ msgstr "Quote-part"
 
 msgid "Owners’ insurance"
 msgstr "Assurance des copropriétaires"
+
+#, python-format
+msgid "Owners’ insurance saved for unit %(number)s."
+msgstr "Assurance des copropriétaires enregistrée pour l’unité %(number)s."
 
 msgid "Paid"
 msgstr "Payé"
@@ -3161,6 +3161,10 @@ msgstr "Locataire"
 
 msgid "Tenant insurance"
 msgstr "Assurance locataire"
+
+#, python-format
+msgid "Tenant insurance saved for unit %(number)s."
+msgstr "Assurance des locataires enregistrée pour l’unité %(number)s."
 
 msgid "Tenants"
 msgstr "Locataires"

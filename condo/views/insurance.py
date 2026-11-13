@@ -83,7 +83,8 @@ def new(unit_id, group):
                 provider=request.form.get("provider", "").strip()[:200] or None,
                 policy_number=request.form.get("policy_number", "").strip()[:100] or None))
             db.session.commit()
-            flash(_("Insurance saved for the %(group)s of unit %(number)s.", group=group, number=unit.number), "success")
+            flash(_("Tenant insurance saved for unit %(number)s.", number=unit.number) if group == "tenants"
+                  else _("Owners’ insurance saved for unit %(number)s.", number=unit.number), "success")
             return redirect(_back(unit))
         for e in errors:
             flash(e, "error")
