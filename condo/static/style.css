@@ -683,7 +683,7 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .unit-stats .stat-badge { font-size: 1rem; line-height: 2.3rem; }
 .unit-stats .stat-badge .badge { font-size: .9rem; }
 .unit-account-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-bottom: 1.4rem; }
-.unit-people { display: grid; gap: 1.2rem; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+.unit-people { display: grid; gap: 1.2rem; grid-template-columns: minmax(0, 1fr); max-width: 52rem; }
 .unit-people > .card { margin-bottom: 0; }
 .person-row { display: flex; gap: .75rem; align-items: flex-start; padding: .7rem 0; border-top: 1px solid var(--border); }
 .card-head + .person-row { border-top: 0; padding-top: .3rem; }
