@@ -108,11 +108,10 @@ def test_owner_sees_only_their_unit(alice_client):
     assert alice_client.get("/accounting/payments/new").status_code == 403
 
 
-def test_tenant_goes_to_statement(client):
+def test_tenant_has_no_statement(client):
     from .conftest import login
     login(client, "bob@test.com")
-    resp = client.get("/accounting/")
-    assert resp.status_code == 302 and "/accounting/unit/" in resp.headers["Location"]
+    assert client.get("/accounting/").status_code == 403
 
 
 def test_manager_unit_filter(admin_client):
@@ -316,3 +315,21 @@ def test_building_and_by_unit_tabs(admin_client):
     admin_client.get(f"/accounting/?unit={u102.id}&year=2026")
     page = admin_client.get("/accounting/?tab=unit&view=year&year=2026").data.decode()  # remembers the last unit
     assert f'aria-current="page">102<' in page
+
+
+def test_tenants_see_no_accounting_at_all(app, client):
+    from condo.models import User
+    from .conftest import login
+    seed()
+    bob = db.session.scalar(db.select(User).where(User.email == "bob@test.com"))
+    assert bob.role == "tenant"
+    pay = db.session.scalar(db.select(Payment).where(Payment.unit_id == bob.unit_id))
+    login(client, "bob@test.com")
+    for path in ("/accounting/", "/accounting/my", f"/accounting/unit/{bob.unit_id}",
+                 f"/accounting/?unit={bob.unit_id}", "/accounting/bank"):
+        assert client.get(path).status_code in (403, 302), path
+    if pay:
+        assert client.get(f"/accounting/payments/{pay.id}").status_code == 403
+    home = client.get("/").data.decode()
+    assert "View statement" not in home and "Current balance" not in home and "Monthly dues" not in home
+    assert 'class="label">Statement<' not in home and 'class="label">Accounting<' not in home

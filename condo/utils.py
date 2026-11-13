@@ -120,6 +120,14 @@ def can_access_unit(unit_id):
     return current_user.is_admin or (unit_id is not None and current_user.unit_id == unit_id)
 
 
+def can_see_unit_finances(unit_id):
+    """A unit's statement, balance and payments: the board, accounting staff, and the unit's owners.
+    Tenants never see the unit's finances."""
+    if current_user.is_admin or current_user.can("accounting"):
+        return True
+    return current_user.role != "tenant" and unit_id is not None and current_user.unit_id == unit_id
+
+
 def phone_display(value):
     """Format North American numbers as (514) 566-4383; leave anything else as typed."""
     import re

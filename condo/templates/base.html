@@ -53,7 +53,7 @@
 {% else %}
   {% if current_user.unit_id and (current_user.role == 'owner' or nav_board) %}
     {% set _ignored = nav_items.append(('accounting', url_for('billing.index'), _('Accounting'), _('Accounting'), ep.startswith(('billing', 'fees')))) %}
-  {% elif current_user.unit_id %}
+  {% elif current_user.unit_id and current_user.role != 'tenant' %}
     {% set _ignored = nav_items.append(('accounting', url_for('billing.my_account'), _('Statement'), _('Statement'), ep.startswith('billing'))) %}
   {% endif %}
   {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith('maintenance'))) %}

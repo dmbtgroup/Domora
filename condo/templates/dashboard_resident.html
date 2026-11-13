@@ -34,12 +34,13 @@
   <section class="card">
     {% if unit %}
       <h2>{% trans number=unit.number %}Unit {{ number }}{% endtrans %}</h2>
+      {% set tenant = current_user.role == 'tenant' %}
       <dl class="props">
-        <dt>{% trans %}Monthly dues{% endtrans %}</dt><dd>{{ unit.monthly_fee_cents|money }}</dd>
-        <dt>{% trans %}Current balance{% endtrans %}</dt><dd>{{ balance(unit.balance) }}</dd>
+        {% if not tenant %}<dt>{% trans %}Monthly dues{% endtrans %}</dt><dd>{{ unit.monthly_fee_cents|money }}</dd>
+        <dt>{% trans %}Current balance{% endtrans %}</dt><dd>{{ balance(unit.balance) }}</dd>{% endif %}
         {% if unit.parking_spot %}<dt>{% trans %}Parking{% endtrans %}</dt><dd>{{ unit.parking_spot }}</dd>{% endif %}
       </dl>
-      <a class="btn" href="{{ url_for('billing.ledger', unit_id=unit.id) }}">{% trans %}View statement{% endtrans %}</a>
+      {% if not tenant %}<a class="btn" href="{{ url_for('billing.ledger', unit_id=unit.id) }}">{% trans %}View statement{% endtrans %}</a>{% endif %}
       {% if my_insurance %}
       <h2 style="margin-top:1.2rem">{% trans %}Home insurance{% endtrans %}</h2>
       {% for group in my_insurance %}{{ household_insurance(unit, group) }}{% endfor %}{% endif %}

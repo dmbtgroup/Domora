@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from ..extensions import db
 from ..models import (CHARGE_KINDS, COST_CATEGORIES, PAYMENT_METHOD_LABELS, PAYMENT_METHODS, SYSTEM_CHARGE_KINDS, Charge, Expense, Payment,
                       BankBalance, Setting, Unit, bank_summary, guess_cost_category)
-from ..utils import admin_required, can_access_unit, permission_required, parse_date, parse_money
+from ..utils import admin_required, can_access_unit, can_see_unit_finances, permission_required, parse_date, parse_money
 from ..i18n import fdate, gettext as _
 
 # Shown as "Accounting"; the blueprint keeps its old name so existing links keep working.
@@ -112,8 +112,8 @@ def accounting_scope(user=None):
 @login_required
 def index():
     scope = accounting_scope()
-    if scope is None:  # tenants keep their unit statement
-        if current_user.unit_id:
+    if scope is None:  # tenants: no accounting at all
+        if current_user.unit_id and current_user.role != "tenant":
             return redirect(url_for("billing.ledger", unit_id=current_user.unit_id))
         abort(403)
     period = resolve_period(request.args)
@@ -517,7 +517,7 @@ def _sheet_info():
 def payment_detail(payment_id):
     """Everything about one payment, including where the entry came from."""
     payment = db.session.get(Payment, payment_id) or abort(404)
-    if not (can_access_unit(payment.unit_id) or current_user.can("accounting")):
+    if not can_see_unit_finances(payment.unit_id):
         abort(403)
     from ..models import Reimbursement
     reimbursement = db.session.scalar(db.select(Reimbursement).where(Reimbursement.payment_id == payment.id))
@@ -539,7 +539,7 @@ def cost_detail(cost_id):
 @bp.route("/unit/<int:unit_id>")
 @login_required
 def ledger(unit_id):
-    if not (can_access_unit(unit_id) or current_user.can("accounting")):
+    if not can_see_unit_finances(unit_id):
         abort(403)
     unit = db.session.get(Unit, unit_id) or abort(404)
     rows = unit.ledger()
@@ -550,6 +550,8 @@ def ledger(unit_id):
 @bp.route("/my")
 @login_required
 def my_account():
+    if current_user.role == "tenant":
+        abort(403)
     if current_user.unit_id is None:
         flash(_("Your account is not linked to a unit."), "info")
         return redirect(url_for("dashboard.index"))
