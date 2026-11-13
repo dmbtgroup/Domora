@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 00:05+0000\n"
+"POT-Creation-Date: 2026-11-13 01:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -155,6 +155,12 @@ msgid "%(name)s: %(description)s"
 msgstr "%(name)s : %(description)s"
 
 #, python-format
+msgid "%(num)s bedroom"
+msgid_plural "%(num)s bedrooms"
+msgstr[0] "%(num)s chambre"
+msgstr[1] "%(num)s chambres"
+
+#, python-format
 msgid "%(num)s unit marked as paid before the portal."
 msgid_plural "%(num)s units marked as paid before the portal."
 msgstr[0] "%(num)s unité marquée comme payée avant le portail."
@@ -171,6 +177,10 @@ msgstr "%(problems)s élément(s) à vérifier encore."
 #, python-format
 msgid "%(settle_method)s: %(description)s"
 msgstr "%(settle_method)s : %(description)s"
+
+#, python-format
+msgid "%(share)s of the building"
+msgstr "%(share)s de l’immeuble"
 
 #, python-format
 msgid "%(staff)s · your access is set by the board."
@@ -298,9 +308,6 @@ msgstr "Abstention"
 
 msgid "Access"
 msgstr "Accès"
-
-msgid "Account"
-msgstr "Compte"
 
 msgid "Account active"
 msgstr "Compte actif"
@@ -592,9 +599,6 @@ msgstr "Approuvé : en attente de la comptabilité"
 
 msgid "April"
 msgstr "avril"
-
-msgid "Area"
-msgstr "Superficie"
 
 msgid "Area (sq ft)"
 msgstr "Superficie (pi²)"
@@ -1499,6 +1503,10 @@ msgstr "Les montants fixes des unités ont été effacés parce que vous êtes p
 msgid "Floor"
 msgstr "Étage"
 
+#, python-format
+msgid "Floor %(floor)s"
+msgstr "Étage %(floor)s"
+
 msgid "For"
 msgstr "Pour"
 
@@ -2390,6 +2398,10 @@ msgstr "Payé · %(label)s"
 
 msgid "Parking"
 msgstr "Stationnement"
+
+#, python-format
+msgid "Parking %(spot)s"
+msgstr "Stationnement %(spot)s"
 
 msgid "Parking spot"
 msgstr "Place de stationnement"
@@ -3359,14 +3371,8 @@ msgstr "Total"
 msgid "Total amount"
 msgstr "Montant total"
 
-msgid "Total charged"
-msgstr "Total facturé"
-
 msgid "Total for the period"
 msgstr "Total pour la période"
-
-msgid "Total paid"
-msgstr "Total payé"
 
 #, python-format
 msgid "Total · %(method)s"

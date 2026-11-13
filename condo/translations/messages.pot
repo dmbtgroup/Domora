@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 00:05+0000\n"
+"POT-Creation-Date: 2026-11-13 01:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,6 +162,12 @@ msgid "%(name)s: %(description)s"
 msgstr ""
 
 #, python-format
+msgid "%(num)s bedroom"
+msgid_plural "%(num)s bedrooms"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
 msgid "%(num)s unit marked as paid before the portal."
 msgid_plural "%(num)s units marked as paid before the portal."
 msgstr[0] ""
@@ -177,6 +183,10 @@ msgstr ""
 
 #, python-format
 msgid "%(settle_method)s: %(description)s"
+msgstr ""
+
+#, python-format
+msgid "%(share)s of the building"
 msgstr ""
 
 #, python-format
@@ -315,9 +325,6 @@ msgid "Abstain"
 msgstr ""
 
 msgid "Access"
-msgstr ""
-
-msgid "Account"
 msgstr ""
 
 msgid "Account active"
@@ -615,9 +622,6 @@ msgid "Approved: waiting for accounting"
 msgstr ""
 
 msgid "April"
-msgstr ""
-
-msgid "Area"
 msgstr ""
 
 msgid "Area (sq ft)"
@@ -1557,6 +1561,10 @@ msgstr ""
 msgid "Floor"
 msgstr ""
 
+#, python-format
+msgid "Floor %(floor)s"
+msgstr ""
+
 msgid "For"
 msgstr ""
 
@@ -2485,6 +2493,10 @@ msgid "Paid · %(label)s"
 msgstr ""
 
 msgid "Parking"
+msgstr ""
+
+#, python-format
+msgid "Parking %(spot)s"
 msgstr ""
 
 msgid "Parking spot"
@@ -3503,13 +3515,7 @@ msgstr ""
 msgid "Total amount"
 msgstr ""
 
-msgid "Total charged"
-msgstr ""
-
 msgid "Total for the period"
-msgstr ""
-
-msgid "Total paid"
 msgstr ""
 
 #, python-format

@@ -676,3 +676,36 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .demo-login ul { margin: 0; padding-left: 1.1rem; }
 .demo-login li { margin: .15rem 0; overflow-wrap: anywhere; }
 .demo-login code { font-size: .85rem; }
+
+/* Unit page: facts on one line, three tiles, slim rows for people */
+.unit-facts { margin: .2rem 0 0; font-size: .95rem; }
+.unit-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: .7rem; }
+.unit-stats .stat-badge { font-size: 1rem; line-height: 2.3rem; }
+.unit-stats .stat-badge .badge { font-size: .9rem; }
+.unit-account-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-bottom: 1.4rem; }
+.unit-people { display: grid; gap: 1.2rem; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+.unit-people > .card { margin-bottom: 0; }
+.person-row { display: flex; gap: .75rem; align-items: flex-start; padding: .7rem 0; border-top: 1px solid var(--border); }
+.card-head + .person-row { border-top: 0; padding-top: .3rem; }
+.person-row .avatar { width: 2rem; height: 2rem; font-size: .8rem; }
+.person-row-main { flex: 1; min-width: 0; display: grid; gap: .2rem; }
+.person-row-name { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.person-row-contact { display: flex; flex-wrap: wrap; align-items: center; gap: .15rem 1rem; font-size: .85rem; color: var(--muted); }
+.person-row-contact a { display: inline-flex; align-items: center; gap: .3rem; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+.person-row-contact a:hover { color: var(--brand-deep); }
+.person-row-contact .icon { width: 14px; height: 14px; flex: none; }
+.person-row-actions { flex: none; }
+.unit-people .household-insurance { margin-top: .4rem; padding: .5rem .7rem; font-size: .85rem; gap: .2rem; }
+.unit-people .household-insurance strong { font-weight: 600; }
+@media (max-width: 760px) {
+  .unit-stats { grid-template-columns: 1fr 1fr; }
+  .unit-stats .stat:last-child { grid-column: span 2; }
+  .unit-people { grid-template-columns: 1fr; }
+  .unit-account-actions { justify-content: flex-start; }
+}
+.unit-stats .stat-badge { display: block; }
+.unit-stats .stat-badge .badge { display: inline-block; width: auto; }
+.unit-people .household-insurance .person-line { font-size: .85rem; }
+.stat .badge.ins-missing, .stat .badge.ins-expired { color: var(--danger); }
+.stat .badge.ins-expiring { color: var(--warn); }
+.stat .badge.ins-valid { color: var(--ok); }

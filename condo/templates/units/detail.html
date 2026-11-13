@@ -1,49 +1,72 @@
 {% extends "base.html" %}
 {% from "_icons.html" import icon, icon_link, icon_post %}
-{% from "_macros.html" import balance, post_button, insurance_badge, person, household_insurance %}
+{% from "_macros.html" import balance, post_button, insurance_badge, household_insurance, icon as micon %}
 {% block title %}{% trans number=unit.number %}Unit {{ number }}{% endtrans %}{% endblock %}
+
+{# One slim row per person: name and badges, contacts, and the edit pencil. #}
+{% macro person_row(o, same_address_as=None) %}
+<div class="person-row">
+  <div class="avatar {{ 'tenant' if o.role == 'tenant' }}" aria-hidden="true">{{ o.name|initials }}</div>
+  <div class="person-row-main">
+    <div class="person-row-name"><strong>{{ o.name }}</strong>
+      {% if o.role not in ('owner', 'tenant') %}<span class="tag">{{ o.role_label }}</span>{% endif %}
+      {% for label in o.position_labels %}<span class="badge board">{{ label }}</span>{% endfor %}
+      {% if o.is_primary %}<span class="muted small">· {% trans %}Primary{% endtrans %}</span>{% endif %}</div>
+    {% if o.email or o.phone %}<div class="person-row-contact">
+      {% if o.email %}<a href="mailto:{{ o.email }}" title="{{ o.email }}">{{ micon('mail') }}<span>{{ o.email }}</span></a>{% endif %}
+      {% if o.phone %}<a class="nowrap" href="{{ o.phone|tel }}">{{ micon('phone') }}<span>{{ o.phone|phone }}</span></a>{% endif %}
+    </div>{% endif %}
+    {% if same_address_as %}<div class="person-row-contact muted">{{ micon('pin') }}<span>{% trans same_address_as=same_address_as %}Same address as {{ same_address_as }}{% endtrans %}</span></div>
+    {% elif o.mailing_address %}<div class="person-row-contact muted">{{ micon('pin') }}<span>{{ o.mailing_address|one_line }}</span></div>{% endif %}
+    {% if o.notes %}<div class="person-row-contact excerpt">{{ o.notes }}</div>{% endif %}
+  </div>
+  <div class="person-row-actions">
+    {% if o.origin == 'sheet' %}<span class="tag" title="{{ _('Edit in the Google Sheet’s Owners tab') }}">{% trans %}from sheet{% endtrans %}</span>
+    {% else %}{{ icon_link('pencil', url_for('owners.edit', owner_id=o.id, back=here()), _('Edit'), cls='small') }}{% endif %}
+  </div>
+</div>
+{% endmacro %}
+
 {% block content %}
-<div class="head"><h1>{% trans number=unit.number %}Unit {{ number }}{% endtrans %}</h1>
+<div class="head"><div>
+    <h1>{% trans number=unit.number %}Unit {{ number }}{% endtrans %}</h1>
+    {% set facts = [] %}
+    {% if unit.ownership_share %}{% set _ignored = facts.append(_('%(share)s of the building', share=(unit.ownership_share * 100)|pct)) %}{% endif %}
+    {% if unit.floor is not none %}{% set _ignored = facts.append(_('Floor %(floor)s', floor=unit.floor)) %}{% endif %}
+    {% if unit.bedrooms %}{% set _ignored = facts.append(ngettext('%(num)s bedroom', '%(num)s bedrooms', unit.bedrooms)) %}{% endif %}
+    {% if unit.area_sqft %}{% set _ignored = facts.append(unit.area_sqft ~ ' ' ~ _('sq ft')) %}{% endif %}
+    {% if unit.parking_spot %}{% set _ignored = facts.append(_('Parking %(spot)s', spot=unit.parking_spot)) %}{% endif %}
+    {% if facts %}<p class="unit-facts muted">{{ facts|join(' · ') }}</p>{% endif %}
+  </div>
   <div class="actions">
     {{ icon_link('pencil', url_for('units.edit', unit_id=unit.id), _('Edit')) }}
     {{ icon_post('trash', url_for('units.delete', unit_id=unit.id), _('Delete'), confirm=_('Delete this unit?'), cls='danger') }}
   </div></div>
-<div class="unit-grid">
-  <section class="card">
-    <h2>{% trans %}Details{% endtrans %}</h2>
-    <dl class="props">
-      <dt>{% trans %}Ownership share{% endtrans %}</dt><dd>{{ (unit.ownership_share * 100)|pct if unit.ownership_share else '—' }}</dd>
-      <dt>{% trans %}Floor{% endtrans %}</dt><dd>{{ unit.floor if unit.floor is not none else '—' }}</dd>
-      <dt>{% trans %}Bedrooms{% endtrans %}</dt><dd>{{ unit.bedrooms or '—' }}</dd>
-      <dt>{% trans %}Area{% endtrans %}</dt><dd>{{ (unit.area_sqft ~ ' ' ~ _('sq ft')) if unit.area_sqft else '—' }}</dd>
-      <dt>{% trans %}Parking{% endtrans %}</dt><dd>{{ unit.parking_spot or '—' }}</dd>
-      <dt>{% trans %}Monthly dues{% endtrans %}</dt><dd>{{ unit.monthly_fee_cents|money }}</dd>
-    </dl>
-    {% if unit.notes %}<p class="prose">{{ unit.notes }}</p>{% endif %}
-  </section>
-  <section class="card">
-    <h2>{% trans %}Account{% endtrans %}</h2>
-    <dl class="props">
-      <dt>{% trans %}Total charged{% endtrans %}</dt><dd>{{ unit.total_charged|money }}</dd>
-      <dt>{% trans %}Total paid{% endtrans %}</dt><dd>{{ unit.total_paid|money }}</dd>
-      <dt>{% trans %}Balance{% endtrans %}</dt><dd>{{ balance(unit.balance) }}</dd>
-    </dl>
-    <div class="actions">
-      <a class="btn" href="{{ url_for('billing.ledger', unit_id=unit.id) }}">{% trans %}Statement{% endtrans %}</a>
-      <a class="btn" href="{{ url_for('billing.new_payment', unit_id=unit.id) }}">{% trans %}Record payment{% endtrans %}</a>
-      {{ icon_link('plus', url_for('billing.new_charge', unit_id=unit.id), _('Add charge')) }}
-    </div>
-  </section>
+{% if unit.notes %}<p class="prose muted">{{ unit.notes }}</p>{% endif %}
+
+<div class="stats unit-stats">
+  <div class="stat"><span>{{ unit.monthly_fee_cents|money }}</span>{% trans %}Monthly dues{% endtrans %}</div>
+  <div class="stat"><span>{{ balance(unit.balance) }}</span>{{ _('Owed today') if unit.balance > 0 else _('In credit today') if unit.balance < 0 else _('Balance today') }}</div>
+  {% set gi = unit.group_insurance('owners') %}
+  <div class="stat"><span class="stat-badge">{{ insurance_badge(gi) if gi else '—' }}</span>{% trans %}Owners’ insurance{% endtrans %}</div>
+</div>
+<div class="unit-account-actions">
+  <a class="btn" href="{{ url_for('billing.index', unit=unit.id) }}">{% trans %}Accounting{% endtrans %}</a>
+  <a class="btn" href="{{ url_for('billing.ledger', unit_id=unit.id) }}">{% trans %}Statement{% endtrans %}</a>
+  <a class="btn" href="{{ url_for('billing.new_payment', unit_id=unit.id, back=here()) }}">{% trans %}Record payment{% endtrans %}</a>
+  {{ icon_link('plus', url_for('billing.new_charge', unit_id=unit.id, back=here()), _('Add charge')) }}
+</div>
+
+<div class="unit-people">
   {% for group, people, title in [('owners', unit.owner_contacts, _('Owners')), ('tenants', unit.tenants, _('Tenants'))] %}
   <section class="card">
     <div class="card-head">
       <h2>{{ title }} {% if people %}<span class="muted count">{{ people|length }}</span>{% endif %}</h2>
-      {% set gi = unit.group_insurance(group) %}{% if gi %}{{ insurance_badge(gi) }}{% endif %}
-      {{ icon_link('plus', url_for('owners.new', unit_id=unit.id, role='tenant' if group == 'tenants' else 'owner', back=here()), _('Add tenant') if group == 'tenants' else _('Add owner')) }}
+      {{ icon_link('plus', url_for('owners.new', unit_id=unit.id, role='tenant' if group == 'tenants' else 'owner', back=here()), _('Add tenant') if group == 'tenants' else _('Add owner'), cls='small') }}
     </div>
     {% for o in people %}
       {% set prev = people[loop.index0 - 1] if not loop.first else none %}
-      {{ person(o, same_address_as=prev.name if prev and o.mailing_address and prev.mailing_address
+      {{ person_row(o, same_address_as=prev.name if prev and o.mailing_address and prev.mailing_address
                 and o.mailing_address.strip().lower() == prev.mailing_address.strip().lower() else none) }}
     {% else %}
       <p class="muted">{% if group == 'owners' %}{% if unit.owner_name %}{% trans owner_name=unit.owner_name %}Recorded as “{{ owner_name }}”, but no contact details yet.{% endtrans %}{% else %}{% trans %}No owners recorded.{% endtrans %}{% endif %}{% else %}{% trans %}No tenant: owner-occupied or vacant.{% endtrans %}{% endif %}</p>
