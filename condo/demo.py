@@ -163,6 +163,29 @@ def _fill(c, units, board, today, fiscal_start):
                                                 "next_due": due.isoformat(), "vendor": vendor, "estimated": est,
                                                 "season_from": sf, "season_to": st, "vendor_contact": "514-555-0150"})
 
+    # Business partners (linked to the routine tasks and costs above by name), with quotes for the roof.
+    for name, trade, contact, phone, site in (
+            ("Déneigement Démo", "snow", "Marc Tremblay", "514-555-0150", "deneigement-demo.example"),
+            ("Gouttières Démo", "roofing", "", "514-555-0151", ""),
+            ("Sécurité Démo", "security", "Julie Roy", "514-555-0152", "securite-demo.example"),
+            ("Portes Laval inc.", "doors", "", "514-555-0153", ""),
+            ("Paysagiste Démo", "landscaping", "Éric Lefebvre", "514-555-0154", ""),
+            ("Toitures Horizon", "roofing", "Nadia Bélanger", "514-555-0155", "toitures-horizon.example"),
+            ("Couvreurs Montréal Démo", "roofing", "Paul Girard", "514-555-0156", "")):
+        c.post("/maintenance/partners/new", data={"name": name, "trade": trade, "contact_name": contact, "phone": phone,
+                                                  "website": site, "licence": "5600-0000-01" if trade == "roofing" else "",
+                                                  "active": "1"})
+    from .models import MaintenanceRequest, Partner
+    roof = db.session.scalar(db.select(MaintenanceRequest).where(MaintenanceRequest.title == "Réfection de la toiture"))
+    for name, amount in (("Toitures Horizon", "24,000"), ("Couvreurs Montréal Démo", "26,750")):
+        partner = db.session.scalar(db.select(Partner).where(Partner.name == name))
+        if roof and partner:
+            c.post("/maintenance/partners/quotes/new", data={"request_id": str(roof.id), "partner_id": str(partner.id),
+                                                             "amount": amount, "quoted_on": (today - timedelta(days=9)).isoformat()})
+    snow = db.session.scalar(db.select(Partner).where(Partner.name == "Déneigement Démo"))
+    if snow:
+        c.post(f"/maintenance/partners/{snow.id}/ratings", data={"stars": "4", "comment": "Passage rapide, quelques oublis près des bacs."})
+
     # Notices.
     db.session.add_all([
         Announcement(title="Assemblée générale annuelle", pinned=True, author=board,

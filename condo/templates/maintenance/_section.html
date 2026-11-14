@@ -1,0 +1,8 @@
+{# The section's two top tabs: the work itself, and the business partners who do it. #}
+{% set pa = partner_access() %}
+{% if pa.view %}
+<nav class="segmented section-switch" aria-label="{{ _('Section') }}">
+  <a href="{{ url_for('maintenance.index') }}" class="{{ 'active' if section != 'partners' }}"{% if section != 'partners' %} aria-current="page"{% endif %}>{% trans %}Projects &amp; Maintenance{% endtrans %}</a>
+  <a href="{{ url_for('partners.index') }}" class="{{ 'active' if section == 'partners' }}"{% if section == 'partners' %} aria-current="page"{% endif %}>{% trans %}Business partners{% endtrans %}</a>
+</nav>
+{% endif %}

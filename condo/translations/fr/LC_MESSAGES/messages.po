@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 14:29+0000\n"
+"POT-Creation-Date: 2026-11-14 15:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -109,6 +109,10 @@ msgstr "%(name)s ne peut pas être %(position)s : seuls les copropriétaires si�
 #, python-format
 msgid "%(name)s is already %(key)s."
 msgstr "%(name)s est déjà %(key)s."
+
+#, python-format
+msgid "%(name)s is assigned to this work."
+msgstr "%(name)s est assigné à ces travaux."
 
 #, python-format
 msgid "%(name)s is no longer %(dropped)s: that role can't hold it."
@@ -225,6 +229,9 @@ msgstr "%(year)s : %(monthly_total_cents)s par mois"
 msgid "(Montreal time)"
 msgstr "(heure de Montréal)"
 
+msgid "(board only)"
+msgstr "(conseil seulement)"
+
 msgid "(contact)"
 msgstr "(contact)"
 
@@ -240,6 +247,9 @@ msgstr "(facultatif)"
 
 msgid "(optional, e.g. snow removal from November to April)"
 msgstr "(facultatif, p. ex. déneigement de novembre à avril)"
+
+msgid "(private)"
+msgstr "(privé)"
 
 msgid "(required to decline)"
 msgstr "(obligatoire pour refuser)"
@@ -306,6 +316,9 @@ msgstr "Une adresse courriel valide est obligatoire."
 msgid "Abstain"
 msgstr "Abstention"
 
+msgid "Accepted"
+msgstr "Acceptée"
+
 msgid "Access"
 msgstr "Accès"
 
@@ -363,11 +376,17 @@ msgstr "Active (décochez pour la suspendre sans perdre son historique)"
 msgid "Active maintenance"
 msgstr "Entretien en cours"
 
+msgid "Active partner"
+msgstr "Partenaire actif"
+
 msgid "Active repairs"
 msgstr "Réparations en cours"
 
 msgid "Add"
 msgstr "Ajouter"
+
+msgid "Add a business partner"
+msgstr "Ajouter un partenaire d’affaires"
 
 msgid "Add a charge"
 msgstr "Ajouter des frais"
@@ -380,6 +399,9 @@ msgstr "Ajouter un commentaire"
 
 msgid "Add a cost"
 msgstr "Ajouter une dépense"
+
+msgid "Add a quote"
+msgstr "Ajouter une soumission"
 
 msgid "Add a special contribution"
 msgstr "Ajouter une cotisation spéciale"
@@ -402,11 +424,17 @@ msgstr "Ajouter un copropriétaire"
 msgid "Add another person's own policy"
 msgstr "Ajouter la police personnelle d’une autre personne"
 
+msgid "Add at least one quote before asking the board."
+msgstr "Ajoutez au moins une soumission avant de consulter le conseil."
+
 msgid "Add charge"
 msgstr "Ajouter des frais"
 
 msgid "Add cost"
 msgstr "Ajouter une dépense"
+
+msgid "Add document"
+msgstr "Ajouter le document"
 
 msgid "Add insurance"
 msgstr "Ajouter une assurance"
@@ -414,11 +442,17 @@ msgstr "Ajouter une assurance"
 msgid "Add owner"
 msgstr "Ajouter un copropriétaire"
 
+msgid "Add partner"
+msgstr "Ajouter un partenaire"
+
 msgid "Add payment"
 msgstr "Ajouter un paiement"
 
 msgid "Add project"
 msgstr "Ajouter le projet"
+
+msgid "Add quote"
+msgstr "Ajouter la soumission"
 
 msgid "Add renewal"
 msgstr "Ajouter le renouvellement"
@@ -428,6 +462,12 @@ msgstr "Ajouter un locataire"
 
 msgid "Add the building's units first."
 msgstr "Ajoutez d’abord les unités de l’immeuble."
+
+msgid "Add the contractor as a business partner first."
+msgstr "Ajoutez d’abord l’entrepreneur comme partenaire d’affaires."
+
+msgid "Add the contractors who quote for the building or provide its services: snow removal, cleaning, plumbers…"
+msgstr "Ajoutez les entrepreneurs qui soumissionnent pour l’immeuble ou lui fournissent des services : déneigement, ménage, plombiers…"
 
 #, python-format
 msgid "Add the unit's %(group)s first; the policy names one of them as policyholder."
@@ -447,6 +487,9 @@ msgstr "Ajouté"
 
 msgid "Added by the sync on"
 msgstr "Ajouté par la synchronisation le"
+
+msgid "Address"
+msgstr "Adresse"
 
 #, python-format
 msgid "Adds a %(amount_cents)s credit to unit %(number)s's account (shown in Accounting as an owner-paid cost)."
@@ -469,6 +512,9 @@ msgstr "Tous les avis →"
 
 msgid "All owners"
 msgstr "Tous les copropriétaires"
+
+msgid "All trades"
+msgstr "Tous les métiers"
 
 msgid "All units are paid up."
 msgstr "Toutes les unités sont à jour."
@@ -725,6 +771,39 @@ msgstr "Membres du conseil"
 msgid "Board of directors"
 msgstr "Conseil d’administration"
 
+msgid "Board rating"
+msgstr "Évaluation du conseil"
+
+msgid "Board vote"
+msgstr "Vote du conseil"
+
+#, python-format
+msgid "Board vote in progress: %(voted)s of %(n)s voted."
+msgstr "Vote du conseil en cours : %(voted)s sur %(n)s ont voté."
+
+#, python-format
+msgid "Board vote on “%(title)s”: %(name)s is assigned."
+msgstr "Vote du conseil sur « %(title)s » : %(name)s est assigné."
+
+#, python-format
+msgid "Board vote on “%(title)s”: none of the quotes was chosen."
+msgstr "Vote du conseil sur « %(title)s » : aucune soumission n’a été choisie."
+
+#, python-format
+msgid "Board vote on “%(title)s”: not enough votes (more than half the board must vote). Nobody was assigned."
+msgstr "Vote du conseil sur « %(title)s » : pas assez de votes (plus de la moitié du conseil doit voter). Personne n’a été assigné."
+
+#, python-format
+msgid "Board vote on “%(title)s”: tie. Nobody was assigned; decide with a new vote or by the President."
+msgstr "Vote du conseil sur « %(title)s » : égalité. Personne n’a été assigné; décidez par un nouveau vote ou par le président."
+
+msgid "Board vote started. Board members have been notified."
+msgstr "Vote du conseil lancé. Les membres du conseil ont été avisés."
+
+#, python-format
+msgid "Board vote: %(title)s"
+msgstr "Vote du conseil : %(title)s"
+
 msgid "Board · Directory"
 msgstr "Conseil · Répertoire"
 
@@ -764,6 +843,12 @@ msgstr "Assurance de l’immeuble"
 
 msgid "Building insurance needs the policy's start and end dates."
 msgstr "L’assurance de l’immeuble exige les dates de début et de fin de la police."
+
+msgid "Business partner"
+msgstr "Partenaire d’affaires"
+
+msgid "Business partners"
+msgstr "Partenaires d’affaires"
 
 msgid "By"
 msgstr "Par"
@@ -845,6 +930,9 @@ msgstr "Choix"
 msgid "Choices"
 msgstr "Choix"
 
+msgid "Choose 1 to 5 stars."
+msgstr "Choisissez de 1 à 5 étoiles."
+
 msgid "Choose Owner or Tenant. Managing the building comes from a board position."
 msgstr "Choisissez Copropriétaire ou Locataire. La gestion de l’immeuble vient d’un poste au conseil."
 
@@ -871,6 +959,9 @@ msgstr "Choisissez une priorité."
 
 msgid "Choose a role."
 msgstr "Choisissez un rôle."
+
+msgid "Choose a trade."
+msgstr "Choisissez un métier."
 
 msgid "Choose a unit."
 msgstr "Choisissez une unité."
@@ -911,6 +1002,12 @@ msgstr "Choisissez une des réponses."
 msgid "Choose the Excel file to upload."
 msgstr "Choisissez le fichier Excel à téléverser."
 
+msgid "Choose the deadline's date and time."
+msgstr "Choisissez la date et l’heure de l’échéance."
+
+msgid "Choose the partner who gave the quote."
+msgstr "Choisissez le partenaire qui a donné la soumission."
+
 msgid "Choose the policyholder."
 msgstr "Choisissez le titulaire de la police."
 
@@ -931,6 +1028,9 @@ msgstr "Choisissez votre propre mot de passe (obligatoire)"
 
 msgid "Choose…"
 msgstr "Choisir…"
+
+msgid "Cleaning"
+msgstr "Ménage"
 
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
 msgstr "Cliquez sur une tâche pour remplir le formulaire; ajustez les dates et l’entrepreneur, puis enregistrez."
@@ -968,6 +1068,9 @@ msgstr "Perçu"
 msgid "Collecting"
 msgstr "Perception en cours"
 
+msgid "Comment"
+msgstr "Commentaire"
+
 msgid "Comment added."
 msgstr "Commentaire ajouté."
 
@@ -976,6 +1079,9 @@ msgstr "Le commentaire ne peut pas être vide."
 
 msgid "Common area"
 msgstr "Partie commune"
+
+msgid "Company"
+msgstr "Entreprise"
 
 msgid "Company or store"
 msgstr "Entreprise ou magasin"
@@ -1010,8 +1116,14 @@ msgstr "Confirmez d’abord une synchronisation."
 msgid "Contact"
 msgstr "Contact"
 
+msgid "Contact person"
+msgstr "Personne-ressource"
+
 msgid "Contact the management office to link your account to a unit."
 msgstr "Communiquez avec la gestion pour lier votre compte à une unité."
+
+msgid "Contract"
+msgstr "Contrat"
 
 msgid "Contract ending"
 msgstr "Fin de contrat"
@@ -1023,11 +1135,19 @@ msgstr "Fin du contrat"
 msgid "Contract ends %(when)s: %(title)s — time to renew or find a new contractor"
 msgstr "Le contrat prend fin le %(when)s : %(title)s — à renouveler ou trouver un autre entrepreneur"
 
+#, python-format
+msgid "Contract to %(until)s"
+msgstr "Contrat jusqu’au %(until)s"
+
 msgid "Contractor"
 msgstr "Entrepreneur"
 
 msgid "Contractor contact"
 msgstr "Coordonnées de l’entrepreneur"
+
+#, python-format
+msgid "Contractor for “%(title)s”"
+msgstr "Entrepreneur pour « %(title)s »"
 
 #, python-format
 msgid "Contractor: %(vendor)s"
@@ -1178,6 +1298,9 @@ msgstr "Supprimer ce brouillon?"
 msgid "Delete this notice?"
 msgstr "Supprimer cet avis?"
 
+msgid "Delete this partner? Their documents, quotes and ratings are deleted too."
+msgstr "Supprimer ce partenaire? Ses documents, soumissions et évaluations sont aussi supprimés."
+
 msgid "Delete this payment?"
 msgstr "Supprimer ce paiement?"
 
@@ -1186,6 +1309,12 @@ msgstr "Supprimer ce paiement ? Il vient de la feuille Google ; la prochaine syn
 
 msgid "Delete this project? Its updates and quote are deleted too."
 msgstr "Supprimer ce projet? Son suivi et sa soumission seront aussi supprimés."
+
+msgid "Delete this quote?"
+msgstr "Supprimer cette soumission?"
+
+msgid "Delete this rating?"
+msgstr "Supprimer cette évaluation?"
 
 msgid "Delete this request? Its updates and quote are deleted too."
 msgstr "Supprimer cette demande? Son suivi et sa soumission seront aussi supprimés."
@@ -1244,6 +1373,15 @@ msgstr "Répertoire : voir les coordonnées des copropriétaires et des locatair
 msgid "Document"
 msgstr "Document"
 
+msgid "Document added."
+msgstr "Document ajouté."
+
+msgid "Document deleted."
+msgstr "Document supprimé."
+
+msgid "Document expiring"
+msgstr "Document bientôt expiré"
+
 msgid "Documents"
 msgstr "Documents"
 
@@ -1264,6 +1402,9 @@ msgstr "Terminé"
 
 msgid "Done on"
 msgstr "Fait le"
+
+msgid "Doors & windows"
+msgstr "Portes et fenêtres"
 
 msgid "Download CSV"
 msgstr "Télécharger en CSV"
@@ -1294,6 +1435,9 @@ msgstr "Date d’échéance"
 
 msgid "Due soon"
 msgstr "Bientôt dû"
+
+msgid "Each board member gets one vote between the pending quotes (or “None of these”). The quote with the most votes is accepted when the vote closes, as long as more than half of the board voted."
+msgstr "Chaque membre du conseil a une voix entre les soumissions en attente (ou « Aucune de celles-ci »). La soumission qui obtient le plus de voix est acceptée à la fermeture du vote, pourvu que plus de la moitié du conseil ait voté."
 
 msgid "Each unit gets one \"Opening balance\" entry in its statement: positive means the unit owes money, negative means it is in credit. Amounts include late-payment interest. After loading, generate monthly dues only for months"
 msgstr "Chaque unité reçoit une entrée « Solde d’ouverture » dans son relevé : un montant positif signifie que l’unité doit de l’argent, un montant négatif qu’elle a un crédit. Les montants incluent les intérêts de retard. Après le chargement, générez les frais mensuels seulement pour les mois"
@@ -1326,6 +1470,9 @@ msgstr "Modifier dans l’onglet Owners de la feuille Google"
 msgid "Edit notice"
 msgstr "Modifier l’avis"
 
+msgid "Edit partner"
+msgstr "Modifier le partenaire"
+
 msgid "Edit payment"
 msgstr "Modifier le paiement"
 
@@ -1345,6 +1492,9 @@ msgstr "Modifier « %(title)s »"
 
 msgid "Electrical"
 msgstr "Électricité"
+
+msgid "Elevator"
+msgstr "Ascenseur"
 
 msgid "Email"
 msgstr "Courriel"
@@ -1543,6 +1693,9 @@ msgstr "Relevé complet"
 msgid "Fully paid"
 msgstr "Entièrement payée"
 
+msgid "General contractor"
+msgstr "Entrepreneur général"
+
 msgid "Generate"
 msgstr "Générer"
 
@@ -1561,6 +1714,9 @@ msgstr "Donnez un titre à la cotisation, p. ex. « Remplacement des fenêtres 2
 msgid "Give the document a title."
 msgstr "Donnez un titre au document."
 
+msgid "Give the partner's name."
+msgstr "Indiquez le nom du partenaire."
+
 msgid "Give the task a name, e.g. “Snow removal”."
 msgstr "Donnez un nom à la tâche, p. ex. « Déneigement »."
 
@@ -1570,6 +1726,10 @@ msgstr "Donnez une question ou un titre au vote."
 #, python-format
 msgid "Give this password to %(name)s privately."
 msgstr "Remettez ce mot de passe à %(name)s en privé."
+
+#, python-format
+msgid "Give this work to %(name)s without a board vote?"
+msgstr "Confier ces travaux à %(name)s sans vote du conseil?"
 
 msgid "Go"
 msgstr "Aller"
@@ -1598,6 +1758,9 @@ msgstr "Nettoyage des gouttières"
 
 msgid "HVAC"
 msgstr "Chauffage et climatisation"
+
+msgid "Heating & ventilation"
+msgstr "Chauffage et ventilation"
 
 msgid "Heating / HVAC servicing"
 msgstr "Entretien du chauffage et de la climatisation"
@@ -1659,6 +1822,9 @@ msgstr "Inactif"
 msgid "Insurance"
 msgstr "Assurances"
 
+msgid "Insurance certificate"
+msgstr "Certificat d’assurance"
+
 msgid "Insurance policy removed."
 msgstr "Police d’assurance supprimée."
 
@@ -1696,6 +1862,9 @@ msgstr "Fonction / entreprise"
 msgid "Job or company"
 msgstr "Fonction ou entreprise"
 
+msgid "Jobs assigned"
+msgstr "Travaux confiés"
+
 msgid "July"
 msgstr "juillet"
 
@@ -1704,6 +1873,9 @@ msgstr "juin"
 
 msgid "Keep me signed in"
 msgstr "Rester connecté"
+
+msgid "Landscaping"
+msgstr "Aménagement paysager"
 
 msgid "Language / Langue"
 msgstr "Langue / Language"
@@ -1740,6 +1912,19 @@ msgstr "Reste"
 
 msgid "Left to pay"
 msgstr "Reste à payer"
+
+msgid "Licence"
+msgstr "Licence"
+
+msgid "Licence (RBQ)"
+msgstr "Licence (RBQ)"
+
+msgid "Licence number (RBQ)"
+msgstr "Numéro de licence (RBQ)"
+
+#, python-format
+msgid "Linked to %(n)s existing entries with that name."
+msgstr "Lié à %(n)s entrées existantes portant ce nom."
 
 msgid "Lives in the unit"
 msgstr "Habite l’unité"
@@ -1958,6 +2143,9 @@ msgstr "Nouvel avis"
 msgid "New notice: %(item)s"
 msgstr "Nouvel avis : %(item)s"
 
+msgid "New partner"
+msgstr "Nouveau partenaire"
+
 msgid "New password"
 msgstr "Nouveau mot de passe"
 
@@ -2043,9 +2231,15 @@ msgstr "Aucune police d’assurance de l’immeuble n’a encore été téléver
 msgid "No building insurance policy is on file."
 msgstr "Aucune police d’assurance de l’immeuble au dossier."
 
+msgid "No business partners yet."
+msgstr "Aucun partenaire d’affaires pour l’instant."
+
 #, python-format
 msgid "No condo fees set for %(year)s yet."
 msgstr "Aucuns frais de condo fixés pour %(year)s."
+
+msgid "No contractor assigned yet."
+msgstr "Aucun entrepreneur assigné pour l’instant."
 
 #, python-format
 msgid "No costs in %(label)s."
@@ -2053,6 +2247,9 @@ msgstr "Aucune dépense en %(label)s."
 
 msgid "No database is connected, so changes are temporary and will be lost. Connect a Postgres database (DATABASE_URL) to keep data."
 msgstr "Aucune base de données n’est connectée : les modifications sont temporaires et seront perdues. Connectez une base Postgres (DATABASE_URL) pour conserver les données."
+
+msgid "No documents yet."
+msgstr "Aucun document pour l’instant."
 
 msgid "No insurance"
 msgstr "Aucune assurance"
@@ -2076,15 +2273,24 @@ msgstr "Aucun copropriétaire inscrit pour l’instant pour l’unité ou les un
 msgid "No owners recorded."
 msgstr "Aucun copropriétaire inscrit."
 
+msgid "No partner matches."
+msgstr "Aucun partenaire ne correspond."
+
 #, python-format
 msgid "No payments in %(label)s."
 msgstr "Aucun paiement en %(label)s."
+
+msgid "No payments linked yet."
+msgstr "Aucun paiement lié pour l’instant."
 
 msgid "No projects here."
 msgstr "Aucun projet ici."
 
 msgid "No projects yet."
 msgstr "Aucun projet pour l’instant."
+
+msgid "No quotes yet. Add them from a project or a repair, or here."
+msgstr "Aucune soumission pour l’instant. Ajoutez-les depuis un projet ou une réparation, ou ici."
 
 msgid "No requests yet."
 msgstr "Aucune demande pour l’instant."
@@ -2128,6 +2334,9 @@ msgstr "Aucune mise à jour pour l’instant."
 msgid "No votes yet."
 msgstr "Aucun vote pour l’instant."
 
+msgid "No work assigned yet."
+msgstr "Aucuns travaux confiés pour l’instant."
+
 msgid "Nobody can vote yet: the chosen owners need sign-in accounts."
 msgstr "Personne ne peut encore voter : les copropriétaires choisis doivent avoir un compte de connexion."
 
@@ -2136,6 +2345,9 @@ msgstr "Personne d’autre n’est admissible"
 
 msgid "Nobody listed yet."
 msgstr "Personne d’inscrit pour l’instant."
+
+msgid "None of these"
+msgstr "Aucune de celles-ci"
 
 msgid "None yet"
 msgstr "Aucun pour l’instant"
@@ -2168,11 +2380,17 @@ msgstr "Non inclus ci-dessus : solde d’ouverture de %(opening)s reporté des r
 msgid "Not paid yet"
 msgstr "Pas encore payé"
 
+msgid "Not rated yet."
+msgstr "Pas encore évalué."
+
 msgid "Not voted yet"
 msgstr "Pas encore voté"
 
 msgid "Note"
 msgstr "Note"
+
+msgid "Note to the board"
+msgstr "Note au conseil"
 
 msgid "Note to the owner"
 msgstr "Note au copropriétaire"
@@ -2279,6 +2497,9 @@ msgstr "Demandes ouvertes"
 
 msgid "Open the Google Sheet"
 msgstr "Ouvrir la feuille Google"
+
+msgid "Open the vote"
+msgstr "Ouvrir le vote"
 
 msgid "Opening balance"
 msgstr "Solde d’ouverture"
@@ -2406,6 +2627,13 @@ msgstr "Payé à / référence"
 msgid "Paid · %(label)s"
 msgstr "Payé · %(label)s"
 
+#, python-format
+msgid "Paid · %(y)s"
+msgstr "Payé · %(y)s"
+
+msgid "Painting"
+msgstr "Peinture"
+
 msgid "Parking"
 msgstr "Stationnement"
 
@@ -2418,6 +2646,16 @@ msgstr "Place de stationnement"
 
 msgid "Partly paid"
 msgstr "Payée en partie"
+
+msgid "Partner"
+msgstr "Partenaire"
+
+#, python-format
+msgid "Partner added: %(name)s."
+msgstr "Partenaire ajouté : %(name)s."
+
+msgid "Partner deleted."
+msgstr "Partenaire supprimé."
 
 msgid "Password"
 msgstr "Mot de passe"
@@ -2480,6 +2718,9 @@ msgstr "Paiements reçus · %(label)s"
 
 msgid "Payments − costs since"
 msgstr "Paiements − dépenses depuis"
+
+msgid "Pending"
+msgstr "En attente"
 
 msgid "People you hire, such as a cleaner, a contractor or an outside accountant, who aren't owners or tenants. Give each one only the access they need. Owners' and tenants' logins are managed in the Owners and Tenants tabs."
 msgstr "Les personnes que vous engagez, comme un service d’entretien ménager, un entrepreneur ou un comptable externe, qui ne sont ni copropriétaires ni locataires. Donnez à chacune seulement les accès dont elle a besoin. Les accès des copropriétaires et des locataires se gèrent dans les onglets Copropriétaires et Locataires."
@@ -2591,6 +2832,9 @@ msgstr "Contact principal de cette unité"
 msgid "Priority"
 msgstr "Priorité"
 
+msgid "Professional services"
+msgstr "Services professionnels"
+
 msgid "Progress"
 msgstr "Progression"
 
@@ -2656,8 +2900,14 @@ msgstr "Soumission et approbation du conseil"
 msgid "Quote (PDF or photo)"
 msgstr "Soumission (PDF ou photo)"
 
+msgid "Quote added."
+msgstr "Soumission ajoutée."
+
 msgid "Quote awaiting board approval"
 msgstr "Soumission en attente de l’approbation du conseil"
+
+msgid "Quote deleted."
+msgstr "Soumission supprimée."
 
 msgid "Quote sent to the board for approval."
 msgstr "Soumission envoyée au conseil pour approbation."
@@ -2668,6 +2918,15 @@ msgstr "Soumission à approuver : unité %(number)s, %(amount)s — %(req)s"
 
 msgid "Quoted amount ($)"
 msgstr "Montant de la soumission ($)"
+
+msgid "Quotes"
+msgstr "Soumissions"
+
+msgid "Rating"
+msgstr "Évaluation"
+
+msgid "Rating saved."
+msgstr "Évaluation enregistrée."
 
 msgid "Reassign or remove the unit's residents before deleting it."
 msgstr "Réaffectez ou retirez les résidents de l’unité avant de la supprimer."
@@ -2912,8 +3171,14 @@ msgstr "Rôle"
 msgid "Roof inspection"
 msgstr "Inspection de la toiture"
 
+msgid "Roofing"
+msgstr "Toiture"
+
 msgid "Routine"
 msgstr "Entretien courant"
+
+msgid "Routine contracts"
+msgstr "Contrats d’entretien courant"
 
 msgid "Routine maintenance"
 msgstr "Entretien courant"
@@ -2954,6 +3219,9 @@ msgstr "Enregistrer l’assurance"
 msgid "Save link"
 msgstr "Enregistrer le lien"
 
+msgid "Save rating"
+msgstr "Enregistrer l’évaluation"
+
 msgid "Save the sheet link first, or upload a copy of the sheet."
 msgstr "Enregistrez d’abord le lien de la feuille, ou téléversez une copie de la feuille."
 
@@ -2978,6 +3246,9 @@ msgstr "Rechercher un nom, un courriel, un téléphone ou une entreprise"
 msgid "Search name, email, phone, address or unit"
 msgstr "Rechercher un nom, un courriel, un téléphone, une adresse ou une unité"
 
+msgid "Search…"
+msgstr "Rechercher…"
+
 msgid "Season"
 msgstr "Saison"
 
@@ -2988,8 +3259,14 @@ msgstr "Saison : %(start)s à %(end)s"
 msgid "Secretary"
 msgstr "Secrétaire"
 
+msgid "Section"
+msgstr "Section"
+
 msgid "Security"
 msgstr "Sécurité"
+
+msgid "Security & fire safety"
+msgstr "Sécurité et incendie"
 
 msgid "See all the details"
 msgstr "Voir tous les détails"
@@ -3109,8 +3386,14 @@ msgstr "Répartition"
 msgid "Staff"
 msgstr "Employé"
 
+msgid "Stars"
+msgstr "Étoiles"
+
 msgid "Start date"
 msgstr "Date de début"
+
+msgid "Start the board vote"
+msgstr "Lancer le vote du conseil"
 
 msgid "Start with common tasks"
 msgstr "Commencer avec des tâches courantes"
@@ -3402,6 +3685,9 @@ msgstr "Total : %(e)s"
 msgid "Totals"
 msgstr "Totaux"
 
+msgid "Trade"
+msgstr "Métier"
+
 msgid "Transactions"
 msgstr "Transactions"
 
@@ -3536,6 +3822,9 @@ msgstr "Services publics"
 msgid "Vacant"
 msgstr "Vacant"
 
+msgid "Valid until"
+msgstr "Valide jusqu’au"
+
 msgid "Vice-president"
 msgstr "Vice-président"
 
@@ -3610,6 +3899,9 @@ msgstr "Vous voulez ceci pour votre immeuble?"
 msgid "We couldn't find that page."
 msgstr "Nous n’avons pas trouvé cette page."
 
+msgid "Website"
+msgstr "Site Web"
+
 msgid "Weight"
 msgstr "Poids"
 
@@ -3658,6 +3950,9 @@ msgstr "Lavage des fenêtres"
 
 msgid "With ownership share, a unit that owns an eighth of the building counts for an eighth of the vote; if it has two owners, each counts for half."
 msgstr "Selon la quote-part, une unité qui possède le huitième de l’immeuble compte pour le huitième des voix; si elle a deux copropriétaires, chacun compte pour la moitié."
+
+msgid "Work"
+msgstr "Travaux"
 
 msgid "Workbook"
 msgstr "Classeur"
@@ -3787,6 +4082,13 @@ msgstr "selon la quote-part"
 msgid "certificate"
 msgstr "certificat"
 
+#, python-format
+msgid "contract to %(until)s"
+msgstr "contrat jusqu’au %(until)s"
+
+msgid "contractor chosen"
+msgstr "entrepreneur choisi"
+
 msgid "credit"
 msgstr "crédit"
 
@@ -3879,6 +4181,12 @@ msgstr "argent reçu"
 msgid "must change at next sign-in"
 msgstr "doit le changer à la prochaine connexion"
 
+msgid "none of the quotes chosen"
+msgstr "aucune soumission choisie"
+
+msgid "not enough votes"
+msgstr "pas assez de votes"
+
 msgid "not voted"
 msgstr "pas voté"
 
@@ -3903,6 +4211,9 @@ msgstr "copropriétaire"
 
 msgid "owner and treasurer"
 msgstr "copropriétaire et trésorier"
+
+msgid "quote"
+msgstr "soumission"
 
 msgid "so owners and tenants can see it."
 msgstr "pour que les copropriétaires et les locataires puissent la consulter."
@@ -3943,6 +4254,9 @@ msgstr "la demande"
 msgid "the unit"
 msgstr "l’unité"
 
+msgid "tie, nobody assigned"
+msgstr "égalité, personne d’assigné"
+
 msgid "to approve"
 msgstr "à approuver"
 
@@ -3952,6 +4266,10 @@ msgstr "à enregistrer"
 #, python-format
 msgid "unit %(number)s"
 msgstr "unité %(number)s"
+
+#, python-format
+msgid "valid until %(until)s"
+msgstr "valide jusqu’au %(until)s"
 
 msgid "view"
 msgstr "voir"
@@ -4021,6 +4339,12 @@ msgstr "— Saisir une nouvelle adresse —"
 #, python-format
 msgid "— current: %(filename)s; choose a file only to replace it"
 msgstr "— actuel : %(filename)s; choisissez un fichier seulement pour le remplacer"
+
+msgid "— none —"
+msgstr "— aucun —"
+
+msgid "— not linked —"
+msgstr "— non lié —"
 
 #, python-format
 msgid "“%(doc)s” deleted."

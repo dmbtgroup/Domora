@@ -86,6 +86,9 @@ def check_polls(now=None):
             notify.send([v.user for v in p.voters] + notify.board(), _l("Results are in: %(title)s", title=p.title),
                         url=url, kind="vote", include_actor=True)
             p.results_notified_at = now
+            if p.request_id:  # a board vote on quotes: give the work to the winner
+                from .partners import apply_vote_outcome
+                apply_vote_outcome(p)
             sent += 1
     if sent:
         db.session.commit()

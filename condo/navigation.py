@@ -11,7 +11,7 @@ from flask_login import current_user
 TOP_LEVEL = {
     "dashboard.index", "units.index", "directory.contacts", "directory.board", "directory.accounts",
     "directory.index", "billing.index", "maintenance.index", "announcements.index", "documents.index",
-    "amenities.index", "auth.login", "billing.my_account", "notifications.index", "reimbursements.index", "votes.index",
+    "amenities.index", "auth.login", "billing.my_account", "notifications.index", "reimbursements.index", "votes.index", "partners.index",
 }
 
 from .i18n import lazy_gettext as _l
@@ -65,6 +65,8 @@ def parent_for(endpoint, args):
         project = req.is_project if req else request.values.get("kind") == "project"
         return (_l("Projects"), url_for("maintenance.index", tab="projects")) if project else \
             (_l("Maintenance"), url_for("maintenance.index", tab="maintenance"))
+    if endpoint.startswith("partners."):
+        return _l("Business partners"), url_for("partners.index")
     if endpoint.startswith("votes."):
         return _l("Votes"), url_for("votes.index")
     if endpoint.startswith("announcements."):
@@ -112,6 +114,8 @@ def label_for(path):
         from .models import MaintenanceRequest
         req = db.session.get(MaintenanceRequest, int(m.group(1)))
         return (_l("the project") if req.is_project else _l("the request")) if req else _l("Projects & Maintenance")
+    if bare.startswith("/maintenance/partners"):
+        return _l("Business partners")
     if bare.startswith("/maintenance"):
         return _l("Maintenance") if "tab=maintenance" in path else _l("Routine") if "tab=routine" in path else _l("Projects")
     for prefix, label in (("/directory", _l("Directory")), ("/accounting", _l("Accounting")), ("/maintenance", _l("Maintenance")),

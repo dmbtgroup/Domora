@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon_link, icon_post %}
+{% block title %}{% trans %}Business partners{% endtrans %}{% endblock %}
+{% macro stars(n) %}{% if n %}<span class="stars" title="{{ n }}/5">{% for i in range(1, 6) %}<span class="{{ '' if i <= n|round(0, 'common') else 'off' }}">★</span>{% endfor %}</span>{% endif %}{% endmacro %}
+{% block content %}
+<div class="head"><h1>{% trans %}Projects &amp; Maintenance{% endtrans %}</h1>
+  {% if manage %}{{ icon_link('plus', url_for('partners.new'), _('Add partner'), cls='primary') }}{% endif %}</div>
+{% set section = 'partners' %}{% include "maintenance/_section.html" %}
+
+<div class="filter-bar">
+  <nav class="segmented" aria-label="{{ _('Show') }}">
+    <a href="{{ url_for('partners.index', trade=trade, q=q) }}" class="{{ 'active' if show != 'all' }}">{% trans %}Active{% endtrans %} <span class="count">{{ counts.active }}</span></a>
+    <a href="{{ url_for('partners.index', show='all', trade=trade, q=q) }}" class="{{ 'active' if show == 'all' }}">{% trans %}All{% endtrans %} <span class="count">{{ counts.all }}</span></a>
+  </nav>
+  <form method="get" class="status-pick partner-filter">
+    {% if show == 'all' %}<input type="hidden" name="show" value="all">{% endif %}
+    <select name="trade" onchange="this.form.submit()" aria-label="{{ _('Trade') }}" class="{{ 'chosen' if trade }}">
+      <option value="">{% trans %}All trades{% endtrans %}</option>
+      {% for k, label in trades.items() %}<option value="{{ k }}" {{ 'selected' if trade == k }}>{{ label }}</option>{% endfor %}
+    </select>
+    <input type="search" name="q" value="{{ q }}" placeholder="{{ _('Search…') }}" aria-label="{{ _('Search') }}">
+  </form>
+</div>
+
+<div class="card">
+<table>
+  <thead><tr>{% if manage %}<th class="row-actions-h"><span class="sr-only">{% trans %}Actions{% endtrans %}</span></th>{% endif %}
+    <th>{% trans %}Partner{% endtrans %}</th><th>{% trans %}Trade{% endtrans %}</th><th>{% trans %}Phone{% endtrans %}</th>
+    {% if manage %}<th>{% trans %}Rating{% endtrans %}</th><th class="num">{% trans y=year %}Paid · {{ y }}{% endtrans %}</th><th></th>{% else %}<th>{% trans %}Website{% endtrans %}</th>{% endif %}</tr></thead>
+  <tbody>{% for p in partners %}
+    <tr class="{{ 'muted' if not p.active }}">
+      {% if manage %}<td class="row-actions">{{ icon_link('pencil', url_for('partners.edit', partner_id=p.id), _('Edit'), cls='small') }}{{ icon_post('trash', url_for('partners.delete', partner_id=p.id), _('Delete'), confirm=_('Delete this partner? Their documents, quotes and ratings are deleted too.'), cls='danger small') }}</td>{% endif %}
+      <td>{% if manage %}<a href="{{ url_for('partners.detail', partner_id=p.id) }}"><strong>{{ p.name }}</strong></a>{% else %}<strong>{{ p.name }}</strong>{% endif %}
+        {% if p.contact_name and manage %}<div class="muted small">{{ p.contact_name }}</div>{% endif %}</td>
+      <td>{{ p.trade_label }}</td>
+      <td class="nowrap">{% if p.phone %}<a href="{{ p.phone|tel }}">{{ p.phone|phone }}</a>{% else %}—{% endif %}</td>
+      {% if manage %}
+      <td>{{ stars(p.rating) if p.rating else '—' }}</td>
+      <td class="num">{% set s = p.spent_cents(year) %}{{ s|money if s else '—' }}</td>
+      <td>{% for t in p.routine_tasks if t.active and t.contract_ends %}<span class="tag">{% trans until=t.contract_ends|fdate('medium') %}Contract to {{ until }}{% endtrans %}</span> {% endfor %}
+        {% set exp = p.expiring_documents(today) %}{% if exp %}<span class="badge ins-expiring">{% trans %}Document expiring{% endtrans %}</span>{% endif %}
+        {% if not p.active %}<span class="tag">{% trans %}Inactive{% endtrans %}</span>{% endif %}</td>
+      {% else %}
+      <td>{% if p.website %}<a href="{{ p.website_url }}" target="_blank" rel="noopener">{{ p.website }}</a>{% else %}—{% endif %}</td>
+      {% endif %}
+    </tr>
+  {% else %}<tr><td colspan="{{ 7 if manage else 4 }}" class="muted">{% if q or trade %}{% trans %}No partner matches.{% endtrans %}{% else %}{% trans %}No business partners yet.{% endtrans %}{% if manage %} {% trans %}Add the contractors who quote for the building or provide its services: snow removal, cleaning, plumbers…{% endtrans %}{% endif %}{% endif %}</td></tr>{% endfor %}</tbody>
+</table>
+</div>
+{% endblock %}

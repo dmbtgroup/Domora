@@ -18,6 +18,7 @@
         submitted by {{ name }} on {{ created_at }}{% endtrans %}</p>
       <div class="prose">{{ req.description }}</div>
     </div>
+    {% include "maintenance/_contractor.html" %}
     <div class="card">
       <h2>{% trans %}Updates{% endtrans %}</h2>
       {% for c in req.comments %}

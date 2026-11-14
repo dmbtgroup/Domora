@@ -21,6 +21,11 @@
     <label>{% trans %}Approved by{% endtrans %} <input name="approved_by" maxlength="255" value="{{ form.get('approved_by', '') }}"></label>
     <label>{% trans %}Paid to / reference{% endtrans %} <input name="source" maxlength="255" value="{{ form.get('source', '') }}"></label>
   </div>
+  {% set choices = partner_choices() %}{% if choices %}
+  <div class="row">
+    <label>{% trans %}Business partner{% endtrans %} <select name="partner_id"><option value="">{% trans %}— none —{% endtrans %}</option>
+      {% for pt in choices %}<option value="{{ pt.id }}" {{ 'selected' if form.get('partner_id')|string == pt.id|string }}>{{ pt.name }}</option>{% endfor %}</select></label>
+  </div>{% endif %}
   <label>{% trans %}Notes{% endtrans %} <textarea name="notes" rows="2">{{ form.get('notes', '') }}</textarea></label>
   <div class="form-actions"><button class="btn primary">{% trans %}Save{% endtrans %}</button>
   <a href="{{ safe_back() or url_for('billing.index') }}">{% trans %}Cancel{% endtrans %}</a></div>

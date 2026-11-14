@@ -247,11 +247,14 @@ def _cost_form(cost):
         except ValueError as e:
             errors.append(str(e))
         if not errors:
+            from ..models import Partner
+            raw = request.form.get("partner_id", "")
+            partner = db.session.get(Partner, int(raw)) if raw.isdigit() else None
             values = dict(spent_on=spent_on, category=category, description=description[:255],
                           amount_cents=amount if refund else -amount,
                           approved_by=request.form.get("approved_by", "").strip()[:255] or None,
-                          source=request.form.get("source", "").strip()[:255] or None,
-                          notes=request.form.get("notes", "").strip() or None)
+                          source=request.form.get("source", "").strip()[:255] or (partner.name[:255] if partner else None),
+                          notes=request.form.get("notes", "").strip() or None, partner_id=partner.id if partner else None)
             if cost is None:
                 db.session.add(Expense(recorded_by_id=current_user.id, **values))
                 flash(_("Refund recorded.") if refund else _("Cost recorded."), "success")
@@ -270,7 +273,8 @@ def _cost_form(cost):
     else:
         form = {"spent_on": cost.spent_on.isoformat(), "category": cost.category_key, "kind": "refund" if cost.amount_cents > 0 else "cost",
                 "description": cost.description, "amount": f"{abs(cost.amount_cents) / 100:,.2f}",
-                "approved_by": cost.approved_by or "", "source": cost.source or "", "notes": cost.notes or ""}
+                "approved_by": cost.approved_by or "", "source": cost.source or "", "notes": cost.notes or "",
+                "partner_id": cost.partner_id or ""}
     return render_template("billing/cost_form.html", categories=COST_CATEGORIES, form=form, cost=cost)
 
 

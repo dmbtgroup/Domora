@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon_link, icon_post %}
+{% from "_macros.html" import csrf, icon as micon %}
+{% block title %}{{ p.name }}{% endblock %}
+{% macro stars(n) %}<span class="stars" title="{{ n }}/5">{% for i in range(1, 6) %}<span class="{{ '' if i <= n|round(0, 'common') else 'off' }}">★</span>{% endfor %}</span>{% endmacro %}
+{% block content %}
+<div class="head"><div>
+    <h1>{{ p.name }} {% if not p.active %}<span class="tag">{% trans %}Inactive{% endtrans %}</span>{% endif %}</h1>
+    <p class="unit-facts muted">{{ p.trade_label }}{% if p.rating %} · {{ stars(p.rating) }} {{ p.rating }}{% endif %}</p></div>
+  <div class="actions">
+    {{ icon_link('pencil', url_for('partners.edit', partner_id=p.id), _('Edit')) }}
+    {{ icon_post('trash', url_for('partners.delete', partner_id=p.id), _('Delete'), confirm=_('Delete this partner? Their documents, quotes and ratings are deleted too.'), cls='danger') }}
+  </div></div>
+
+<div class="stats unit-stats">
+  <div class="stat"><span>{{ spent|money }}</span>{% trans y=year %}Paid · {{ y }}{% endtrans %}</div>
+  <div class="stat"><span>{{ p.quotes|length }}</span>{% trans %}Quotes{% endtrans %}</div>
+  <div class="stat"><span>{{ work|length }}</span>{% trans %}Jobs assigned{% endtrans %}</div>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h2>{% trans %}Details{% endtrans %}</h2>
+    <dl class="props">
+      {% if p.contact_name %}<dt>{% trans %}Contact person{% endtrans %}</dt><dd>{{ p.contact_name }}</dd>{% endif %}
+      {% if p.phone %}<dt>{% trans %}Phone{% endtrans %}</dt><dd><a href="{{ p.phone|tel }}">{{ p.phone|phone }}</a></dd>{% endif %}
+      {% if p.email %}<dt>{% trans %}Email{% endtrans %}</dt><dd><a href="mailto:{{ p.email }}">{{ p.email }}</a></dd>{% endif %}
+      {% if p.website %}<dt>{% trans %}Website{% endtrans %}</dt><dd><a href="{{ p.website_url }}" target="_blank" rel="noopener">{{ p.website }}</a></dd>{% endif %}
+      {% if p.licence %}<dt>{% trans %}Licence (RBQ){% endtrans %}</dt><dd>{{ p.licence }}</dd>{% endif %}
+      {% if p.address %}<dt>{% trans %}Address{% endtrans %}</dt><dd>{{ p.address }}</dd>{% endif %}
+    </dl>
+    {% if p.notes %}<p class="prose muted">{{ p.notes }}</p>{% endif %}
+    {% if p.routine_tasks %}<h3>{% trans %}Routine contracts{% endtrans %}</h3><ul class="list">
+      {% for t in p.routine_tasks %}<li><a href="{{ url_for('maintenance.routine_detail', task_id=t.id) }}">{{ t.title }}</a>
+        {% if t.contract_ends %}<span class="muted">· {% trans until=t.contract_ends|fdate('medium') %}contract to {{ until }}{% endtrans %}</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
+  </section>
+
+  <section class="card">
+    <h2>{% trans %}Documents{% endtrans %}</h2>
+    {% if p.documents %}<ul class="list">{% for d in p.documents %}
+      <li class="doc-row"><span>{% if d.file %}<a href="{{ url_for('partners.document_file', doc_id=d.id) }}" target="_blank" rel="noopener">{{ d.title or d.kind_label }}</a>{% else %}{{ d.title or d.kind_label }}{% endif %}
+        <span class="muted">· {{ d.kind_label }}{% if d.valid_until %} · {% trans until=d.valid_until|fdate('medium') %}valid until {{ until }}{% endtrans %}{% endif %}</span>
+        {% if d.valid_until and d.valid_until < today %}<span class="badge ins-expired">{% trans %}Expired{% endtrans %}</span>{% elif d in p.expiring_documents(today) %}<span class="badge ins-expiring">{% trans %}Expiring soon{% endtrans %}</span>{% endif %}</span>
+        {{ icon_post('trash', url_for('partners.delete_document', doc_id=d.id), _('Delete'), confirm=_('Delete this document?'), cls='danger small') }}</li>
+    {% endfor %}</ul>{% else %}<p class="muted">{% trans %}No documents yet.{% endtrans %}</p>{% endif %}
+    <form method="post" action="{{ url_for('partners.add_document', partner_id=p.id) }}" enctype="multipart/form-data" class="compact-form">
+      {{ csrf() }}
+      <div class="row">
+        <label>{% trans %}Type{% endtrans %} <select name="kind">{% for k, label in doc_kinds.items() %}<option value="{{ k }}">{{ label }}</option>{% endfor %}</select></label>
+        <label>{% trans %}Valid until{% endtrans %} <input type="date" name="valid_until"></label>
+      </div>
+      <label>{% trans %}Title{% endtrans %} <span class="muted">{% trans %}(optional){% endtrans %}</span><input name="title" maxlength="200"></label>
+      <label>{% trans %}File{% endtrans %} <input type="file" name="file" accept="{{ accept }}" required></label>
+      <button class="btn small">{% trans %}Add document{% endtrans %}</button>
+    </form>
+  </section>
+</div>
+
+<section class="card">
+  <h2>{% trans %}Quotes{% endtrans %}</h2>
+  {% if p.quotes %}<table class="quote-table">
+    <thead><tr><th>{% trans %}Date{% endtrans %}</th><th>{% trans %}For{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th><th>{% trans %}Status{% endtrans %}</th><th></th></tr></thead>
+    <tbody>{% for q in p.quotes %}<tr>
+      <td class="nowrap">{{ q.quoted_on|fdate('medium') }}</td>
+      <td>{% if q.request %}<a href="{{ url_for('maintenance.detail', request_id=q.request.id) }}">{{ q.request.title }}</a>{% else %}<span class="muted">{{ q.note or '—' }}</span>{% endif %}</td>
+      <td class="num">{{ q.amount_cents|money }}</td>
+      <td><span class="badge quote-{{ q.status }}">{{ q.status_label }}</span></td>
+      <td class="nowrap">{% if q.file %}<a href="{{ url_for('partners.quote_file', quote_id=q.id) }}" target="_blank" rel="noopener">PDF</a>{% endif %}
+        {{ icon_post('trash', url_for('partners.delete_quote', quote_id=q.id, back=here()), _('Delete'), confirm=_('Delete this quote?'), cls='danger small') }}</td></tr>{% endfor %}</tbody>
+  </table>{% else %}<p class="muted">{% trans %}No quotes yet. Add them from a project or a repair, or here.{% endtrans %}</p>{% endif %}
+  <details class="add-inline"><summary class="btn small">{% trans %}Add a quote{% endtrans %}</summary>
+  <form method="post" action="{{ url_for('partners.add_quote', back=here()) }}" enctype="multipart/form-data" class="compact-form">
+    {{ csrf() }}<input type="hidden" name="partner_id" value="{{ p.id }}">
+    <div class="row">
+      <label>{% trans %}For{% endtrans %} <select name="request_id"><option value="">{% trans %}— not linked —{% endtrans %}</option>
+        {% for r in requests %}<option value="{{ r.id }}">#{{ r.id }} · {{ r.title|truncate(50) }}</option>{% endfor %}</select></label>
+      <label>{% trans %}Amount{% endtrans %} <span class="money-input"><input name="amount" inputmode="decimal" required placeholder="0.00"></span></label>
+      <label>{% trans %}Date{% endtrans %} <input type="date" name="quoted_on" value="{{ today.isoformat() }}"></label>
+    </div>
+    <label>{% trans %}Note{% endtrans %} <input name="note"></label>
+    <label>{% trans %}Quote (PDF or photo){% endtrans %} <input type="file" name="file" accept="{{ accept }}"></label>
+    <button class="btn primary small">{% trans %}Add quote{% endtrans %}</button>
+  </form></details>
+</section>
+
+<div class="grid two">
+  <section class="card">
+    <h2>{% trans %}Work{% endtrans %}</h2>
+    {% if work %}<ul class="list">{% for r in work %}<li><a href="{{ url_for('maintenance.detail', request_id=r.id) }}">{{ r.title }}</a>
+      <span class="muted">· {{ statuses.get(r.status, r.status) }}</span></li>{% endfor %}</ul>
+    {% else %}<p class="muted">{% trans %}No work assigned yet.{% endtrans %}</p>{% endif %}
+    <h3>{% trans %}Payments{% endtrans %}</h3>
+    {% if payments %}<table><tbody>{% for x in payments %}<tr><td class="nowrap"><a href="{{ url_for('billing.cost_detail', cost_id=x.id) }}">{{ x.spent_on|fdate('iso') }}</a></td><td class="muted">{{ x.description|truncate(50) }}</td><td class="num">{{ x.cost_cents|money }}</td></tr>{% endfor %}</tbody></table>
+    {% else %}<p class="muted">{% trans %}No payments linked yet.{% endtrans %}</p>{% endif %}
+  </section>
+
+  <section class="card">
+    <h2>{% trans %}Board rating{% endtrans %} <span class="muted small">{% trans %}(private){% endtrans %}</span></h2>
+    {% if p.ratings %}<ul class="list">{% for r in p.ratings %}<li class="doc-row"><span>{{ stars(r.stars) }}
+      {% if r.request %}<span class="muted">· <a href="{{ url_for('maintenance.detail', request_id=r.request.id) }}">{{ r.request.title|truncate(40) }}</a></span>{% endif %}
+      <span class="muted">· {{ r.author.name if r.author else '' }}, {{ r.created_at|fdate('medium') }}</span>
+      {% if r.comment %}<div>{{ r.comment }}</div>{% endif %}</span>
+      {{ icon_post('trash', url_for('partners.delete_rating', rating_id=r.id), _('Delete'), confirm=_('Delete this rating?'), cls='danger small') }}</li>{% endfor %}</ul>
+    {% else %}<p class="muted">{% trans %}Not rated yet.{% endtrans %}</p>{% endif %}
+    <form method="post" action="{{ url_for('partners.add_rating', partner_id=p.id) }}" class="compact-form">
+      {{ csrf() }}
+      <div class="star-pick" role="radiogroup" aria-label="{{ _('Stars') }}">
+        {% for i in [5, 4, 3, 2, 1] %}<input type="radio" name="stars" id="star{{ i }}" value="{{ i }}"{% if i == 5 %} required{% endif %}><label for="star{{ i }}" title="{{ i }}/5">★</label>{% endfor %}
+      </div>
+      {% if work %}<label>{% trans %}For{% endtrans %} <select name="request_id"><option value="">—</option>{% for r in work %}<option value="{{ r.id }}">{{ r.title|truncate(50) }}</option>{% endfor %}</select></label>{% endif %}
+      <label>{% trans %}Comment{% endtrans %} <textarea name="comment" rows="2"></textarea></label>
+      <button class="btn small">{% trans %}Save rating{% endtrans %}</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

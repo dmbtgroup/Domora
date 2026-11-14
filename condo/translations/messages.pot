@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-13 14:29+0000\n"
+"POT-Creation-Date: 2026-11-14 15:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,6 +113,10 @@ msgstr ""
 
 #, python-format
 msgid "%(name)s is already %(key)s."
+msgstr ""
+
+#, python-format
+msgid "%(name)s is assigned to this work."
 msgstr ""
 
 #, python-format
@@ -237,6 +241,9 @@ msgstr ""
 msgid "(Montreal time)"
 msgstr ""
 
+msgid "(board only)"
+msgstr ""
+
 msgid "(contact)"
 msgstr ""
 
@@ -251,6 +258,9 @@ msgid "(optional)"
 msgstr ""
 
 msgid "(optional, e.g. snow removal from November to April)"
+msgstr ""
+
+msgid "(private)"
 msgstr ""
 
 msgid "(required to decline)"
@@ -324,6 +334,9 @@ msgstr ""
 msgid "Abstain"
 msgstr ""
 
+msgid "Accepted"
+msgstr ""
+
 msgid "Access"
 msgstr ""
 
@@ -381,10 +394,16 @@ msgstr ""
 msgid "Active maintenance"
 msgstr ""
 
+msgid "Active partner"
+msgstr ""
+
 msgid "Active repairs"
 msgstr ""
 
 msgid "Add"
+msgstr ""
+
+msgid "Add a business partner"
 msgstr ""
 
 msgid "Add a charge"
@@ -397,6 +416,9 @@ msgid "Add a comment"
 msgstr ""
 
 msgid "Add a cost"
+msgstr ""
+
+msgid "Add a quote"
 msgstr ""
 
 msgid "Add a special contribution"
@@ -420,10 +442,16 @@ msgstr ""
 msgid "Add another person's own policy"
 msgstr ""
 
+msgid "Add at least one quote before asking the board."
+msgstr ""
+
 msgid "Add charge"
 msgstr ""
 
 msgid "Add cost"
+msgstr ""
+
+msgid "Add document"
 msgstr ""
 
 msgid "Add insurance"
@@ -432,10 +460,16 @@ msgstr ""
 msgid "Add owner"
 msgstr ""
 
+msgid "Add partner"
+msgstr ""
+
 msgid "Add payment"
 msgstr ""
 
 msgid "Add project"
+msgstr ""
+
+msgid "Add quote"
 msgstr ""
 
 msgid "Add renewal"
@@ -445,6 +479,14 @@ msgid "Add tenant"
 msgstr ""
 
 msgid "Add the building's units first."
+msgstr ""
+
+msgid "Add the contractor as a business partner first."
+msgstr ""
+
+msgid ""
+"Add the contractors who quote for the building or provide its services: "
+"snow removal, cleaning, plumbers…"
 msgstr ""
 
 #, python-format
@@ -466,6 +508,9 @@ msgid "Added"
 msgstr ""
 
 msgid "Added by the sync on"
+msgstr ""
+
+msgid "Address"
 msgstr ""
 
 #, python-format
@@ -490,6 +535,9 @@ msgid "All notices →"
 msgstr ""
 
 msgid "All owners"
+msgstr ""
+
+msgid "All trades"
 msgstr ""
 
 msgid "All units are paid up."
@@ -755,6 +803,43 @@ msgstr ""
 msgid "Board of directors"
 msgstr ""
 
+msgid "Board rating"
+msgstr ""
+
+msgid "Board vote"
+msgstr ""
+
+#, python-format
+msgid "Board vote in progress: %(voted)s of %(n)s voted."
+msgstr ""
+
+#, python-format
+msgid "Board vote on “%(title)s”: %(name)s is assigned."
+msgstr ""
+
+#, python-format
+msgid "Board vote on “%(title)s”: none of the quotes was chosen."
+msgstr ""
+
+#, python-format
+msgid ""
+"Board vote on “%(title)s”: not enough votes (more than half the board "
+"must vote). Nobody was assigned."
+msgstr ""
+
+#, python-format
+msgid ""
+"Board vote on “%(title)s”: tie. Nobody was assigned; decide with a new "
+"vote or by the President."
+msgstr ""
+
+msgid "Board vote started. Board members have been notified."
+msgstr ""
+
+#, python-format
+msgid "Board vote: %(title)s"
+msgstr ""
+
 msgid "Board · Directory"
 msgstr ""
 
@@ -793,6 +878,12 @@ msgid "Building insurance"
 msgstr ""
 
 msgid "Building insurance needs the policy's start and end dates."
+msgstr ""
+
+msgid "Business partner"
+msgstr ""
+
+msgid "Business partners"
 msgstr ""
 
 msgid "By"
@@ -878,6 +969,9 @@ msgstr ""
 msgid "Choices"
 msgstr ""
 
+msgid "Choose 1 to 5 stars."
+msgstr ""
+
 msgid "Choose Owner or Tenant. Managing the building comes from a board position."
 msgstr ""
 
@@ -903,6 +997,9 @@ msgid "Choose a priority."
 msgstr ""
 
 msgid "Choose a role."
+msgstr ""
+
+msgid "Choose a trade."
 msgstr ""
 
 msgid "Choose a unit."
@@ -944,6 +1041,12 @@ msgstr ""
 msgid "Choose the Excel file to upload."
 msgstr ""
 
+msgid "Choose the deadline's date and time."
+msgstr ""
+
+msgid "Choose the partner who gave the quote."
+msgstr ""
+
 msgid "Choose the policyholder."
 msgstr ""
 
@@ -963,6 +1066,9 @@ msgid "Choose your own password (required)"
 msgstr ""
 
 msgid "Choose…"
+msgstr ""
+
+msgid "Cleaning"
 msgstr ""
 
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
@@ -1001,6 +1107,9 @@ msgstr ""
 msgid "Collecting"
 msgstr ""
 
+msgid "Comment"
+msgstr ""
+
 msgid "Comment added."
 msgstr ""
 
@@ -1008,6 +1117,9 @@ msgid "Comment cannot be empty."
 msgstr ""
 
 msgid "Common area"
+msgstr ""
+
+msgid "Company"
 msgstr ""
 
 msgid "Company or store"
@@ -1047,7 +1159,13 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
+msgid "Contact person"
+msgstr ""
+
 msgid "Contact the management office to link your account to a unit."
+msgstr ""
+
+msgid "Contract"
 msgstr ""
 
 msgid "Contract ending"
@@ -1060,10 +1178,18 @@ msgstr ""
 msgid "Contract ends %(when)s: %(title)s — time to renew or find a new contractor"
 msgstr ""
 
+#, python-format
+msgid "Contract to %(until)s"
+msgstr ""
+
 msgid "Contractor"
 msgstr ""
 
 msgid "Contractor contact"
+msgstr ""
+
+#, python-format
+msgid "Contractor for “%(title)s”"
 msgstr ""
 
 #, python-format
@@ -1219,6 +1345,9 @@ msgstr ""
 msgid "Delete this notice?"
 msgstr ""
 
+msgid "Delete this partner? Their documents, quotes and ratings are deleted too."
+msgstr ""
+
 msgid "Delete this payment?"
 msgstr ""
 
@@ -1228,6 +1357,12 @@ msgid ""
 msgstr ""
 
 msgid "Delete this project? Its updates and quote are deleted too."
+msgstr ""
+
+msgid "Delete this quote?"
+msgstr ""
+
+msgid "Delete this rating?"
 msgstr ""
 
 msgid "Delete this request? Its updates and quote are deleted too."
@@ -1287,6 +1422,15 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+msgid "Document added."
+msgstr ""
+
+msgid "Document deleted."
+msgstr ""
+
+msgid "Document expiring"
+msgstr ""
+
 msgid "Documents"
 msgstr ""
 
@@ -1310,6 +1454,9 @@ msgid "Done"
 msgstr ""
 
 msgid "Done on"
+msgstr ""
+
+msgid "Doors & windows"
 msgstr ""
 
 msgid "Download CSV"
@@ -1343,6 +1490,12 @@ msgid "Due date"
 msgstr ""
 
 msgid "Due soon"
+msgstr ""
+
+msgid ""
+"Each board member gets one vote between the pending quotes (or “None of "
+"these”). The quote with the most votes is accepted when the vote closes, "
+"as long as more than half of the board voted."
 msgstr ""
 
 msgid ""
@@ -1380,6 +1533,9 @@ msgstr ""
 msgid "Edit notice"
 msgstr ""
 
+msgid "Edit partner"
+msgstr ""
+
 msgid "Edit payment"
 msgstr ""
 
@@ -1398,6 +1554,9 @@ msgid "Edit “%(title)s”"
 msgstr ""
 
 msgid "Electrical"
+msgstr ""
+
+msgid "Elevator"
 msgstr ""
 
 msgid "Email"
@@ -1606,6 +1765,9 @@ msgstr ""
 msgid "Fully paid"
 msgstr ""
 
+msgid "General contractor"
+msgstr ""
+
 msgid "Generate"
 msgstr ""
 
@@ -1624,6 +1786,9 @@ msgstr ""
 msgid "Give the document a title."
 msgstr ""
 
+msgid "Give the partner's name."
+msgstr ""
+
 msgid "Give the task a name, e.g. “Snow removal”."
 msgstr ""
 
@@ -1632,6 +1797,10 @@ msgstr ""
 
 #, python-format
 msgid "Give this password to %(name)s privately."
+msgstr ""
+
+#, python-format
+msgid "Give this work to %(name)s without a board vote?"
 msgstr ""
 
 msgid "Go"
@@ -1664,6 +1833,9 @@ msgid "Gutter cleaning"
 msgstr ""
 
 msgid "HVAC"
+msgstr ""
+
+msgid "Heating & ventilation"
 msgstr ""
 
 msgid "Heating / HVAC servicing"
@@ -1726,6 +1898,9 @@ msgstr ""
 msgid "Insurance"
 msgstr ""
 
+msgid "Insurance certificate"
+msgstr ""
+
 msgid "Insurance policy removed."
 msgstr ""
 
@@ -1763,6 +1938,9 @@ msgstr ""
 msgid "Job or company"
 msgstr ""
 
+msgid "Jobs assigned"
+msgstr ""
+
 msgid "July"
 msgstr ""
 
@@ -1770,6 +1948,9 @@ msgid "June"
 msgstr ""
 
 msgid "Keep me signed in"
+msgstr ""
+
+msgid "Landscaping"
 msgstr ""
 
 msgid "Language / Langue"
@@ -1806,6 +1987,19 @@ msgid "Left"
 msgstr ""
 
 msgid "Left to pay"
+msgstr ""
+
+msgid "Licence"
+msgstr ""
+
+msgid "Licence (RBQ)"
+msgstr ""
+
+msgid "Licence number (RBQ)"
+msgstr ""
+
+#, python-format
+msgid "Linked to %(n)s existing entries with that name."
 msgstr ""
 
 msgid "Lives in the unit"
@@ -2031,6 +2225,9 @@ msgstr ""
 msgid "New notice: %(item)s"
 msgstr ""
 
+msgid "New partner"
+msgstr ""
+
 msgid "New password"
 msgstr ""
 
@@ -2118,8 +2315,14 @@ msgstr ""
 msgid "No building insurance policy is on file."
 msgstr ""
 
+msgid "No business partners yet."
+msgstr ""
+
 #, python-format
 msgid "No condo fees set for %(year)s yet."
+msgstr ""
+
+msgid "No contractor assigned yet."
 msgstr ""
 
 #, python-format
@@ -2129,6 +2332,9 @@ msgstr ""
 msgid ""
 "No database is connected, so changes are temporary and will be lost. "
 "Connect a Postgres database (DATABASE_URL) to keep data."
+msgstr ""
+
+msgid "No documents yet."
 msgstr ""
 
 msgid "No insurance"
@@ -2153,14 +2359,23 @@ msgstr ""
 msgid "No owners recorded."
 msgstr ""
 
+msgid "No partner matches."
+msgstr ""
+
 #, python-format
 msgid "No payments in %(label)s."
+msgstr ""
+
+msgid "No payments linked yet."
 msgstr ""
 
 msgid "No projects here."
 msgstr ""
 
 msgid "No projects yet."
+msgstr ""
+
+msgid "No quotes yet. Add them from a project or a repair, or here."
 msgstr ""
 
 msgid "No requests yet."
@@ -2207,6 +2422,9 @@ msgstr ""
 msgid "No votes yet."
 msgstr ""
 
+msgid "No work assigned yet."
+msgstr ""
+
 msgid "Nobody can vote yet: the chosen owners need sign-in accounts."
 msgstr ""
 
@@ -2214,6 +2432,9 @@ msgid "Nobody else eligible"
 msgstr ""
 
 msgid "Nobody listed yet."
+msgstr ""
+
+msgid "None of these"
 msgstr ""
 
 msgid "None yet"
@@ -2249,10 +2470,16 @@ msgstr ""
 msgid "Not paid yet"
 msgstr ""
 
+msgid "Not rated yet."
+msgstr ""
+
 msgid "Not voted yet"
 msgstr ""
 
 msgid "Note"
+msgstr ""
+
+msgid "Note to the board"
 msgstr ""
 
 msgid "Note to the owner"
@@ -2367,6 +2594,9 @@ msgid "Open requests"
 msgstr ""
 
 msgid "Open the Google Sheet"
+msgstr ""
+
+msgid "Open the vote"
 msgstr ""
 
 msgid "Opening balance"
@@ -2502,6 +2732,13 @@ msgstr ""
 msgid "Paid · %(label)s"
 msgstr ""
 
+#, python-format
+msgid "Paid · %(y)s"
+msgstr ""
+
+msgid "Painting"
+msgstr ""
+
 msgid "Parking"
 msgstr ""
 
@@ -2513,6 +2750,16 @@ msgid "Parking spot"
 msgstr ""
 
 msgid "Partly paid"
+msgstr ""
+
+msgid "Partner"
+msgstr ""
+
+#, python-format
+msgid "Partner added: %(name)s."
+msgstr ""
+
+msgid "Partner deleted."
 msgstr ""
 
 msgid "Password"
@@ -2575,6 +2822,9 @@ msgid "Payments received · %(label)s"
 msgstr ""
 
 msgid "Payments − costs since"
+msgstr ""
+
+msgid "Pending"
 msgstr ""
 
 msgid ""
@@ -2691,6 +2941,9 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
+msgid "Professional services"
+msgstr ""
+
 msgid "Progress"
 msgstr ""
 
@@ -2758,7 +3011,13 @@ msgstr ""
 msgid "Quote (PDF or photo)"
 msgstr ""
 
+msgid "Quote added."
+msgstr ""
+
 msgid "Quote awaiting board approval"
+msgstr ""
+
+msgid "Quote deleted."
 msgstr ""
 
 msgid "Quote sent to the board for approval."
@@ -2769,6 +3028,15 @@ msgid "Quote to approve: unit %(number)s, %(amount)s — %(req)s"
 msgstr ""
 
 msgid "Quoted amount ($)"
+msgstr ""
+
+msgid "Quotes"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Rating saved."
 msgstr ""
 
 msgid "Reassign or remove the unit's residents before deleting it."
@@ -3020,7 +3288,13 @@ msgstr ""
 msgid "Roof inspection"
 msgstr ""
 
+msgid "Roofing"
+msgstr ""
+
 msgid "Routine"
+msgstr ""
+
+msgid "Routine contracts"
 msgstr ""
 
 msgid "Routine maintenance"
@@ -3062,6 +3336,9 @@ msgstr ""
 msgid "Save link"
 msgstr ""
 
+msgid "Save rating"
+msgstr ""
+
 msgid "Save the sheet link first, or upload a copy of the sheet."
 msgstr ""
 
@@ -3086,6 +3363,9 @@ msgstr ""
 msgid "Search name, email, phone, address or unit"
 msgstr ""
 
+msgid "Search…"
+msgstr ""
+
 msgid "Season"
 msgstr ""
 
@@ -3096,7 +3376,13 @@ msgstr ""
 msgid "Secretary"
 msgstr ""
 
+msgid "Section"
+msgstr ""
+
 msgid "Security"
+msgstr ""
+
+msgid "Security & fire safety"
 msgstr ""
 
 msgid "See all the details"
@@ -3223,7 +3509,13 @@ msgstr ""
 msgid "Staff"
 msgstr ""
 
+msgid "Stars"
+msgstr ""
+
 msgid "Start date"
+msgstr ""
+
+msgid "Start the board vote"
 msgstr ""
 
 msgid "Start with common tasks"
@@ -3546,6 +3838,9 @@ msgstr ""
 msgid "Totals"
 msgstr ""
 
+msgid "Trade"
+msgstr ""
+
 msgid "Transactions"
 msgstr ""
 
@@ -3688,6 +3983,9 @@ msgstr ""
 msgid "Vacant"
 msgstr ""
 
+msgid "Valid until"
+msgstr ""
+
 msgid "Vice-president"
 msgstr ""
 
@@ -3767,6 +4065,9 @@ msgstr ""
 msgid "We couldn't find that page."
 msgstr ""
 
+msgid "Website"
+msgstr ""
+
 msgid "Weight"
 msgstr ""
 
@@ -3818,6 +4119,9 @@ msgstr ""
 msgid ""
 "With ownership share, a unit that owns an eighth of the building counts "
 "for an eighth of the vote; if it has two owners, each counts for half."
+msgstr ""
+
+msgid "Work"
 msgstr ""
 
 msgid "Workbook"
@@ -3954,6 +4258,13 @@ msgstr ""
 msgid "certificate"
 msgstr ""
 
+#, python-format
+msgid "contract to %(until)s"
+msgstr ""
+
+msgid "contractor chosen"
+msgstr ""
+
 msgid "credit"
 msgstr ""
 
@@ -4046,6 +4357,12 @@ msgstr ""
 msgid "must change at next sign-in"
 msgstr ""
 
+msgid "none of the quotes chosen"
+msgstr ""
+
+msgid "not enough votes"
+msgstr ""
+
 msgid "not voted"
 msgstr ""
 
@@ -4069,6 +4386,9 @@ msgid "owner"
 msgstr ""
 
 msgid "owner and treasurer"
+msgstr ""
+
+msgid "quote"
 msgstr ""
 
 msgid "so owners and tenants can see it."
@@ -4113,6 +4433,9 @@ msgstr ""
 msgid "the unit"
 msgstr ""
 
+msgid "tie, nobody assigned"
+msgstr ""
+
 msgid "to approve"
 msgstr ""
 
@@ -4121,6 +4444,10 @@ msgstr ""
 
 #, python-format
 msgid "unit %(number)s"
+msgstr ""
+
+#, python-format
+msgid "valid until %(until)s"
 msgstr ""
 
 msgid "view"
@@ -4190,6 +4517,12 @@ msgstr ""
 
 #, python-format
 msgid "— current: %(filename)s; choose a file only to replace it"
+msgstr ""
+
+msgid "— none —"
+msgstr ""
+
+msgid "— not linked —"
 msgstr ""
 
 #, python-format

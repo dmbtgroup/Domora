@@ -23,6 +23,9 @@
   </fieldset>
   <label>{% trans %}Category{% endtrans %} <select name="category">{% for c in categories %}<option value="{{ c }}" {{ 'selected' if form.get('category') == c }}>{{ CATEGORY_LABELS.get(c, c) }}</option>{% endfor %}</select></label>
   <div class="row">
+    {% set choices = partner_choices() %}{% if choices %}
+    <label>{% trans %}Business partner{% endtrans %} <select name="partner_id"><option value="">{% trans %}— none —{% endtrans %}</option>
+      {% for pt in choices %}<option value="{{ pt.id }}" {{ 'selected' if form.get('partner_id')|string == pt.id|string }}>{{ pt.name }}</option>{% endfor %}</select></label>{% endif %}
     <label>{% trans %}Contractor{% endtrans %} <span class="muted">{% trans %}(optional){% endtrans %}</span><input name="vendor" maxlength="200" value="{{ form.get('vendor', '') }}" placeholder="{{ _('e.g. Déneigement Laval') }}"></label>
     <label>{% trans %}Contractor contact{% endtrans %} <input name="vendor_contact" maxlength="200" value="{{ form.get('vendor_contact', '') }}" placeholder="{{ _('Phone or email') }}"></label>
   </div>

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block title %}{{ _('Edit partner') if p else _('Add partner') }}{% endblock %}
+{% block content %}
+<h1>{{ _('Edit partner') if p else _('Add a business partner') }}</h1>
+<form method="post" class="card narrow">
+  {{ csrf() }}
+  <div class="row">
+    <label>{% trans %}Company{% endtrans %} <input name="name" required maxlength="200" value="{{ form.get('name', '') }}" placeholder="{{ _('e.g. Déneigement Laval') }}"></label>
+    <label>{% trans %}Trade{% endtrans %} <select name="trade">{% for k, label in trades.items() %}<option value="{{ k }}" {{ 'selected' if form.get('trade') == k }}>{{ label }}</option>{% endfor %}</select></label>
+  </div>
+  <div class="row">
+    <label>{% trans %}Contact person{% endtrans %} <input name="contact_name" maxlength="200" value="{{ form.get('contact_name', '') }}"></label>
+    <label>{% trans %}Phone{% endtrans %} <input name="phone" type="tel" maxlength="60" value="{{ form.get('phone', '') }}"></label>
+  </div>
+  <div class="row">
+    <label>{% trans %}Email{% endtrans %} <input name="email" type="email" maxlength="255" value="{{ form.get('email', '') }}"></label>
+    <label>{% trans %}Website{% endtrans %} <input name="website" maxlength="255" value="{{ form.get('website', '') }}" placeholder="example.com"></label>
+  </div>
+  <div class="row">
+    <label>{% trans %}Licence number (RBQ){% endtrans %} <input name="licence" maxlength="60" value="{{ form.get('licence', '') }}"></label>
+    <label>{% trans %}Address{% endtrans %} <input name="address" value="{{ form.get('address', '') }}"></label>
+  </div>
+  <label>{% trans %}Notes{% endtrans %} <span class="muted">{% trans %}(board only){% endtrans %}</span><textarea name="notes" rows="3">{{ form.get('notes', '') }}</textarea></label>
+  <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if form.get('active') }}> {% trans %}Active partner{% endtrans %}</label>
+  <div class="form-actions"><button class="btn primary">{% trans %}Save{% endtrans %}</button>
+    <a href="{{ url_for('partners.detail', partner_id=p.id) if p else url_for('partners.index') }}">{% trans %}Cancel{% endtrans %}</a></div>
+</form>
+{% endblock %}

@@ -208,11 +208,19 @@ def _get_visible(request_id):
 def detail(request_id):
     req = _get_visible(request_id)
     owners = owner_accounts(req.unit_id) if req.awaiting_owner and req.unit_id else []
+    from .partners import active_partners, can_manage as can_manage_partners
+    from .reimbursements import is_president
+    from .votes import to_local
+    partner_manage = can_manage_partners()
     return render_template("maintenance/detail.html", req=req, statuses=REQUEST_STATUSES,
                            priorities=REQUEST_PRIORITIES, can_decide=can_decide(req), owner_accounts=owners,
                            board=is_board(), unit_owner=is_unit_owner(req), accept=files.ACCEPT,
                            can_projects=can_add_projects(), can_delete=can_delete(req),
-                           can_routine=can_manage_routine())
+                           can_routine=can_manage_routine(), partner_manage=partner_manage,
+                           partner_list=active_partners() if partner_manage else [], can_assign=is_president(),
+                           open_vote=next((p for p in req.polls if p.state == "open"), None),
+                           vote_default_deadline=to_local(utcnow() + _timedelta(days=3)).strftime("%Y-%m-%dT%H:%M"),
+                           today_iso=_date.today().isoformat())
 
 
 def is_unit_owner(req, user=None):
@@ -592,6 +600,13 @@ def _routine_form(task, form):
     task.season_from, task.season_to = months
     task.vendor = form.get("vendor", "").strip()[:200] or None
     task.vendor_contact = form.get("vendor_contact", "").strip()[:200] or None
+    from ..models import Partner
+    raw = form.get("partner_id", "")
+    partner = db.session.get(Partner, int(raw)) if str(raw).isdigit() else None
+    task.partner_id = partner.id if partner else None
+    if partner:  # the business partner fills in the contractor when it's left blank
+        task.vendor = task.vendor or partner.name[:200]
+        task.vendor_contact = task.vendor_contact or (partner.phone or partner.email or None)
     task.estimated_cents, task.contract_ends = estimated, contract_ends
     task.active = bool(form.get("active", "1" if task.id is None else ""))
     return []
@@ -670,7 +685,7 @@ def routine_edit(task_id):
     form = {"title": task.title, "description": task.description or "", "frequency": task.frequency,
             "category": task.category, "next_due": task.next_due.isoformat(),
             "season_from": str(task.season_from or ""), "season_to": str(task.season_to or ""),
-            "vendor": task.vendor or "", "vendor_contact": task.vendor_contact or "",
+            "vendor": task.vendor or "", "vendor_contact": task.vendor_contact or "", "partner_id": task.partner_id or "",
             "estimated": f"{task.estimated_cents / 100:.2f}" if task.estimated_cents else "",
             "contract_ends": task.contract_ends.isoformat() if task.contract_ends else "", "active": task.active}
     return _render_routine_form(task, form)
@@ -694,7 +709,7 @@ def routine_done(task_id):
     if cost and request.form.get("record_cost") and current_user.can("accounting_edit"):
         expense = Expense(spent_on=done_on, category="maintenance", amount_cents=-cost,
                           description=(f"{task.title}" + (f" — {task.vendor}" if task.vendor else ""))[:255],
-                          source=task.vendor, notes=note, recorded_by_id=current_user.id)
+                          source=task.vendor, notes=note, recorded_by_id=current_user.id, partner_id=task.partner_id)
         db.session.add(expense)
         db.session.flush()
         log.expense_id = expense.id

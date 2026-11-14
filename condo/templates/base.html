@@ -43,12 +43,12 @@
 {% set _ignored = nav_items.append(('home', url_for('dashboard.index'), _('Dashboard'), _('Home'), ep.startswith('dashboard'))) %}
 {% if current_user.is_admin %}
   {% set _ignored = nav_items.append(('accounting', url_for('billing.index'), _('Accounting'), _('Accounting'), ep.startswith(('billing', 'fees', 'reimbursements', 'sheet')))) %}
-  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith('maintenance'))) %}
+  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith(('maintenance', 'partners')))) %}
   {% set _ignored = nav_items.append(('directory', url_for('directory.index'), _('Directory'), _('Directory'), ep.startswith(('directory', 'owners', 'residents')))) %}
   {% set _ignored = nav_items.append(('units', url_for('units.index'), _('Units'), _('Units'), ep.startswith(('units', 'insurance', 'importer')))) %}
 {% elif current_user.is_staff %}
   {% if current_user.can('accounting') %}{% set _ignored = nav_items.append(('accounting', url_for('billing.index'), _('Accounting'), _('Accounting'), ep.startswith(('billing', 'fees')))) %}{% endif %}
-  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith('maintenance'))) %}
+  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith(('maintenance', 'partners')))) %}
   {% if current_user.can('directory') %}{% set _ignored = nav_items.append(('directory', url_for('directory.index'), _('Directory'), _('Directory'), ep.startswith('directory'))) %}{% endif %}
 {% else %}
   {% if current_user.unit_id and (current_user.role == 'owner' or nav_board) %}
@@ -56,7 +56,7 @@
   {% elif current_user.unit_id and current_user.role != 'tenant' %}
     {% set _ignored = nav_items.append(('accounting', url_for('billing.my_account'), _('Statement'), _('Statement'), ep.startswith('billing'))) %}
   {% endif %}
-  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith('maintenance'))) %}
+  {% set _ignored = nav_items.append(('projects', url_for('maintenance.index'), _('Projects &amp; Maintenance'), _('Projects'), ep.startswith(('maintenance', 'partners')))) %}
   {% if current_user.unit_id and nav_board %}{% set _ignored = nav_items.append(('directory', url_for('directory.board'), _('Directory'), _('Directory'), ep.startswith(('directory', 'residents')))) %}{% endif %}
   {% if current_user.role == 'owner' or nav_board %}{% set _ignored = nav_items.append(('reimburse', url_for('reimbursements.index'), _('Reimbursements'), _('Refunds'), ep.startswith('reimbursements'))) %}{% endif %}
 {% endif %}

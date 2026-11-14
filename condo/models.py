@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from flask_login import UserMixin
 from sqlalchemy import func
@@ -340,6 +340,11 @@ class MaintenanceRequest(db.Model):
     quote_file = db.relationship("StoredFile", foreign_keys=[quote_file_id])
     comments = db.relationship("MaintenanceComment", back_populates="request",
                                cascade="all, delete-orphan", order_by="MaintenanceComment.created_at")
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="SET NULL"))  # assigned contractor
+    partner = db.relationship("Partner", foreign_keys=[partner_id])
+    quotes = db.relationship("Quote", back_populates="request", cascade="all, delete-orphan",
+                             order_by="Quote.amount_cents")
+    polls = db.relationship("Poll", back_populates="request", order_by="Poll.created_at.desc()")
 
     @property
     def is_active(self):
@@ -498,6 +503,8 @@ class Expense(db.Model):
     notes = db.Column(db.Text)
     origin = db.Column(db.String(20))
     sheet_key = db.Column(db.String(255), index=True)  # which sheet row it came from (see sheet_sync.entry_keys)
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="SET NULL"))
+    partner = db.relationship("Partner", backref="expenses")
     recorded_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     source_data = db.Column(db.JSON)  # the full Google Sheet row it came from
     created_at = db.Column(db.DateTime, default=utcnow)
@@ -1044,6 +1051,8 @@ class RoutineTask(db.Model):
     vendor_contact = db.Column(db.String(200))
     estimated_cents = db.Column(db.Integer)
     contract_ends = db.Column(db.Date)
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="SET NULL"))
+    partner = db.relationship("Partner", backref="routine_tasks")
     active = db.Column(db.Boolean, nullable=False, default=True)
     reminded_due = db.Column(db.Date)          # the due date the board was last reminded about
     reminded_contract = db.Column(db.Date)     # the contract end date the board was last reminded about
@@ -1131,9 +1140,12 @@ class Poll(db.Model):
     closed_at = db.Column(db.DateTime)
     reminded_at = db.Column(db.DateTime)
     results_notified_at = db.Column(db.DateTime)
+    request_id = db.Column(db.Integer, db.ForeignKey("maintenance_request.id", ondelete="SET NULL"))  # choosing a contractor
+    outcome = db.Column(db.String(200))  # what the vote decided for that request
     created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     created_at = db.Column(db.DateTime, default=utcnow)
 
+    request = db.relationship("MaintenanceRequest", back_populates="polls")
     options = db.relationship("PollOption", back_populates="poll", cascade="all, delete-orphan",
                               order_by="PollOption.position")
     voters = db.relationship("PollVoter", back_populates="poll", cascade="all, delete-orphan")
@@ -1174,8 +1186,10 @@ class PollOption(db.Model):
     poll_id = db.Column(db.Integer, db.ForeignKey("poll.id", ondelete="CASCADE"), nullable=False, index=True)
     text = db.Column(db.String(200), nullable=False)
     position = db.Column(db.Integer, nullable=False, default=0)
+    quote_id = db.Column(db.Integer, db.ForeignKey("quote.id", ondelete="SET NULL"))  # a board vote on quotes
 
     poll = db.relationship("Poll", back_populates="options")
+    quote = db.relationship("Quote")
 
 
 class PollVoter(db.Model):
@@ -1193,3 +1207,116 @@ class PollVoter(db.Model):
     unit = db.relationship("Unit")
     option = db.relationship("PollOption")
     __table_args__ = (db.UniqueConstraint("poll_id", "user_id", name="uq_poll_voter"),)
+
+
+# --- Business partners: contractors who quote or provide services -----------------------------------
+
+PARTNER_TRADES = {
+    "snow": _l("Snow removal"), "landscaping": _l("Landscaping"), "cleaning": _l("Cleaning"),
+    "plumbing": _l("Plumbing"), "electrical": _l("Electrical"), "hvac": _l("Heating & ventilation"),
+    "roofing": _l("Roofing"), "painting": _l("Painting"), "general": _l("General contractor"),
+    "doors": _l("Doors & windows"), "security": _l("Security & fire safety"), "elevator": _l("Elevator"),
+    "insurance": _l("Insurance"), "professional": _l("Professional services"), "other": _l("Other"),
+}
+PARTNER_DOC_KINDS = {"contract": _l("Contract"), "insurance": _l("Insurance certificate"),
+                     "licence": _l("Licence"), "other": _l("Other")}
+PARTNER_QUOTE_STATUSES = {"pending": _l("Pending"), "accepted": _l("Accepted"), "declined": _l("Declined")}
+
+
+class Partner(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    trade = db.Column(db.String(20), nullable=False, default="other")
+    contact_name = db.Column(db.String(200))
+    phone = db.Column(db.String(60))
+    email = db.Column(db.String(255))
+    website = db.Column(db.String(255))
+    address = db.Column(db.Text)
+    licence = db.Column(db.String(60))  # e.g. RBQ licence number
+    notes = db.Column(db.Text)
+    active = db.Column(db.Boolean, nullable=False, default=True)
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    documents = db.relationship("PartnerDocument", back_populates="partner", cascade="all, delete-orphan",
+                                order_by="PartnerDocument.created_at.desc()")
+    quotes = db.relationship("Quote", back_populates="partner", cascade="all, delete-orphan",
+                             order_by="Quote.quoted_on.desc()")
+    ratings = db.relationship("PartnerRating", back_populates="partner", cascade="all, delete-orphan",
+                              order_by="PartnerRating.created_at.desc()")
+
+    @property
+    def trade_label(self):
+        return PARTNER_TRADES.get(self.trade, self.trade)
+
+    @property
+    def rating(self):
+        """Average stars (1-5) or None."""
+        return round(sum(r.stars for r in self.ratings) / len(self.ratings), 1) if self.ratings else None
+
+    @property
+    def website_url(self):
+        w = (self.website or "").strip()
+        return w if not w or w.startswith(("http://", "https://")) else "https://" + w
+
+    def spent_cents(self, year):
+        """Paid to this partner in a calendar year (building costs linked to them)."""
+        return -(db.session.scalar(db.select(func.coalesce(func.sum(Expense.amount_cents), 0)).where(
+            Expense.partner_id == self.id, Expense.spent_on.between(date(year, 1, 1), date(year, 12, 31)))) or 0)
+
+    def expiring_documents(self, today=None, within_days=60):
+        today = today or date.today()
+        return [d for d in self.documents if d.valid_until and d.valid_until <= today + timedelta(days=within_days)]
+
+
+class PartnerDocument(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="CASCADE"), nullable=False, index=True)
+    kind = db.Column(db.String(20), nullable=False, default="other")
+    title = db.Column(db.String(200))
+    valid_until = db.Column(db.Date)
+    file_id = db.Column(db.Integer, db.ForeignKey("stored_file.id"))
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    partner = db.relationship("Partner", back_populates="documents")
+    file = db.relationship("StoredFile")
+
+    @property
+    def kind_label(self):
+        return PARTNER_DOC_KINDS.get(self.kind, self.kind)
+
+
+class Quote(db.Model):
+    """A partner's price for a project or repair. Accepting one assigns the partner to the work."""
+    id = db.Column(db.Integer, primary_key=True)
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="CASCADE"), nullable=False, index=True)
+    request_id = db.Column(db.Integer, db.ForeignKey("maintenance_request.id", ondelete="CASCADE"), index=True)
+    amount_cents = db.Column(db.Integer, nullable=False)
+    quoted_on = db.Column(db.Date, nullable=False)
+    status = db.Column(db.String(10), nullable=False, default="pending")
+    note = db.Column(db.Text)
+    file_id = db.Column(db.Integer, db.ForeignKey("stored_file.id"))
+    created_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    partner = db.relationship("Partner", back_populates="quotes")
+    request = db.relationship("MaintenanceRequest", back_populates="quotes")
+    file = db.relationship("StoredFile")
+
+    @property
+    def status_label(self):
+        return PARTNER_QUOTE_STATUSES.get(self.status, self.status)
+
+
+class PartnerRating(db.Model):
+    """The board's private note on a partner's work: 1-5 stars and a comment."""
+    id = db.Column(db.Integer, primary_key=True)
+    partner_id = db.Column(db.Integer, db.ForeignKey("partner.id", ondelete="CASCADE"), nullable=False, index=True)
+    request_id = db.Column(db.Integer, db.ForeignKey("maintenance_request.id", ondelete="SET NULL"))
+    stars = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    partner = db.relationship("Partner", back_populates="ratings")
+    request = db.relationship("MaintenanceRequest")
+    author = db.relationship("User")

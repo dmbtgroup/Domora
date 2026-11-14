@@ -710,3 +710,24 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .stat .badge.ins-expiring { color: var(--warn); }
 .stat .badge.ins-valid { color: var(--ok); }
 .group-email { display: inline-flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+
+/* Projects & Maintenance | Business partners: the section's two top tabs */
+.section-switch { margin: 0 0 1rem; }
+.section-switch a { font-size: 1rem; padding: .45rem 1.1rem; }
+/* Partners */
+.stars { color: var(--gold); letter-spacing: .05em; white-space: nowrap; }
+.stars .off { color: var(--border); }
+.partner-meta { display: flex; flex-wrap: wrap; gap: .2rem 1rem; color: var(--muted); font-size: .9rem; }
+.star-pick { display: inline-flex; flex-direction: row-reverse; gap: .1rem; }
+.star-pick input { display: none; }
+.star-pick label { font-size: 1.6rem; color: var(--border); cursor: pointer; margin: 0; }
+.star-pick input:checked ~ label, .star-pick label:hover, .star-pick label:hover ~ label { color: var(--gold); }
+.quote-table td { vertical-align: middle; }
+.partner-filter { display: flex; gap: .5rem; } .partner-filter input[type=search] { width: 14rem; margin: 0; }
+@media (max-width: 600px) { .partner-filter { width: 100%; flex-wrap: wrap; } .partner-filter input[type=search] { width: 100%; } }
+.doc-row { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+.compact-form { margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--border); }
+.compact-form label { margin-bottom: .5rem; }
+.add-inline summary { list-style: none; display: inline-block; margin-top: .6rem; cursor: pointer; }
+.add-inline summary::-webkit-details-marker { display: none; }
+.badge.quote-accepted { color: var(--ok); } .badge.quote-declined { color: var(--muted); } .badge.quote-pending { color: var(--warn); }

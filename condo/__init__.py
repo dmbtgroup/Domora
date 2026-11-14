@@ -52,10 +52,10 @@ def create_app(test_config=None):
     i18n.init_app(app)
 
     from . import models  # noqa: F401  (register models)
-    from .views import amenities, announcements, auth, billing, dashboard, directory, documents, fees, importer, insurance, notifications, reimbursements, maintenance, owners, residents, sheet, units, votes
+    from .views import amenities, announcements, auth, billing, dashboard, directory, documents, fees, importer, insurance, notifications, reimbursements, maintenance, owners, partners, residents, sheet, units, votes
 
     for bp in (auth.bp, dashboard.bp, units.bp, residents.bp, billing.bp,
-               maintenance.bp, announcements.bp, amenities.bp, importer.bp, sheet.bp, owners.bp, directory.bp, documents.bp, insurance.bp, billing.legacy, notifications.bp, reimbursements.bp, fees.bp, votes.bp):
+               maintenance.bp, announcements.bp, amenities.bp, importer.bp, sheet.bp, owners.bp, directory.bp, documents.bp, insurance.bp, billing.legacy, notifications.bp, reimbursements.bp, fees.bp, votes.bp, partners.bp):
         app.register_blueprint(bp)
 
     from .cli import register_cli
@@ -76,6 +76,19 @@ def create_app(test_config=None):
         return "https://mail.google.com/mail/?" + urlencode(params)
 
     app.jinja_env.globals.update(gmail_compose=gmail_compose)
+
+    def partner_access():
+        from flask_login import current_user as cu
+        from .views.partners import can_manage, can_view
+        if not cu.is_authenticated:
+            return {"view": False, "manage": False}
+        return {"view": can_view(), "manage": can_manage()}
+
+    def partner_choices():
+        from .views.partners import active_partners, can_manage
+        return active_partners() if can_manage() else []
+
+    app.jinja_env.globals.update(partner_access=partner_access, partner_choices=partner_choices)
     app.jinja_env.filters.update(money=money, phone=phone_display, tel=phone_href, one_line=one_line,
                                  initials=initials)
 

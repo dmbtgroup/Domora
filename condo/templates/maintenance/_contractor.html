@@ -1,0 +1,58 @@
+{# The contractor for this project or repair: quotes side by side, then assign (President) or ask the board. #}
+{% if partner_manage %}
+<div class="card contractor-card">
+  <h2>{% trans %}Contractor{% endtrans %}</h2>
+  {% if req.partner %}<p><strong><a href="{{ url_for('partners.detail', partner_id=req.partner.id) }}">{{ req.partner.name }}</a></strong>
+    <span class="muted">· {{ req.partner.trade_label }}</span>{% if req.partner.phone %} · <a href="{{ req.partner.phone|tel }}">{{ req.partner.phone|phone }}</a>{% endif %}</p>
+  {% else %}<p class="muted">{% trans %}No contractor assigned yet.{% endtrans %}</p>{% endif %}
+
+  {% if req.quotes %}
+  <table class="quote-table">
+    <thead><tr><th>{% trans %}Partner{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th><th>{% trans %}Status{% endtrans %}</th><th></th></tr></thead>
+    <tbody>{% for q in req.quotes %}<tr>
+      <td><a href="{{ url_for('partners.detail', partner_id=q.partner.id) }}">{{ q.partner.name }}</a>
+        <div class="muted small">{{ q.quoted_on|fdate('medium') }}{% if q.file %} · <a href="{{ url_for('partners.quote_file', quote_id=q.id) }}" target="_blank" rel="noopener">{% trans %}quote{% endtrans %}</a>{% endif %}</div></td>
+      <td class="num">{{ q.amount_cents|money }}</td>
+      <td><span class="badge quote-{{ q.status }}">{{ q.status_label }}</span></td>
+      <td class="nowrap">{% if can_assign and q.status != 'accepted' and not open_vote %}{{ post_button(url_for('partners.assign_quote', quote_id=q.id, back=here()), _('Assign'), cls='btn small', confirm=_('Give this work to %(name)s without a board vote?', name=q.partner.name)) }}{% endif %}
+        {{ icon_post('trash', url_for('partners.delete_quote', quote_id=q.id, back=here()), _('Delete'), confirm=_('Delete this quote?'), cls='danger small') }}</td>
+    </tr>{% endfor %}</tbody>
+  </table>
+  {% endif %}
+
+  {% if open_vote %}
+  <p class="flash flash-info">{% trans voted=open_vote.results().voted, n=open_vote.voters|length %}Board vote in progress: {{ voted }} of {{ n }} voted.{% endtrans %}
+    <a href="{{ url_for('votes.detail', poll_id=open_vote.id) }}">{% trans %}Open the vote{% endtrans %}</a></p>
+  {% elif board and req.quotes|selectattr('status', 'equalto', 'pending')|list %}
+  <details class="add-inline"><summary class="btn small">{% trans %}Board vote{% endtrans %}</summary>
+    <form method="post" action="{{ url_for('partners.board_vote', request_id=req.id) }}" class="compact-form">
+      {{ csrf() }}
+      <p class="muted small">{% trans %}Each board member gets one vote between the pending quotes (or “None of these”). The quote with the most votes is accepted when the vote closes, as long as more than half of the board voted.{% endtrans %}</p>
+      <label>{% trans %}Deadline{% endtrans %} <input type="datetime-local" name="deadline" required value="{{ vote_default_deadline }}"></label>
+      <label>{% trans %}Note to the board{% endtrans %} <span class="muted">{% trans %}(optional){% endtrans %}</span><textarea name="note" rows="2"></textarea></label>
+      <button class="btn primary small">{% trans %}Start the board vote{% endtrans %}</button>
+    </form></details>
+  {% endif %}
+  {% for poll in req.polls if poll.outcome %}<p class="muted small">{{ poll.closed_at|fdate('medium') if poll.closed_at else poll.deadline|fdate('medium') }} · <a href="{{ url_for('votes.detail', poll_id=poll.id) }}">{% trans %}Board vote{% endtrans %}</a>:
+    {% if poll.outcome.startswith('assigned') %}{% trans %}contractor chosen{% endtrans %}{% elif poll.outcome == 'tie' %}{% trans %}tie, nobody assigned{% endtrans %}{% elif poll.outcome == 'none' %}{% trans %}none of the quotes chosen{% endtrans %}{% else %}{% trans %}not enough votes{% endtrans %}{% endif %}</p>{% endfor %}
+
+  <details class="add-inline"><summary class="btn small">{% trans %}Add a quote{% endtrans %}</summary>
+    <form method="post" action="{{ url_for('partners.add_quote', back=here()) }}" enctype="multipart/form-data" class="compact-form">
+      {{ csrf() }}<input type="hidden" name="request_id" value="{{ req.id }}">
+      {% if partner_list %}
+      <label>{% trans %}Partner{% endtrans %} <select name="partner_id" required><option value="">{% trans %}Choose…{% endtrans %}</option>
+        {% for pt in partner_list %}<option value="{{ pt.id }}">{{ pt.name }} · {{ pt.trade_label }}</option>{% endfor %}</select></label>
+      <div class="row">
+        <label>{% trans %}Amount{% endtrans %} <span class="money-input"><input name="amount" inputmode="decimal" required placeholder="0.00"></span></label>
+        <label>{% trans %}Date{% endtrans %} <input type="date" name="quoted_on" value="{{ today_iso }}"></label>
+      </div>
+      <label>{% trans %}Quote (PDF or photo){% endtrans %} <input type="file" name="file" accept="{{ accept }}"></label>
+      <button class="btn primary small">{% trans %}Add quote{% endtrans %}</button>
+      {% endif %}
+      <p class="muted small">{% if not partner_list %}{% trans %}Add the contractor as a business partner first.{% endtrans %} {% endif %}<a href="{{ url_for('partners.new') }}">{% trans %}New partner{% endtrans %}</a></p>
+    </form></details>
+</div>
+{% elif req.partner %}
+<div class="card"><h2>{% trans %}Contractor{% endtrans %}</h2>
+  <p><strong>{{ req.partner.name }}</strong> <span class="muted">· {{ req.partner.trade_label }}</span>{% if req.partner.phone %} · <a href="{{ req.partner.phone|tel }}">{{ req.partner.phone|phone }}</a>{% endif %}</p></div>
+{% endif %}
