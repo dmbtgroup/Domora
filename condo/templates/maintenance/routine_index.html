@@ -13,15 +13,18 @@
 </div>
 <div class="card">
 <table>
-  <thead><tr><th>{% trans %}Task{% endtrans %}</th><th>{% trans %}How often{% endtrans %}</th><th>{% trans %}Next due{% endtrans %}</th><th>{% trans %}Last done{% endtrans %}</th><th>{% trans %}Contractor{% endtrans %}</th></tr></thead>
+  {% set show_cost = current_user.role != 'tenant' %}
+  <thead><tr><th>{% trans %}Task{% endtrans %}</th><th>{% trans %}How often{% endtrans %}</th><th>{% trans %}Next due{% endtrans %}</th><th>{% trans %}Last done{% endtrans %}</th><th>{% trans %}Contractor{% endtrans %}</th>{% if show_cost %}<th class="num">{% trans %}Cost{% endtrans %}</th>{% endif %}</tr></thead>
   <tbody>
   {% for t in tasks %}{% set st = t.state(today) %}
-    <tr class="{{ 'inactive' if not t.active }}"><td><a href="{{ url_for('maintenance.routine_detail', task_id=t.id) }}"><strong>{{ t.title }}</strong></a> <span class="muted">· {{ CATEGORY_LABELS.get(t.category, t.category) }}</span></td>
+    <tr class="{{ 'inactive' if not t.active }}"><td><a href="{{ url_for('maintenance.routine_detail', task_id=t.id) }}"><strong>{{ t.title }}</strong></a></td>
       <td>{{ t.frequency_label }}{% if t.season_from %}<div class="excerpt">{% trans start=_month(t.season_from), end=_month(t.season_to) %}Season: {{ start }} to {{ end }}{% endtrans %}</div>{% endif %}</td>
-      <td class="nowrap">{{ t.next_due|fdate }} <span class="badge rt-{{ st }}">{{ states[st] }}</span></td>
-      <td class="nowrap">{% if t.last_done %}{{ t.last_done.done_on|fdate }}{% else %}<span class="muted">—</span>{% endif %}</td>
-      <td>{{ t.vendor or '—' }}{% if t.contract_ending(today) %} <span class="badge rt-due_soon" title="{{ t.contract_ends|fdate('long') }}">{% trans %}Contract ending{% endtrans %}</span>{% endif %}</td></tr>
-  {% else %}<tr><td colspan="5" class="muted">{% trans %}No routine maintenance yet.{% endtrans %}</td></tr>{% endfor %}
+      <td class="nowrap">{{ t.next_due|fdate('compact') }} <span class="badge rt-{{ st }}">{{ states[st] }}</span></td>
+      <td class="nowrap">{% if t.last_done %}{{ t.last_done.done_on|fdate('compact') }}{% else %}<span class="muted">—</span>{% endif %}</td>
+      <td>{{ t.vendor or '—' }}{% if t.contract_ending(today) %} <span class="badge rt-due_soon" title="{{ t.contract_ends|fdate('long') }}">{% trans %}Contract ending{% endtrans %}</span>{% endif %}</td>
+      {% if show_cost %}<td class="num nowrap">{% set last_cost = t.last_done.cost_cents if t.last_done else none %}
+        {% if last_cost %}{{ last_cost|money }}{% elif t.estimated_cents %}<span class="muted" title="{{ _('Estimated') }}">{{ t.estimated_cents|money }} <small>{% trans %}est.{% endtrans %}</small></span>{% else %}<span class="muted">—</span>{% endif %}</td>{% endif %}</tr>
+  {% else %}<tr><td colspan="6" class="muted">{% trans %}No routine maintenance yet.{% endtrans %}</td></tr>{% endfor %}
   </tbody>
 </table>
 </div>

@@ -149,3 +149,14 @@ def test_mark_done_with_invoice_and_photos(admin_client):
     assert "invoice-2231.pdf" in admin_client.get(f"/accounting/costs/{log.expense_id}").data.decode()
     admin_client.post(f"/maintenance/files/{inv.id}/delete")
     assert db.session.get(WorkFile, inv.id) is None
+
+
+def test_list_shows_cost_or_estimate_and_short_dates(admin_client):
+    make(admin_client)  # estimated $4,800, next due 2026-11-15, category Common area
+    page = admin_client.get("/maintenance/?tab=routine").data.decode()
+    row = page.split("<tbody>")[1].split("</tbody>")[0]
+    assert "$4,800.00" in row and "est." in row and "Nov 15 &#39;26" in row and "Common area" not in row
+    t = db.session.scalar(db.select(RoutineTask))
+    admin_client.post(f"/maintenance/routine/{t.id}/done", data={"done_on": "2026-11-20", "cost": "4,650"})
+    row = admin_client.get("/maintenance/?tab=routine").data.decode().split("<tbody>")[1].split("</tbody>")[0]
+    assert "$4,650.00" in row and "est." not in row

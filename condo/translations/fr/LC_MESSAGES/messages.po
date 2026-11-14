@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 16:06+0000\n"
+"POT-Creation-Date: 2026-11-14 17:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1568,6 +1568,9 @@ msgstr "Saisi dans l’application"
 
 msgid "Equally between units"
 msgstr "À parts égales entre les unités"
+
+msgid "Estimated"
+msgstr "Estimé"
 
 msgid "Estimated cost"
 msgstr "Coût estimé"
@@ -4196,6 +4199,9 @@ msgstr "p. ex. Remplacement des fenêtres 2027"
 
 msgid "e.g. Ying Zhou, by phone"
 msgstr "p. ex. Ying Zhou, par téléphone"
+
+msgid "est."
+msgstr "est."
 
 msgid "fixed"
 msgstr "fixe"

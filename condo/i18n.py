@@ -72,6 +72,7 @@ _PATTERNS = {
     "medium": {"en": "MMM d, y", "fr": "d MMM y"},          # Nov 6, 2026 · 6 nov. 2026
     "long": {"en": "MMMM d, y", "fr": "d MMMM y"},          # November 6, 2026 · 6 novembre 2026
     "short": {"en": "MMM d", "fr": "d MMM"},                # Nov 6 · 6 nov.
+    "compact": {"en": "MMM d ''yy", "fr": "d MMM yy"},      # Nov 6 '26 · 6 nov. 26
     "month": {"en": "MMM y", "fr": "MMM y"},                # Nov 2026 · nov. 2026
     "monthname": {"en": "MMMM", "fr": "MMMM"},              # November · novembre
     "monthyear": {"en": "MMMM y", "fr": "MMMM y"},          # November 2026 · novembre 2026

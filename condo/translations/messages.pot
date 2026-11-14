@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 16:06+0000\n"
+"POT-Creation-Date: 2026-11-14 17:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1632,6 +1632,9 @@ msgid "Entered in the app"
 msgstr ""
 
 msgid "Equally between units"
+msgstr ""
+
+msgid "Estimated"
 msgstr ""
 
 msgid "Estimated cost"
@@ -4373,6 +4376,9 @@ msgid "e.g. Window replacement 2027"
 msgstr ""
 
 msgid "e.g. Ying Zhou, by phone"
+msgstr ""
+
+msgid "est."
 msgstr ""
 
 msgid "fixed"
