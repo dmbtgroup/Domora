@@ -731,3 +731,15 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .add-inline summary { list-style: none; display: inline-block; margin-top: .6rem; cursor: pointer; }
 .add-inline summary::-webkit-details-marker { display: none; }
 .badge.quote-accepted { color: var(--ok); } .badge.quote-declined { color: var(--muted); } .badge.quote-pending { color: var(--warn); }
+
+/* Invoices and before/after photos on finished work */
+.work-file-inputs { display: grid; gap: .3rem; margin: .4rem 0 .6rem; }
+.work-file-inputs label { margin: 0; font-size: .9rem; }
+.work-file-inputs input[type=file] { font-size: .85rem; }
+.work-files { list-style: none; margin: .3rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem .8rem; }
+.work-file { display: inline-flex; align-items: center; gap: .3rem; font-size: .88rem; }
+.work-file .tag { font-size: .72rem; }
+.work-file.kind-invoice .tag { color: var(--brand-deep); border-color: var(--gold-light); background: var(--gold-soft); }
+.work-file .link-btn.danger { font-size: 1.1rem; line-height: 1; color: var(--muted); }
+.work-file .link-btn.danger:hover { color: var(--danger); }
+.attach-on-update { margin: .2rem 0 .8rem; } .attach-on-update summary { cursor: pointer; }

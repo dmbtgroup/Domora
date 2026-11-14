@@ -103,3 +103,30 @@ def test_list_filter_is_active_done_all_with_a_status_dropdown(admin_client):
     assert "Light" in body("/maintenance/?tab=maintenance&status=done") and "Leak" not in body("/maintenance/?tab=maintenance&status=done")
     picked = admin_client.get("/maintenance/?tab=maintenance&status=in_progress").data.decode()
     assert '<option value="in_progress" selected>' in picked and "Door" in picked.split("<tbody>")[1] and "Leak" not in picked.split("<tbody>")[1]
+
+
+def test_resolve_a_repair_with_invoice_and_photos_owners_see_only_photos(app, admin_client):
+    import io
+    PDF = b"%PDF-1.4\n%%EOF"
+    PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 40
+    alice = db.session.scalar(db.select(User).where(User.email == "alice@test.com"))
+    req = MaintenanceRequest(title="Leaking faucet", description="Drips", category="Plumbing", unit=alice.unit,
+                             submitted_by=alice)
+    db.session.add(req)
+    db.session.commit()
+    admin_client.post(f"/maintenance/{req.id}/status", content_type="multipart/form-data", data={
+        "status": "resolved", "priority": "normal", "invoice_files": [(io.BytesIO(PDF), "plumber.pdf")],
+        "after_files": [(io.BytesIO(PNG), "fixed.png")]})
+    req = db.session.get(MaintenanceRequest, req.id)
+    assert req.status == "resolved" and sorted(f.kind for f in req.work_files) == ["after", "invoice"]
+    admin_client.post(f"/maintenance/{req.id}/files", content_type="multipart/form-data",
+                      data={"before_files": [(io.BytesIO(PNG), "before.png")]})
+    assert len(db.session.get(MaintenanceRequest, req.id).work_files) == 3
+    admin_client.post("/logout")
+    login(admin_client, "alice@test.com")
+    page = admin_client.get(f"/maintenance/{req.id}").data.decode()
+    assert "fixed.png" in page and "plumber.pdf" not in page
+    invoice = next(f for f in req.work_files if f.kind == "invoice")
+    photo = next(f for f in req.work_files if f.kind == "after")
+    assert admin_client.get(f"/maintenance/files/{invoice.id}").status_code == 403
+    assert admin_client.get(f"/maintenance/files/{photo.id}").status_code == 200

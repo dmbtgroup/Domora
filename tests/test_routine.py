@@ -126,3 +126,26 @@ def test_move_a_maintenance_request_to_routine(admin_client):
     req = db.session.get(MaintenanceRequest, req.id)
     assert req.status == "closed"
     assert any("Moved to routine maintenance" in c.body for c in req.comments)
+
+
+def test_mark_done_with_invoice_and_photos(admin_client):
+    import io
+    from condo.models import WorkFile
+    PDF = b"%PDF-1.4\n%%EOF"
+    PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 40
+    make(admin_client)
+    t = db.session.scalar(db.select(RoutineTask))
+    admin_client.post(f"/maintenance/routine/{t.id}/done", content_type="multipart/form-data", data={
+        "done_on": "2026-11-20", "cost": "4,800", "record_cost": "1",
+        "invoice_files": [(io.BytesIO(PDF), "invoice-2231.pdf")],
+        "before_files": [(io.BytesIO(PNG), "before.png")], "after_files": [(io.BytesIO(PNG), "after1.png"), (io.BytesIO(PNG), "after2.png")]})
+    log = db.session.scalar(db.select(RoutineLog))
+    kinds = sorted(f.kind for f in log.work_files)
+    assert kinds == ["after", "after", "before", "invoice"] and all(f.expense_id == log.expense_id for f in log.work_files)
+    page = admin_client.get(f"/maintenance/routine/{t.id}").data.decode()
+    assert "invoice-2231.pdf" in page and "after2.png" in page
+    inv = next(f for f in log.work_files if f.kind == "invoice")
+    assert admin_client.get(f"/maintenance/files/{inv.id}").status_code == 200
+    assert "invoice-2231.pdf" in admin_client.get(f"/accounting/costs/{log.expense_id}").data.decode()
+    admin_client.post(f"/maintenance/files/{inv.id}/delete")
+    assert db.session.get(WorkFile, inv.id) is None

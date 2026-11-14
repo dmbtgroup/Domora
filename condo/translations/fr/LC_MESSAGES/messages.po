@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 15:21+0000\n"
+"POT-Creation-Date: 2026-11-14 16:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -163,6 +163,12 @@ msgid "%(num)s bedroom"
 msgid_plural "%(num)s bedrooms"
 msgstr[0] "%(num)s chambre"
 msgstr[1] "%(num)s chambres"
+
+#, python-format
+msgid "%(num)s file attached."
+msgid_plural "%(num)s files attached."
+msgstr[0] "%(num)s fichier joint."
+msgstr[1] "%(num)s fichiers joints."
 
 #, python-format
 msgid "%(num)s unit marked as paid before the portal."
@@ -436,6 +442,9 @@ msgstr "Ajouter une dépense"
 msgid "Add document"
 msgstr "Ajouter le document"
 
+msgid "Add files"
+msgstr "Ajouter des fichiers"
+
 msgid "Add insurance"
 msgstr "Ajouter une assurance"
 
@@ -670,8 +679,14 @@ msgstr "Attribuez-vous d’abord votre poste dans Répertoire > Conseil, sinon v
 msgid "At least 8 characters. Share it with the person privately."
 msgstr "Au moins 8 caractères. Transmettez-le à la personne en privé."
 
+msgid "Attach"
+msgstr "Joindre"
+
 msgid "Attach a file."
 msgstr "Joignez un fichier."
+
+msgid "Attach the invoice or photos"
+msgstr "Joindre la facture ou des photos"
 
 msgid "Attach the receipt or invoice."
 msgstr "Joignez le reçu ou la facture."
@@ -1295,6 +1310,9 @@ msgstr "Supprimer ce document?"
 msgid "Delete this draft?"
 msgstr "Supprimer ce brouillon?"
 
+msgid "Delete this file?"
+msgstr "Supprimer ce fichier?"
+
 msgid "Delete this notice?"
 msgstr "Supprimer cet avis?"
 
@@ -1626,8 +1644,14 @@ msgstr "Fichier"
 msgid "File (PDF, image, Word or Excel; up to 4 MB)"
 msgstr "Fichier (PDF, image, Word ou Excel; 4 Mo maximum)"
 
+msgid "File deleted."
+msgstr "Fichier supprimé."
+
 msgid "Filed under Maintenance"
 msgstr "Classé sous Entretien"
+
+msgid "Files"
+msgstr "Fichiers"
 
 msgid "Files can be at most 4 MB."
 msgstr "Les fichiers peuvent faire au plus 4 Mo."
@@ -1846,6 +1870,12 @@ msgstr "Virement Interac / virement bancaire"
 
 msgid "Invalid email or password."
 msgstr "Courriel ou mot de passe invalide."
+
+msgid "Invoice"
+msgstr "Facture"
+
+msgid "Invoices &amp; photos"
+msgstr "Factures et photos"
 
 msgid "Is this bigger planned work, or upkeep that comes back on a schedule?"
 msgstr "S’agit-il de travaux planifiés plus importants, ou d’un entretien qui revient selon un calendrier?"
@@ -2251,6 +2281,9 @@ msgstr "Aucune base de données n’est connectée : les modifications sont temp
 msgid "No documents yet."
 msgstr "Aucun document pour l’instant."
 
+msgid "No files yet. Attach the invoice and photos before and after the work."
+msgstr "Aucun fichier pour l’instant. Joignez la facture et les photos avant et après les travaux."
+
 msgid "No insurance"
 msgstr "Aucune assurance"
 
@@ -2596,6 +2629,9 @@ msgstr "Assurance des copropriétaires"
 msgid "Owners’ insurance saved for unit %(number)s."
 msgstr "Assurance des copropriétaires enregistrée pour l’unité %(number)s."
 
+msgid "PDF or photos, up to 4 MB in total per save. Large photos are made smaller automatically."
+msgstr "PDF ou photos, jusqu’à 4 Mo au total par enregistrement. Les grandes photos sont réduites automatiquement."
+
 msgid "Paid"
 msgstr "Payé"
 
@@ -2743,6 +2779,18 @@ msgstr "Téléphone"
 
 msgid "Phone or email"
 msgstr "Téléphone ou courriel"
+
+msgid "Photo after"
+msgstr "Photo après"
+
+msgid "Photo before"
+msgstr "Photo avant"
+
+msgid "Photos after"
+msgstr "Photos après"
+
+msgid "Photos before"
+msgstr "Photos avant"
 
 msgid "Pin to top"
 msgstr "Épingler en haut"

@@ -63,9 +63,24 @@
   }, true);
 
   // A form sent while a file is still being copied waits for it, then is sent.
+  function totalSize(form) {
+    var n = 0;
+    Array.prototype.forEach.call(form.querySelectorAll('input[type=file]'), function (i) {
+      Array.prototype.forEach.call(i.files || [], function (f) { n += f.size; });
+    });
+    return n;
+  }
+
   document.addEventListener('submit', function (e) {
     var form = e.target, job = pending.get(form);
-    if (!job) return;
+    if (!job) {
+      if (form.querySelector && totalSize(form) > LIMIT) {  // all the files of one save must fit in 4 MB
+        e.preventDefault();
+        alert(t('These files add up to more than 4 MB. Save fewer at a time (for example the invoice first, then the photos).',
+                'Ces fichiers dépassent 4 Mo au total. Enregistrez-en moins à la fois (par exemple la facture d’abord, puis les photos).'));
+      }
+      return;
+    }
     e.preventDefault();
     var btn = e.submitter;
     if (btn) btn.disabled = true;

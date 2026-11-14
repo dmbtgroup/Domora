@@ -6,7 +6,7 @@ from ..extensions import db
 from ..utils import board_positions_of, parse_date, parse_money
 from ..models import (ACTIVE_STATUSES, QUOTE_STATUSES, REQUEST_CATEGORIES, REQUEST_PRIORITIES, REQUEST_STATUSES,
                       MaintenanceComment, MaintenanceRequest, Unit, User, utcnow)
-from ..i18n import gettext as _, lazy_gettext as _l, lazy_lower, lazy_money
+from ..i18n import gettext as _, lazy_gettext as _l, lazy_lower, lazy_money, ngettext
 
 bp = Blueprint("maintenance", __name__, url_prefix="/maintenance")
 
@@ -475,9 +475,71 @@ def update_status(request_id):
             body=f"Status changed from {REQUEST_STATUSES[old]} to {REQUEST_STATUSES[new_status]}."))
         notify.send([req.submitted_by], _l("Your repair request is now %(new_status)s: %(req)s", new_status=lazy_lower(REQUEST_STATUSES[new_status]), req=req.title),
                     url=_url(req), kind="maintenance")
+    file_errors, added = [], 0
+    if current_user.can("maintenance"):  # the invoice and before/after photos, e.g. when marking it resolved
+        from .. import work_files
+        added = work_files.take_all(file_errors, request_id=req.id)
     db.session.commit()
-    flash(_("Request updated."), "success")
+    flash(_("Request updated.") + (" " + ngettext("%(num)s file attached.", "%(num)s files attached.", added) if added else ""),
+          "success")
+    for e in file_errors:
+        flash(e, "error")
     return redirect(url_for("maintenance.detail", request_id=req.id))
+
+
+@bp.route("/<int:request_id>/files", methods=["POST"])
+@login_required
+def add_work_files(request_id):
+    """Attach the invoice or before/after photos to a project or repair at any time."""
+    req = _get_visible(request_id)
+    if not sees_all():
+        abort(403)
+    from .. import work_files
+    errors = []
+    added = work_files.take_all(errors, request_id=req.id)
+    db.session.commit()
+    if added:
+        flash(ngettext("%(num)s file attached.", "%(num)s files attached.", added), "success")
+    for e in errors or ([] if added else [_("Attach a file.")]):
+        flash(e, "error")
+    return redirect(url_for("maintenance.detail", request_id=req.id) + "#attachments")
+
+
+def _can_see_work_file(wf):
+    """Photos: whoever can see the work. Invoices: the board, repair staff and accounting."""
+    if wf.routine_log_id is not None:
+        return can_manage_routine() or current_user.can("accounting")
+    if wf.kind == "invoice":
+        return sees_all() or current_user.can("accounting")
+    if wf.request is not None:
+        return _visible(wf.request)
+    return sees_all() or current_user.can("accounting")
+
+
+@bp.route("/files/<int:file_id>")
+@login_required
+def work_file(file_id):
+    from ..models import WorkFile
+    wf = db.session.get(WorkFile, file_id) or abort(404)
+    if not _can_see_work_file(wf):
+        abort(403)
+    return files.send(wf.file)
+
+
+@bp.route("/files/<int:file_id>/delete", methods=["POST"])
+@login_required
+def delete_work_file(file_id):
+    from ..models import WorkFile
+    wf = db.session.get(WorkFile, file_id) or abort(404)
+    if not sees_all():
+        abort(403)
+    back = (url_for("maintenance.detail", request_id=wf.request_id) if wf.request_id else
+            url_for("maintenance.routine_detail", task_id=wf.routine_log.task_id) if wf.routine_log else url_for("maintenance.index"))
+    db.session.delete(wf)
+    db.session.commit()
+    flash(_("File deleted."), "success")
+    from ..navigation import safe_back
+    return redirect(safe_back() or back)
 
 
 # --- Routine maintenance ------------------------------------------------------------------------------
@@ -662,7 +724,7 @@ def routine_new():
 @login_required
 def routine_detail(task_id):
     task = _routine(task_id)
-    return render_template("maintenance/routine_detail.html", task=task, states=ROUTINE_STATE_LABELS,
+    return render_template("maintenance/routine_detail.html", task=task, states=ROUTINE_STATE_LABELS, accept=files.ACCEPT,
                            can_manage=can_manage_routine(), today=_date.today())
 
 
@@ -706,6 +768,7 @@ def routine_done(task_id):
         return redirect(url_for("maintenance.routine_detail", task_id=task.id))
     note = request.form.get("note", "").strip() or None
     log = RoutineLog(task=task, done_on=done_on, cost_cents=cost, note=note, done_by_id=current_user.id)
+    from .. import work_files
     if cost and request.form.get("record_cost") and current_user.can("accounting_edit"):
         expense = Expense(spent_on=done_on, category="maintenance", amount_cents=-cost,
                           description=(f"{task.title}" + (f" — {task.vendor}" if task.vendor else ""))[:255],
@@ -714,10 +777,16 @@ def routine_done(task_id):
         db.session.flush()
         log.expense_id = expense.id
     db.session.add(log)
+    db.session.flush()
+    file_errors = []
+    added = work_files.take_all(file_errors, routine_log_id=log.id, expense_id=log.expense_id)
     task.advance(done_on)
     db.session.commit()
     flash(_("Marked as done. Next due %(when)s.", when=fdate(task.next_due, "long"))
-          + (" " + _("The cost was added to Accounting.") if log.expense_id else ""), "success")
+          + (" " + _("The cost was added to Accounting.") if log.expense_id else "")
+          + (" " + ngettext("%(num)s file attached.", "%(num)s files attached.", added) if added else ""), "success")
+    for e in file_errors:
+        flash(e, "error")
     return redirect(url_for("maintenance.routine_detail", task_id=task.id))
 
 

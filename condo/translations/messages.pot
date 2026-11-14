@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 15:21+0000\n"
+"POT-Creation-Date: 2026-11-14 16:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,6 +168,12 @@ msgstr ""
 #, python-format
 msgid "%(num)s bedroom"
 msgid_plural "%(num)s bedrooms"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%(num)s file attached."
+msgid_plural "%(num)s files attached."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -454,6 +460,9 @@ msgstr ""
 msgid "Add document"
 msgstr ""
 
+msgid "Add files"
+msgstr ""
+
 msgid "Add insurance"
 msgstr ""
 
@@ -698,7 +707,13 @@ msgstr ""
 msgid "At least 8 characters. Share it with the person privately."
 msgstr ""
 
+msgid "Attach"
+msgstr ""
+
 msgid "Attach a file."
+msgstr ""
+
+msgid "Attach the invoice or photos"
 msgstr ""
 
 msgid "Attach the receipt or invoice."
@@ -1342,6 +1357,9 @@ msgstr ""
 msgid "Delete this draft?"
 msgstr ""
 
+msgid "Delete this file?"
+msgstr ""
+
 msgid "Delete this notice?"
 msgstr ""
 
@@ -1691,7 +1709,13 @@ msgstr ""
 msgid "File (PDF, image, Word or Excel; up to 4 MB)"
 msgstr ""
 
+msgid "File deleted."
+msgstr ""
+
 msgid "Filed under Maintenance"
+msgstr ""
+
+msgid "Files"
 msgstr ""
 
 msgid "Files can be at most 4 MB."
@@ -1921,6 +1945,12 @@ msgid "Interac e-Transfer / bank transfer"
 msgstr ""
 
 msgid "Invalid email or password."
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Invoices &amp; photos"
 msgstr ""
 
 msgid "Is this bigger planned work, or upkeep that comes back on a schedule?"
@@ -2337,6 +2367,9 @@ msgstr ""
 msgid "No documents yet."
 msgstr ""
 
+msgid "No files yet. Attach the invoice and photos before and after the work."
+msgstr ""
+
 msgid "No insurance"
 msgstr ""
 
@@ -2698,6 +2731,11 @@ msgstr ""
 msgid "Owners’ insurance saved for unit %(number)s."
 msgstr ""
 
+msgid ""
+"PDF or photos, up to 4 MB in total per save. Large photos are made "
+"smaller automatically."
+msgstr ""
+
 msgid "Paid"
 msgstr ""
 
@@ -2851,6 +2889,18 @@ msgid "Phone"
 msgstr ""
 
 msgid "Phone or email"
+msgstr ""
+
+msgid "Photo after"
+msgstr ""
+
+msgid "Photo before"
+msgstr ""
+
+msgid "Photos after"
+msgstr ""
+
+msgid "Photos before"
 msgstr ""
 
 msgid "Pin to top"

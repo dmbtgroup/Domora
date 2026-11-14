@@ -20,6 +20,8 @@
       {% if x.notes %}<dt>{% trans %}Notes{% endtrans %}</dt><dd class="prose">{{ x.notes }}</dd>{% endif %}
       {% if x.source %}<dt>{% trans %}Paid to / reference{% endtrans %}</dt><dd class="prose">{{ x.source }}</dd>{% endif %}
       {% if x.approved_by %}<dt>{% trans %}Approved by{% endtrans %}</dt><dd>{{ x.approved_by }}</dd>{% endif %}
+      {% if x.partner %}<dt>{% trans %}Business partner{% endtrans %}</dt><dd>{% if partner_access().manage %}<a href="{{ url_for('partners.detail', partner_id=x.partner.id) }}">{{ x.partner.name }}</a>{% else %}{{ x.partner.name }}{% endif %}</dd>{% endif %}
+      {% if x.work_files %}<dt>{% trans %}Files{% endtrans %}</dt><dd>{% for wf in x.work_files %}<a href="{{ url_for('maintenance.work_file', file_id=wf.id) }}" target="_blank" rel="noopener"><span class="tag">{{ wf.kind_label }}</span> {{ wf.file.filename|truncate(40) }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</dd>{% endif %}
     </dl>
   </section>
   <aside>{% with item=x %}{% include "billing/_source.html" %}{% endwith %}</aside>

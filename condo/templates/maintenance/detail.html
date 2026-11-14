@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf, status_badge, priority_badge, post_button %}
 {% from "_icons.html" import icon_post %}
+{% from "maintenance/_work_files.html" import file_inputs, file_list %}
 {% block title %}{{ _('Project') if req.is_project else _('Request') }} #{{ req.id }}{% endblock %}
 {% block content %}
 <div class="head"><h1>#{{ req.id }} · {{ req.title }}</h1>
@@ -19,6 +20,18 @@
       <div class="prose">{{ req.description }}</div>
     </div>
     {% include "maintenance/_contractor.html" %}
+    {% set shown = req.work_files if partner_manage else req.work_files|rejectattr('kind', 'equalto', 'invoice')|list %}
+    {% if shown or partner_manage %}
+    <div class="card" id="attachments">
+      <h2>{% trans %}Invoices &amp; photos{% endtrans %} {% if shown %}<span class="muted count">{{ shown|length }}</span>{% endif %}</h2>
+      {% if shown %}{{ file_list(shown, can_delete=current_user.can('maintenance')) }}{% else %}<p class="muted">{% trans %}No files yet. Attach the invoice and photos before and after the work.{% endtrans %}</p>{% endif %}
+      {% if current_user.can('maintenance') %}
+      <details class="add-inline"><summary class="btn small">{% trans %}Add files{% endtrans %}</summary>
+        <form method="post" action="{{ url_for('maintenance.add_work_files', request_id=req.id) }}" enctype="multipart/form-data" class="compact-form">
+          {{ csrf() }}{{ file_inputs(accept) }}<button class="btn primary small">{% trans %}Attach{% endtrans %}</button>
+        </form></details>{% endif %}
+    </div>
+    {% endif %}
     <div class="card">
       <h2>{% trans %}Updates{% endtrans %}</h2>
       {% for c in req.comments %}
@@ -112,10 +125,11 @@
     <div class="card">
     {% if current_user.can('maintenance') %}
       <h2>{% trans %}Manage{% endtrans %}</h2>
-      <form method="post" action="{{ url_for('maintenance.update_status', request_id=req.id) }}">
+      <form method="post" action="{{ url_for('maintenance.update_status', request_id=req.id) }}" enctype="multipart/form-data">
         {{ csrf() }}
         <label>{% trans %}Status{% endtrans %} <select name="status">{% for k, label in statuses.items() if (k not in ('awaiting_owner', 'quote_requested', 'quote_review', 'owner_repair')) or k == req.status %}<option value="{{ k }}" {{ 'selected' if req.status == k }}>{{ label }}</option>{% endfor %}</select></label>
         <label>{% trans %}Priority{% endtrans %} <select name="priority">{% for k, label in priorities.items() %}<option value="{{ k }}" {{ 'selected' if req.priority == k }}>{{ label }}</option>{% endfor %}</select></label>
+        <details class="attach-on-update"><summary class="link-btn">{% trans %}Attach the invoice or photos{% endtrans %}</summary>{{ file_inputs(accept) }}</details>
         <button class="btn primary">{% trans %}Update{% endtrans %}</button>
       </form>
     {% elif req.submitted_by_id == current_user.id %}

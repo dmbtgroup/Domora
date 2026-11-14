@@ -1,0 +1,17 @@
+{# Invoices and before/after photos for finished work. #}
+{% macro file_inputs(accept) %}
+<div class="work-file-inputs">
+  <label>{% trans %}Invoice{% endtrans %} <input type="file" name="invoice_files" accept="{{ accept }}" multiple></label>
+  <label>{% trans %}Photos before{% endtrans %} <input type="file" name="before_files" accept="image/*,.heic,.heif,.pdf" multiple></label>
+  <label>{% trans %}Photos after{% endtrans %} <input type="file" name="after_files" accept="image/*,.heic,.heif,.pdf" multiple></label>
+  <p class="muted small">{% trans %}PDF or photos, up to 4 MB in total per save. Large photos are made smaller automatically.{% endtrans %}</p>
+</div>
+{% endmacro %}
+
+{% macro file_list(wfs, can_delete=False) %}
+{% if wfs %}<ul class="work-files">{% for wf in wfs %}
+  <li class="work-file kind-{{ wf.kind }}">
+    <a href="{{ url_for('maintenance.work_file', file_id=wf.id) }}" target="_blank" rel="noopener"><span class="tag">{{ wf.kind_label }}</span> {{ wf.file.filename|truncate(36) }}</a>
+    {% if can_delete %}<form method="post" action="{{ url_for('maintenance.delete_work_file', file_id=wf.id, back=here()) }}" class="inline" onsubmit="return confirm({{ _('Delete this file?')|tojson|forceescape }})"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-btn danger" title="{{ _('Delete') }}" aria-label="{{ _('Delete') }}">×</button></form>{% endif %}
+  </li>{% endfor %}</ul>{% endif %}
+{% endmacro %}

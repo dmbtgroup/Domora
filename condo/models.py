@@ -1320,3 +1320,32 @@ class PartnerRating(db.Model):
     partner = db.relationship("Partner", back_populates="ratings")
     request = db.relationship("MaintenanceRequest")
     author = db.relationship("User")
+
+
+# --- Attachments on finished work: invoices and before/after photos ------------------------------------
+
+WORK_FILE_KINDS = {"invoice": _l("Invoice"), "before": _l("Photo before"), "after": _l("Photo after"), "other": _l("Other")}
+
+
+class WorkFile(db.Model):
+    """A file kept with a project, repair or routine visit: the invoice, or photos before and after the work.
+    An invoice for a visit whose cost went to Accounting is also shown with that cost."""
+    id = db.Column(db.Integer, primary_key=True)
+    kind = db.Column(db.String(10), nullable=False, default="other")
+    file_id = db.Column(db.Integer, db.ForeignKey("stored_file.id"), nullable=False)
+    request_id = db.Column(db.Integer, db.ForeignKey("maintenance_request.id", ondelete="CASCADE"), index=True)
+    routine_log_id = db.Column(db.Integer, db.ForeignKey("routine_log.id", ondelete="CASCADE"), index=True)
+    expense_id = db.Column(db.Integer, db.ForeignKey("expense.id", ondelete="SET NULL"), index=True)
+    uploaded_by_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    file = db.relationship("StoredFile")
+    request = db.relationship("MaintenanceRequest", backref=db.backref("work_files", order_by="WorkFile.created_at",
+                                                                       cascade="all, delete-orphan"))
+    routine_log = db.relationship("RoutineLog", backref=db.backref("work_files", order_by="WorkFile.created_at",
+                                                                    cascade="all, delete-orphan"))
+    expense = db.relationship("Expense", backref=db.backref("work_files", order_by="WorkFile.created_at"))
+
+    @property
+    def kind_label(self):
+        return WORK_FILE_KINDS.get(self.kind, self.kind)
