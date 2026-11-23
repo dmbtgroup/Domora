@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}{% trans label=label %}Performance · {{ label }}{% endtrans %}{% endblock %}
+{% macro change(now, before) %}{% if before %}{% set ch = (now / before - 1) * 100 %}<span class="{{ 'perf-up' if ch > 0.5 else 'perf-down' if ch < -0.5 }}">{{ '▲' if ch > 0.5 else '▼' if ch < -0.5 else '·' }} {{ ch|abs|pct(0) }}</span>{% elif now %}<span class="muted">{% trans %}new{% endtrans %}</span>{% else %}<span class="muted">—</span>{% endif %}{% endmacro %}
+{% macro cat_name(key) %}{{ labels[key] if key != '_rest' else ngettext('Other (%(num)s)', 'Others (%(num)s)', rest_count) }}{% endmacro %}
+{% set pargs = {'span': span, 'year': year} if span == 'year' else {'span': span} %}
+{% block content %}
+<div class="head"><h1>{% trans %}Accounting{% endtrans %}</h1></div>
+<nav class="section-tabs">
+  <a href="{{ url_for('billing.index', year=start.year) }}">{% trans %}Building{% endtrans %}</a>
+  <a href="{{ url_for('billing.index', tab='unit', year=start.year) }}">{% trans %}By unit{% endtrans %}</a>
+  <a href="{{ url_for('billing.performance', **pargs) }}" class="active" aria-current="page">{% trans %}Performance{% endtrans %}</a>
+</nav>
+
+<div class="card perf-bar">
+  <nav class="segmented" aria-label="{{ _('Period') }}">
+    <a href="{{ url_for('billing.performance', year=start.year if span == 'year' else today.year) }}" class="{{ 'active' if span == 'year' }}">{% trans %}Year{% endtrans %}</a>
+    <a href="{{ url_for('billing.performance', span='12m') }}" class="{{ 'active' if span == '12m' }}">{% trans %}12 months{% endtrans %}</a>
+  </nav>
+  {% if span == 'year' %}
+  <nav class="perf-years" aria-label="{{ _('Year') }}">
+    {% for y in years|reverse %}<a href="{{ url_for('billing.performance', year=y) }}" class="{{ 'active' if y == year }}"{% if y == year %} aria-current="page"{% endif %}>{{ y }}</a>{% endfor %}
+  </nav>
+  {% else %}<strong>{{ start|fdate('month') }} – {{ end|fdate('month') }}</strong>{% endif %}
+  <span class="muted">{% trans prev=prev_label %}Compared with {{ prev }}{% endtrans %}</span>
+</div>
+
+<div class="stats">
+  <div class="stat"><span>{{ income|money0 }}</span>{% trans label=label %}Income · {{ label }}{% endtrans %}<br><small>{{ change(income, prev_income) }} {% trans prev=prev_label %}vs {{ prev }}{% endtrans %}</small></div>
+  <div class="stat"><span>{{ total|money0 }}</span>{% trans label=label %}Costs · {{ label }}{% endtrans %}<br><small>{{ change(total, prev_total) }} {% trans prev=prev_label %}vs {{ prev }}{% endtrans %}</small></div>
+  <div class="stat"><span>{{ '+' if income - total > 0 }}{{ (income - total)|money0 }}</span>{% trans %}Net (income − costs){% endtrans %}</div>
+  <div class="stat"><span>{{ bank.today|money0 if bank.today is not none else '—' }}</span>{% trans %}Bank balance today{% endtrans %}</div>
+</div>
+
+{% if not total %}
+<div class="card"><p class="muted">{% trans label=label %}No costs recorded for {{ label }}.{% endtrans %}</p></div>
+{% else %}
+<section class="card">
+  <h2>{% trans label=label %}Where the money went · {{ label }}{% endtrans %}</h2>
+  <div class="perf-split" role="img" aria-label="{{ _('Costs by category') }}">
+    {% for key, cents in split %}{% set share = cents / total %}
+    <a class="perf-c-{{ colors.get(key, 'other') }}" style="flex: {{ cents }}" title="{{ cat_name(key) }}: {{ cents|money0 }} ({{ (share * 100)|pct(0) }})"
+       {% if key != '_rest' %}href="{{ url_for('billing.performance', category=key, **pargs) }}#detail"{% endif %}>
+      {% if share >= 0.08 %}<b>{{ (share * 100)|pct(0) }}</b><span>{{ cents|money0 }}</span>{% endif %}</a>
+    {% endfor %}
+  </div>
+  <div class="perf-legend">
+    {% for key, cents in split %}<span><i class="perf-c-{{ colors.get(key, 'other') }}"></i>{{ cat_name(key) }} · {{ cents|money0 }}</span>{% endfor %}
+  </div>
+</section>
+
+<div class="perf-grid">
+  <section class="card">
+    <h2>{% trans %}Costs by category{% endtrans %}</h2>
+    <p class="muted small">{% trans %}Click a category to see its costs.{% endtrans %}</p>
+    <div class="perf-rank">
+      {% for key, cents in ranked %}
+      <a href="{{ url_for('billing.performance', category=key, **pargs) }}#detail" class="{{ 'active' if key == chosen }}">
+        <span class="perf-rank-name">{{ labels[key] }}</span>
+        <span class="perf-rank-track"><span style="width: {{ (cents / ranked[0][1] * 100)|round(1) }}%"></span></span>
+        <span class="num">{{ cents|money0 }} <small class="muted">{{ (cents / total * 100)|pct(0) }}</small></span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="card">
+    <h2>{% trans prev=prev_label %}Compared with {{ prev }}{% endtrans %}</h2>
+    <table>
+      <thead><tr><th>{% trans %}Category{% endtrans %}</th><th class="num">{{ prev_label if span == 'year' else _('Before') }}</th><th class="num">{{ label }}</th><th class="num">{% trans %}Difference{% endtrans %}</th></tr></thead>
+      <tbody>
+      {% for key in compare %}
+        <tr><td>{{ labels[key] }}</td><td class="num">{{ prev_cats.get(key, 0)|money0 }}</td><td class="num">{{ cats.get(key, 0)|money0 }}</td><td class="num">{{ change(cats.get(key, 0), prev_cats.get(key, 0)) }}</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot><tr><th>{% trans %}Total{% endtrans %}</th><th class="num">{{ prev_total|money0 }}</th><th class="num">{{ total|money0 }}</th><th class="num">{{ change(total, prev_total) }}</th></tr></tfoot>
+    </table>
+  </section>
+</div>
+
+{% if chosen %}
+<section class="card" id="detail">
+  <div class="card-head"><h2>{{ labels[chosen] }} · {{ label }} <span class="muted count">{{ chosen_items|length }}</span></h2>
+    <a class="btn small" href="{{ url_for('billing.performance', **pargs) }}">{% trans %}All categories{% endtrans %}</a></div>
+  <table>
+    <thead><tr><th>{% trans %}Date{% endtrans %}</th><th>{% trans %}Description{% endtrans %}</th><th>{% trans %}Paid to{% endtrans %}</th><th class="num">{% trans %}Amount{% endtrans %}</th></tr></thead>
+    <tbody>
+    {% for x in chosen_items %}
+      <tr><td class="nowrap date-link"><a href="{{ url_for('billing.payment_detail', payment_id=x.payment.id, back=here()) if x.origin == 'credit' else url_for('billing.cost_detail', cost_id=x.id, back=here()) }}">{{ x.spent_on|fdate('compact') }}</a></td>
+        <td>{{ x.description }}</td>
+        <td>{% if x.origin == 'credit' %}<span class="muted">{% trans number=x.payment.unit.number %}Owner of unit {{ number }}{% endtrans %}</span>{% elif x.partner %}<a href="{{ url_for('partners.detail', partner_id=x.partner.id) }}">{{ x.partner.name }}</a>{% else %}{{ x.source or '' }}{% endif %}</td>
+        <td class="num">{{ x.cost_cents|money }}</td></tr>
+    {% endfor %}
+    </tbody>
+    <tfoot><tr><th colspan="3">{% trans %}Total{% endtrans %}</th><th class="num">{{ cats.get(chosen, 0)|money }}</th></tr></tfoot>
+  </table>
+</section>
+{% endif %}
+{% endif %}
+
+<section class="card">
+  <h2>{% trans label=label %}Income and costs by month · {{ label }}{% endtrans %}</h2>
+  {% set W, H, L, B, T = 1080, 260, 64, 30, 10 %}{% set pw = (W - L - 10) / 12 %}{% set ymax = step * 4 %}
+  <svg class="perf-months" viewBox="0 0 {{ W }} {{ H }}" role="img" aria-label="{{ _('Income and costs by month') }}">
+    {% for i in range(5) %}{% set y = H - B - (H - B - T) * i / 4 %}
+    <line x1="{{ L }}" x2="{{ W - 10 }}" y1="{{ y }}" y2="{{ y }}" class="grid"/>
+    <text x="{{ L - 8 }}" y="{{ y + 4 }}" text-anchor="end">{{ (step * i)|money0 }}</text>
+    {% endfor %}
+    {% for m in months %}{% set x = L + pw * loop.index0 + pw / 2 %}
+    <g class="perf-month">
+      <title>{{ m.start|fdate('monthyear') }} · {% trans %}Income{% endtrans %} {{ m.income|money0 }} · {% trans %}Costs{% endtrans %} {{ m.costs|money0 }}{% for key, cents in m.top %}
+{{ labels[key] }} {{ cents|money0 }}{% endfor %}</title>
+      <rect class="hit" x="{{ x - pw / 2 + 3 }}" y="{{ T }}" width="{{ pw - 6 }}" height="{{ H - B - T }}"/>
+      {% for v, cls, dx in [(m.income, 'perf-income', -19), (m.costs, 'perf-costs', 1)] %}{% set h = (H - B - T) * v / ymax %}
+      {% if h > 0 %}<path class="{{ cls }}" d="M{{ x + dx }},{{ H - B }} v{{ -([h - 3, 0]|max) }} q0,-3 3,-3 h12 q3,0 3,3 v{{ [h - 3, 0]|max }}z"/>{% endif %}
+      {% endfor %}
+      <text x="{{ x }}" y="{{ H - 10 }}" text-anchor="middle" class="{{ 'future' if m.future }}">{{ m.start|fdate('MMM') }}</text>
+    </g>
+    {% endfor %}
+    <line x1="{{ L }}" x2="{{ W - 10 }}" y1="{{ H - B }}" y2="{{ H - B }}" class="base"/>
+  </svg>
+  <div class="perf-legend"><span><i class="perf-income"></i>{% trans %}Income{% endtrans %}</span><span><i class="perf-costs"></i>{% trans %}Costs{% endtrans %}</span></div>
+  <details class="perf-table"><summary>{% trans %}Show as a table{% endtrans %}</summary>
+    <table><thead><tr><th>{% trans %}Month{% endtrans %}</th><th class="num">{% trans %}Income{% endtrans %}</th><th class="num">{% trans %}Costs{% endtrans %}</th><th class="num">{% trans %}Net{% endtrans %}</th></tr></thead>
+    <tbody>{% for m in months %}<tr><td>{{ m.start|fdate('monthyear') }}</td><td class="num">{{ m.income|money }}</td><td class="num">{{ m.costs|money }}</td><td class="num">{{ (m.income - m.costs)|money }}</td></tr>{% endfor %}</tbody></table>
+  </details>
+</section>
+{% endblock %}

@@ -38,7 +38,7 @@ def test_add_and_mark_done_moves_the_due_date_and_records_cost(admin_client):
     log = db.session.scalar(db.select(RoutineLog))
     assert log.cost_cents == 480000 and log.expense_id
     exp = db.session.get(Expense, log.expense_id)
-    assert exp.amount_cents == -480000 and exp.category == "maintenance" and "Snow removal" in exp.description
+    assert exp.amount_cents == -480000 and exp.category == "snow" and "Snow removal" in exp.description
     detail = admin_client.get(f"/maintenance/routine/{t.id}").data.decode()
     assert "Contract signed" in detail and "November 15, 2027" in detail
 

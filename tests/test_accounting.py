@@ -148,7 +148,8 @@ def test_sync_banner_removed(admin_client):
 
 def test_guess_cost_category():
     assert guess_cost_category("Electricity_Hydro-Quebec") == "utilities"
-    assert guess_cost_category("Snow Removal") == "maintenance"
+    assert guess_cost_category("Snow Removal") == "snow" and guess_cost_category("Lawn mowing") == "landscaping"
+    assert guess_cost_category("Ménage des aires communes") == "cleaning"
     assert guess_cost_category("Insurance_Unique Cie Ass.") == "insurance"
     assert guess_cost_category("Bank charges") == "administration"
     assert guess_cost_category("parking heaters, labour & materials") == "repairs"
@@ -171,7 +172,7 @@ def test_purchase_credit_is_also_a_cost_and_opening_not_billed(admin_client):
     page = admin_client.get("/accounting/?view=month&year=2026&month=10").data.decode()
     costs_panel = page.split("<h2>Costs")[1].split("</section>")[0]
     assert "Leaf blower for condo yard" in costs_panel
-    assert "$114.31" in costs_panel and "Maintenance $114.31" in costs_panel
+    assert "$114.31" in costs_panel and "Landscaping $114.31" in costs_panel
     # Net = cash actually received (211.26): payments 325.57 − owner-paid cost 114.31.
     assert "$211.26</span>Net" in page
     units = page.split("<h2>Units</h2>")[1]

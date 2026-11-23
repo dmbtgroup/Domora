@@ -428,6 +428,9 @@ COST_CATEGORIES = {
     "utilities": _l("Utilities"),
     "insurance": _l("Insurance"),
     "maintenance": _l("Maintenance"),
+    "snow": _l("Snow removal"),
+    "landscaping": _l("Landscaping"),
+    "cleaning": _l("Cleaning"),
     "repairs": _l("Repairs & projects"),
     "administration": _l("Administration"),
     "other": _l("Other"),
@@ -435,11 +438,45 @@ COST_CATEGORIES = {
 _COST_KEYWORDS = [
     ("insurance", ("insurance", "assurance")),
     ("utilities", ("hydro", "electric bill", "électricité", "gas", "water bill")),
-    ("maintenance", ("snow", "lawn", "landscap", "garden", "gardening", "cleaning", "déneigement", "leaf", "compost")),
+    ("snow", ("snow", "déneigement", "deneigement", "salt", "sel de déglaçage")),
+    ("landscaping", ("lawn", "landscap", "garden", "paysag", "leaf", "leaves", "compost", "tree", "pelouse", "arbre")),
+    ("cleaning", ("cleaning", "ménage", "menage", "nettoyage", "janitor", "window washing")),
+    ("maintenance", ("maintenance", "entretien", "gutter", "gouttière", "filter", "inspection")),
     ("administration", ("bank", "fee", "frais", "interac", "cheque", "check order", "accounting", "tax")),
     ("repairs", ("repair", "heater", "plumb", "roof", "window", "door", "brick", "garage", "contractor",
                  "electric", "paint", "invoice")),
 ]
+
+
+# A business partner's trade says what kind of cost their invoices are.
+TRADE_COST_CATEGORY = {"snow": "snow", "landscaping": "landscaping", "cleaning": "cleaning", "insurance": "insurance",
+                       "plumbing": "repairs", "electrical": "repairs", "hvac": "repairs", "roofing": "repairs",
+                       "painting": "repairs", "general": "repairs", "doors": "repairs", "elevator": "maintenance",
+                       "security": "maintenance", "professional": "administration"}
+
+
+def cost_category_for(text, partner=None, default="other"):
+    """The category a cost most likely belongs to: from its business partner's trade, else its wording."""
+    if partner is not None and TRADE_COST_CATEGORY.get(partner.trade):
+        return TRADE_COST_CATEGORY[partner.trade]
+    guess = guess_cost_category(text)
+    return guess if guess != "other" else default
+
+
+def recategorize_costs():
+    """Once, when Snow removal, Landscaping and Cleaning became categories of their own: move the costs
+    filed under Maintenance or Other that clearly belong there. Returns how many moved."""
+    if Setting.get("cost_categories_v2"):
+        return 0
+    moved = 0
+    for x in db.session.scalars(db.select(Expense).where(db.or_(Expense.category.is_(None),
+                                                                Expense.category.in_(("maintenance", "other"))))):
+        new = cost_category_for(f"{x.description} {x.notes or ''} {x.source or ''}", x.partner, default=x.category)
+        if new in ("snow", "landscaping", "cleaning") and new != x.category:
+            x.category = new
+            moved += 1
+    Setting.put("cost_categories_v2", {"moved": moved})
+    return moved
 
 
 def guess_cost_category(text):

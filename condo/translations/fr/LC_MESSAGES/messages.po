@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 17:30+0000\n"
+"POT-Creation-Date: 2026-11-23 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -273,6 +273,9 @@ msgstr "1. Lier la feuille"
 msgid "1. Units"
 msgstr "1. Unités"
 
+msgid "12 months"
+msgstr "12 mois"
+
 msgid "2. Owner names"
 msgstr "2. Noms des copropriétaires"
 
@@ -515,6 +518,9 @@ msgstr "Alertes"
 
 msgid "All"
 msgstr "Tout"
+
+msgid "All categories"
+msgstr "Toutes les catégories"
 
 msgid "All notices →"
 msgstr "Tous les avis →"
@@ -759,6 +765,9 @@ msgstr "Chambres"
 
 msgid "Beds"
 msgstr "Chambres"
+
+msgid "Before"
+msgstr "Avant"
 
 msgid "Bill the units"
 msgstr "Facturer les unités"
@@ -1047,6 +1056,9 @@ msgstr "Choisir…"
 msgid "Cleaning"
 msgstr "Ménage"
 
+msgid "Click a category to see its costs."
+msgstr "Cliquez sur une catégorie pour voir ses dépenses."
+
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
 msgstr "Cliquez sur une tâche pour remplir le formulaire; ajustez les dates et l’entrepreneur, puis enregistrez."
 
@@ -1100,6 +1112,10 @@ msgstr "Entreprise"
 
 msgid "Company or store"
 msgstr "Entreprise ou magasin"
+
+#, python-format
+msgid "Compared with %(prev)s"
+msgstr "Comparé à %(prev)s"
 
 #, python-format
 msgid "Condo fee · %(year)s"
@@ -1194,6 +1210,9 @@ msgstr "Dépense enregistrée."
 
 msgid "Costs"
 msgstr "Dépenses"
+
+msgid "Costs by category"
+msgstr "Dépenses par catégorie"
 
 #, python-format
 msgid "Costs · %(label)s"
@@ -1846,6 +1865,20 @@ msgstr "Dans l’application actuellement"
 msgid "Inactive"
 msgstr "Inactif"
 
+msgid "Income"
+msgstr "Revenus"
+
+msgid "Income and costs by month"
+msgstr "Revenus et dépenses par mois"
+
+#, python-format
+msgid "Income and costs by month · %(label)s"
+msgstr "Revenus et dépenses par mois · %(label)s"
+
+#, python-format
+msgid "Income · %(label)s"
+msgstr "Revenus · %(label)s"
+
 msgid "Insurance"
 msgstr "Assurances"
 
@@ -1912,6 +1945,9 @@ msgstr "Aménagement paysager"
 
 msgid "Language / Langue"
 msgstr "Langue / Language"
+
+msgid "Last 12 months"
+msgstr "12 derniers mois"
 
 #, python-format
 msgid "Last automatic check failed (%(t)s UTC): %(message)s"
@@ -2143,6 +2179,9 @@ msgstr "Besoin d’aide? Communiquez avec le soutien DMBT :"
 msgid "Net"
 msgstr "Net"
 
+msgid "Net (income − costs)"
+msgstr "Net (revenus − dépenses)"
+
 msgid "Net (payments − costs)"
 msgstr "Net (paiements − dépenses)"
 
@@ -2277,6 +2316,10 @@ msgstr "Aucun entrepreneur assigné pour l’instant."
 #, python-format
 msgid "No costs in %(label)s."
 msgstr "Aucune dépense en %(label)s."
+
+#, python-format
+msgid "No costs recorded for %(label)s."
+msgstr "Aucune dépense enregistrée pour %(label)s."
 
 msgid "No database is connected, so changes are temporary and will be lost. Connect a Postgres database (DATABASE_URL) to keep data."
 msgstr "Aucune base de données n’est connectée : les modifications sont temporaires et seront perdues. Connectez une base Postgres (DATABASE_URL) pour conserver les données."
@@ -2555,6 +2598,12 @@ msgstr "Ou en saisir un"
 msgid "Other"
 msgstr "Autre"
 
+#, python-format
+msgid "Other (%(num)s)"
+msgid_plural "Others (%(num)s)"
+msgstr[0] "Autre (%(num)s)"
+msgstr[1] "Autres (%(num)s)"
+
 msgid "Other contact"
 msgstr "Autre contact"
 
@@ -2587,6 +2636,10 @@ msgstr "Contacts des copropriétaires"
 
 msgid "Owner name"
 msgstr "Nom du copropriétaire"
+
+#, python-format
+msgid "Owner of unit %(number)s"
+msgstr "Propriétaire de l’unité %(number)s"
 
 msgid "Owner to get a quote"
 msgstr "Soumission à obtenir par le copropriétaire"
@@ -2770,6 +2823,13 @@ msgstr "Selon la banque le %(when)s"
 
 msgid "Percentages are weighted by how much each vote counts."
 msgstr "Les pourcentages tiennent compte du poids de chaque voix."
+
+msgid "Performance"
+msgstr "Performance"
+
+#, python-format
+msgid "Performance · %(label)s"
+msgstr "Performance · %(label)s"
 
 msgid "Period"
 msgstr "Période"
@@ -3381,6 +3441,9 @@ msgstr "Lien de la feuille enregistré. Faites un aperçu de la synchronisation 
 msgid "Show"
 msgstr "Afficher"
 
+msgid "Show as a table"
+msgstr "Afficher en tableau"
+
 msgid "Sign in"
 msgstr "Se connecter"
 
@@ -3984,6 +4047,10 @@ msgstr "Depuis quand? À quel endroit exactement? Quels sont les meilleurs momen
 msgid "When it's renewed, add the new policy here; earlier ones are kept. If one owner has filed the policy, the others don't need to."
 msgstr "Au renouvellement, ajoutez la nouvelle police ici; les précédentes sont conservées. Si un copropriétaire a déposé la police, les autres n’ont pas à le faire."
 
+#, python-format
+msgid "Where the money went · %(label)s"
+msgstr "Où va l’argent · %(label)s"
+
 msgid "Who votes"
 msgstr "Qui vote"
 
@@ -4235,6 +4302,9 @@ msgstr "argent reçu"
 msgid "must change at next sign-in"
 msgstr "doit le changer à la prochaine connexion"
 
+msgid "new"
+msgstr "nouveau"
+
 msgid "none of the quotes chosen"
 msgstr "aucune soumission choisie"
 
@@ -4296,6 +4366,9 @@ msgstr "mot de passe temporaire"
 msgid "tenant"
 msgstr "locataire"
 
+msgid "the 12 months before"
+msgstr "les 12 mois précédents"
+
 msgid "the previous page"
 msgstr "la page précédente"
 
@@ -4327,6 +4400,10 @@ msgstr "valide jusqu’au %(until)s"
 
 msgid "view"
 msgstr "voir"
+
+#, python-format
+msgid "vs %(prev)s"
+msgstr "vs %(prev)s"
 
 #, python-format
 msgid "with the email %(email)s, then give yourself your position in"

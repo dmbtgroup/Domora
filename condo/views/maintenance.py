@@ -770,7 +770,9 @@ def routine_done(task_id):
     log = RoutineLog(task=task, done_on=done_on, cost_cents=cost, note=note, done_by_id=current_user.id)
     from .. import work_files
     if cost and request.form.get("record_cost") and current_user.can("accounting_edit"):
-        expense = Expense(spent_on=done_on, category="maintenance", amount_cents=-cost,
+        from ..models import cost_category_for
+        expense = Expense(spent_on=done_on, category=cost_category_for(task.title, task.partner, default="maintenance"),
+                          amount_cents=-cost,
                           description=(f"{task.title}" + (f" — {task.vendor}" if task.vendor else ""))[:255],
                           source=task.vendor, notes=note, recorded_by_id=current_user.id, partner_id=task.partner_id)
         db.session.add(expense)

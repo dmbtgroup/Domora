@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 
 from ..extensions import db
 from ..models import (CHARGE_KINDS, COST_CATEGORIES, PAYMENT_METHOD_LABELS, PAYMENT_METHODS, SYSTEM_CHARGE_KINDS, Charge, Expense, Payment,
-                      BankBalance, Setting, Unit, bank_summary, guess_cost_category)
+                      BankBalance, Setting, Unit, add_months, bank_summary, guess_cost_category)
 from ..utils import admin_required, can_access_unit, can_see_unit_finances, permission_required, parse_date, parse_money
 from ..i18n import fdate, gettext as _
 
@@ -61,7 +61,7 @@ class OwnerPaidCost:
         text = payment.notes or "Purchase"
         self.description = text.split(" — ", 1)[1] if " — " in text else text
         self.cost_cents = payment.amount_cents
-        self.category_key = guess_cost_category(self.description)
+        self.category_key = guess_cost_category(f"{self.description} {payment.notes or ''}")
         if self.category_key == "other":
             self.category_key = "maintenance"
         self.category_label = COST_CATEGORIES[self.category_key]
@@ -250,6 +250,9 @@ def _cost_form(cost):
             from ..models import Partner
             raw = request.form.get("partner_id", "")
             partner = db.session.get(Partner, int(raw)) if raw.isdigit() else None
+            if partner is not None and category in ("maintenance", "other"):
+                from ..models import cost_category_for
+                category = cost_category_for(description, partner, default=category)
             values = dict(spent_on=spent_on, category=category, description=description[:255],
                           amount_cents=amount if refund else -amount,
                           approved_by=request.form.get("approved_by", "").strip()[:255] or None,
@@ -602,3 +605,88 @@ def delete_bank_balance(record_id):
     db.session.commit()
     flash(_("Bank balance deleted."), "success")
     return redirect(url_for("billing.bank"))
+
+
+# --- Performance: where the money goes ---------------------------------------------------------------
+
+# Each category keeps its colour whatever its size (the default validated palette, in its fixed order).
+CATEGORY_COLORS = {"insurance": "s1", "repairs": "s2", "snow": "s3", "utilities": "s4", "maintenance": "s5",
+                   "landscaping": "s6", "cleaning": "s7", "administration": "s8", "other": "other"}
+
+
+def _costs_between(start, end):
+    """Building costs paid between two dates: costs and refunds entered, plus purchases an owner paid
+    (credited to their unit) - the same costs the Costs panel lists."""
+    items = list(db.session.scalars(db.select(Expense).where(Expense.spent_on.between(start, end))))
+    credits = db.session.scalars(db.select(Payment).where(Payment.paid_on.between(start, end),
+                                                          Payment.method == "purchase credit"))
+    return items + [OwnerPaidCost(p) for p in credits]
+
+
+def _by_category(items):
+    out = {}
+    for x in items:
+        out[x.category_key] = out.get(x.category_key, 0) + x.cost_cents
+    return out
+
+
+@bp.route("/performance")
+@login_required
+def performance():
+    """The year's (or last 12 months') income and costs, by category and by month, against the year before.
+    For the board and whoever handles the accounting."""
+    if accounting_scope() != "all":
+        abort(403)
+    today = date.today()
+    span = request.args.get("span", "year")
+    if span == "12m":
+        start = add_months(date(today.year, today.month, 1), -11)
+        end = today
+        label = _("Last 12 months")
+    else:
+        span = "year"
+        raw = request.args.get("year", "")
+        year = int(raw) if raw.isdigit() and 2000 <= int(raw) <= 2100 else today.year
+        start, end = date(year, 1, 1), date(year, 12, 31)
+        label = str(year)
+    prev_start, prev_end = add_months(start, -12), add_months(end, -12)
+
+    items = _costs_between(start, end)
+    prev_items = _costs_between(prev_start, prev_end)
+    cats, prev_cats = _by_category(items), _by_category(prev_items)
+    total, prev_total = sum(cats.values()), sum(prev_cats.values())
+    income = _sum(Payment.amount_cents, Payment.paid_on.between(start, end))
+    prev_income = _sum(Payment.amount_cents, Payment.paid_on.between(prev_start, prev_end))
+
+    ranked = sorted(((k, v) for k, v in cats.items() if v > 0), key=lambda kv: -kv[1])
+    split = ranked[:5]
+    rest = sum(v for _k, v in ranked[5:])
+    if rest > 0:
+        split.append(("_rest", rest))
+    compare = sorted(set(cats) | set(prev_cats), key=lambda k: -(cats.get(k, 0) or prev_cats.get(k, 0)))
+
+    months = []
+    m = date(start.year, start.month, 1)
+    while m <= end and len(months) < 12:
+        nxt = add_months(m, 1)
+        in_month = [x for x in items if m <= x.spent_on < nxt]
+        months.append({"start": m, "income": _sum(Payment.amount_cents, Payment.paid_on >= m, Payment.paid_on < nxt),
+                       "costs": sum(x.cost_cents for x in in_month), "future": m > today,
+                       "top": sorted(_by_category(in_month).items(), key=lambda kv: -kv[1])[:3]})
+        m = nxt
+
+    peak = max([x["income"] for x in months] + [x["costs"] for x in months] + [1])
+    step = next(s for s in (10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 10 ** 12)
+                if s * 4 >= peak)  # four gridlines at round amounts
+    chosen = request.args.get("category", "")
+    chosen_items = sorted([x for x in items if x.category_key == chosen], key=lambda x: (x.spent_on, x.sort_id),
+                          reverse=True) if chosen in COST_CATEGORIES else []
+    bank = bank_summary()
+    years = list(range(today.year, today.year - 6, -1))
+    return render_template("billing/performance.html", span=span, label=label, start=start, end=end, years=years,
+                           year=start.year if span == "year" else None, income=income, prev_income=prev_income,
+                           total=total, prev_total=prev_total, cats=cats, prev_cats=prev_cats, ranked=ranked,
+                           split=split, rest_count=max(len(ranked) - 5, 0), compare=compare, months=months,
+                           chosen=chosen if chosen in COST_CATEGORIES else "", chosen_items=chosen_items, step=step,
+                           labels=COST_CATEGORIES, colors=CATEGORY_COLORS, bank=bank, today=today,
+                           prev_label=(str(start.year - 1) if span == "year" else _("the 12 months before")))

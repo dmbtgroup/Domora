@@ -743,3 +743,44 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .work-file .link-btn.danger { font-size: 1.1rem; line-height: 1; color: var(--muted); }
 .work-file .link-btn.danger:hover { color: var(--danger); }
 .attach-on-update { margin: .2rem 0 .8rem; } .attach-on-update summary { cursor: pointer; }
+
+/* Accounting › Performance. Each cost category keeps its colour; costs in one hue, income in gold. */
+.perf-c-s1 { background: #2a78d6; fill: #2a78d6; } .perf-c-s2 { background: #eb6834; fill: #eb6834; }
+.perf-c-s3 { background: #1baf7a; fill: #1baf7a; } .perf-c-s4 { background: #eda100; fill: #eda100; }
+.perf-c-s5 { background: #e87ba4; fill: #e87ba4; } .perf-c-s6 { background: #008300; fill: #008300; }
+.perf-c-s7 { background: #6250d6; fill: #6250d6; } .perf-c-s8 { background: #e34948; fill: #e34948; }
+.perf-c-other { background: #a39a90; fill: #a39a90; }
+.perf-income { background: var(--gold); fill: var(--gold); } .perf-costs { background: var(--brand-deep); fill: var(--brand-deep); }
+.perf-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; padding: .6rem .9rem; }
+.perf-years { display: flex; gap: .2rem; }
+.perf-years a { padding: .3rem .6rem; border-radius: 7px; color: var(--muted); font-weight: 600; }
+.perf-years a.active { color: var(--text); background: var(--gold-soft); }
+.perf-bar .muted { margin-inline-start: auto; }
+.stat small { font-size: .8rem; }
+.perf-up { color: var(--danger); } .perf-down { color: var(--ok); }
+.perf-split { display: flex; height: 56px; gap: 2px; border-radius: 6px; overflow: hidden; margin-top: .6rem; }
+.perf-split a { display: flex; flex-direction: column; justify-content: center; min-width: 4px; padding: 0 .5rem; color: #fff;
+  font-size: .78rem; line-height: 1.25; white-space: nowrap; overflow: hidden; text-decoration: none; }
+.perf-split a.perf-c-s4, .perf-split a.perf-c-s5, .perf-split a.perf-c-other { color: #1b1410; }
+.perf-split a span { font-weight: 400; }
+.perf-split a[href]:hover { filter: brightness(1.08); }
+.perf-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .85rem; margin-top: .6rem; }
+.perf-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-inline-end: .4rem; vertical-align: -1px; }
+.perf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 0 1.2rem; }
+.perf-rank { display: grid; gap: 2px; }
+.perf-rank a { display: grid; grid-template-columns: 9.5rem 1fr 8.5rem; gap: .8rem; align-items: center; padding: .3rem .4rem;
+  border-radius: 6px; color: var(--text); text-decoration: none; }
+.perf-rank a:hover, .perf-rank a.active { background: var(--gold-soft); }
+.perf-rank-track { height: 14px; }
+.perf-rank-track span { display: block; height: 100%; min-width: 2px; background: var(--brand-deep); border-start-end-radius: 4px; border-end-end-radius: 4px; }
+.perf-months { width: 100%; height: auto; display: block; margin-top: .4rem; }
+.perf-months text { font-size: 12px; fill: var(--muted); }
+.perf-months text.future { opacity: .5; }
+.perf-months .grid { stroke: var(--border); }
+.perf-months .base { stroke: var(--muted); stroke-opacity: .5; }
+.perf-months .hit { fill: transparent; }
+.perf-month:hover .hit { fill: var(--text); fill-opacity: .05; }
+.perf-table { margin-top: .6rem; } .perf-table summary { cursor: pointer; color: var(--muted); font-size: .9rem; }
+@media (max-width: 600px) { .perf-rank a { grid-template-columns: 7rem 1fr 6.5rem; gap: .5rem; } .perf-bar .muted { margin-inline-start: 0; } }
+.stat small span { display: inline; font-size: inherit; font-weight: 600; color: var(--muted); }
+.stat small span.perf-up { color: var(--danger); } .stat small span.perf-down { color: var(--ok); }

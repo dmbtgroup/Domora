@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 17:30+0000\n"
+"POT-Creation-Date: 2026-11-23 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,6 +285,9 @@ msgstr ""
 msgid "1. Units"
 msgstr ""
 
+msgid "12 months"
+msgstr ""
+
 msgid "2. Owner names"
 msgstr ""
 
@@ -540,6 +543,9 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+msgid "All categories"
+msgstr ""
+
 msgid "All notices →"
 msgstr ""
 
@@ -786,6 +792,9 @@ msgid "Bedrooms"
 msgstr ""
 
 msgid "Beds"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Bill the units"
@@ -1086,6 +1095,9 @@ msgstr ""
 msgid "Cleaning"
 msgstr ""
 
+msgid "Click a category to see its costs."
+msgstr ""
+
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
 msgstr ""
 
@@ -1138,6 +1150,10 @@ msgid "Company"
 msgstr ""
 
 msgid "Company or store"
+msgstr ""
+
+#, python-format
+msgid "Compared with %(prev)s"
 msgstr ""
 
 #, python-format
@@ -1236,6 +1252,9 @@ msgid "Cost recorded."
 msgstr ""
 
 msgid "Costs"
+msgstr ""
+
+msgid "Costs by category"
 msgstr ""
 
 #, python-format
@@ -1922,6 +1941,20 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
+msgid "Income"
+msgstr ""
+
+msgid "Income and costs by month"
+msgstr ""
+
+#, python-format
+msgid "Income and costs by month · %(label)s"
+msgstr ""
+
+#, python-format
+msgid "Income · %(label)s"
+msgstr ""
+
 msgid "Insurance"
 msgstr ""
 
@@ -1987,6 +2020,9 @@ msgid "Landscaping"
 msgstr ""
 
 msgid "Language / Langue"
+msgstr ""
+
+msgid "Last 12 months"
 msgstr ""
 
 #, python-format
@@ -2225,6 +2261,9 @@ msgstr ""
 msgid "Net"
 msgstr ""
 
+msgid "Net (income − costs)"
+msgstr ""
+
 msgid "Net (payments − costs)"
 msgstr ""
 
@@ -2360,6 +2399,10 @@ msgstr ""
 
 #, python-format
 msgid "No costs in %(label)s."
+msgstr ""
+
+#, python-format
+msgid "No costs recorded for %(label)s."
 msgstr ""
 
 msgid ""
@@ -2653,6 +2696,12 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+#, python-format
+msgid "Other (%(num)s)"
+msgid_plural "Others (%(num)s)"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Other contact"
 msgstr ""
 
@@ -2684,6 +2733,10 @@ msgid "Owner contacts"
 msgstr ""
 
 msgid "Owner name"
+msgstr ""
+
+#, python-format
+msgid "Owner of unit %(number)s"
 msgstr ""
 
 msgid "Owner to get a quote"
@@ -2880,6 +2933,13 @@ msgid "Per the bank on %(when)s"
 msgstr ""
 
 msgid "Percentages are weighted by how much each vote counts."
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, python-format
+msgid "Performance · %(label)s"
 msgstr ""
 
 msgid "Period"
@@ -3500,6 +3560,9 @@ msgid "Sheet link saved. Preview a sync to check what it will load."
 msgstr ""
 
 msgid "Show"
+msgstr ""
+
+msgid "Show as a table"
 msgstr ""
 
 msgid "Sign in"
@@ -4154,6 +4217,10 @@ msgid ""
 " owner has filed the policy, the others don't need to."
 msgstr ""
 
+#, python-format
+msgid "Where the money went · %(label)s"
+msgstr ""
+
 msgid "Who votes"
 msgstr ""
 
@@ -4413,6 +4480,9 @@ msgstr ""
 msgid "must change at next sign-in"
 msgstr ""
 
+msgid "new"
+msgstr ""
+
 msgid "none of the quotes chosen"
 msgstr ""
 
@@ -4477,6 +4547,9 @@ msgstr ""
 msgid "tenant"
 msgstr ""
 
+msgid "the 12 months before"
+msgstr ""
+
 msgid "the previous page"
 msgstr ""
 
@@ -4507,6 +4580,10 @@ msgid "valid until %(until)s"
 msgstr ""
 
 msgid "view"
+msgstr ""
+
+#, python-format
+msgid "vs %(prev)s"
 msgstr ""
 
 #, python-format

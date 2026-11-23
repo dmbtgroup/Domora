@@ -18,9 +18,11 @@ def bootstrap():
 
     db.create_all()
     upgrade_schema()
-    from .models import link_admin_accounts
+    from .models import link_admin_accounts, recategorize_costs
     if link_admin_accounts():
         db.session.commit()
+    recategorize_costs()
+    db.session.commit()
     email = (os.environ.get("ADMIN_EMAIL") or "").strip().lower()
     password = os.environ.get("ADMIN_PASSWORD") or ""
     if not email or len(password) < 8:

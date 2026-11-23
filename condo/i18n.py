@@ -56,7 +56,7 @@ def init_app(app):
     login_manager.login_message = lazy_gettext("Please sign in to see this page.")
     app.jinja_env.add_extension("jinja2.ext.i18n")
     app.jinja_env.policies["ext.i18n.trimmed"] = True
-    app.jinja_env.filters.update(fdate=fdate, fdatetime=fdatetime, pct=pct)
+    app.jinja_env.filters.update(fdate=fdate, fdatetime=fdatetime, pct=pct, money0=money0)
     app.jinja_env.globals.update(lang=current_language, LANGUAGES=LANGUAGES, _month=month_name)
 
 
@@ -107,6 +107,14 @@ def money(cents):
         whole, frac = divmod(abs(cents), 100)
         return f"{sign}{whole:,}".replace(",", " ") + f",{frac:02d} $"
     return f"{sign}${abs(cents) / 100:,.2f}"
+
+
+def money0(cents):
+    """Whole dollars, for charts: 482050 -> '$4,821' / '4 821 $'."""
+    dollars = round(int(cents or 0) / 100)
+    if current_language() == "fr":
+        return f"{dollars:,}".replace(",", " ") + " $"
+    return f"-${abs(dollars):,}" if dollars < 0 else f"${dollars:,}"
 
 
 def in_language(lang):
