@@ -1,0 +1,25 @@
+# Deploys the public Belcentra home page (site/, belcentra.com) to the Vercel project belcentra-site.
+# Runs when site/ changes on master, or on a push to a site-release/<anything> branch.
+name: Deploy belcentra.com
+
+on:
+  push:
+    branches: [master, "site-release/**"]
+    paths: ["site/**", ".github/workflows/deploy-site.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: belcentra-site
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_nXwzNgaNC6ot9TwAgTTYmUkv
+      VERCEL_PROJECT_ID: prj_58ATbqAkI8jKLquB1BtE6jtzibH7
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install --global vercel@latest
+      - name: Deploy site/
+        run: vercel deploy site --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
