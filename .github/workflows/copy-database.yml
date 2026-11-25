@@ -1,5 +1,5 @@
 # One-off copy of the condo database from Neon to Supabase (Canada).
-# Runs only when a tag named copy-db-<anything> is pushed; a tag named copy-db-replace-<anything>
+# Runs only when a branch named copy-db/<anything> is pushed; a branch named copy-db/replace-<anything>
 # first empties the tables already in Supabase (for a second attempt).
 # Needs two repository secrets, which are never printed:
 #   NEON_DIRECT_URL       Neon's direct (unpooled) connection string
@@ -9,7 +9,7 @@ name: Copy database to Supabase
 
 on:
   push:
-    tags: ["copy-db-*"]
+    branches: ["copy-db/**"]
 
 concurrency:
   group: copy-database
@@ -50,14 +50,14 @@ jobs:
           n=$(psql "$DST" -tAc "SELECT count(*) FROM pg_tables WHERE schemaname = 'public'")
           if [ "$n" -gt 0 ]; then
             case "$GITHUB_REF_NAME" in
-              copy-db-replace-*)
+              copy-db/replace-*)
                 echo "Removing $n tables from a previous attempt"
                 psql "$DST" -v ON_ERROR_STOP=1 -qc "DO \$\$ DECLARE t text; BEGIN
                   FOR t IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
                     EXECUTE format('DROP TABLE IF EXISTS public.%I CASCADE', t); END LOOP;
                   FOR t IN SELECT sequencename FROM pg_sequences WHERE schemaname = 'public' LOOP
                     EXECUTE format('DROP SEQUENCE IF EXISTS public.%I CASCADE', t); END LOOP; END \$\$;" ;;
-              *) echo "::error::Supabase already has $n tables. Push a copy-db-replace-… tag to replace them."; exit 1 ;;
+              *) echo "::error::Supabase already has $n tables. Push a copy-db/replace-… branch to replace them."; exit 1 ;;
             esac
           fi
 
