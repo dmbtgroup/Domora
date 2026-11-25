@@ -27,6 +27,10 @@ jobs:
         run: |
           [ -n "$SRC" ] || { echo "::error::Missing secret NEON_DIRECT_URL"; exit 1; }
           [ -n "$DST" ] || { echo "::error::Missing secret SUPABASE_SESSION_URL"; exit 1; }
+          case "$DST" in
+            *ca-central-1*) echo "Supabase is in Canada (Central)." ;;
+            *) echo "::error::SUPABASE_SESSION_URL is not in ca-central-1 (Canada). Nothing was copied."; exit 1 ;;
+          esac
 
       - name: Install a PostgreSQL client that matches the servers
         run: |
