@@ -48,7 +48,7 @@ def test_home_page_for_visitors_with_sign_in(client):
     page = client.get("/").data.decode()
     assert "all in one place." in page and "Everything your building needs" in page
     assert page.count('action="/login"') == 2 and 'name="csrf_token"' in page
-    assert "sales@dmbtgroup.com" in page and 'class="rail"' not in page
+    assert "sales@belcentra.com" in page and 'class="rail"' not in page
     resp = client.post("/login", data={"email": "alice@test.com", "password": "password123"})
     assert resp.headers["Location"] == "/"
     assert "all in one place." not in client.get("/").data.decode()  # signed in: the dashboard
@@ -310,7 +310,7 @@ def test_installable_as_an_app_and_branded_dmbt(client):
     assert data["display"] == "standalone" and any(i["sizes"] == "512x512" for i in data["icons"])
     page = client.get("/login").data.decode()
     assert 'rel="manifest"' in page and "apple-touch-icon" in page
-    assert "Domora" in page and "by DMBT Group" in page and "support@dmbtgroup.com" in page
+    assert "Belcentra" in page and "by DMBT Group" in page and "support@belcentra.com" in page
 
 
 def test_french_demo_condo_loads_through_the_portal(app):

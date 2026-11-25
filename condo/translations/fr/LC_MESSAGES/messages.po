@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 02:24+0000\n"
+"POT-Creation-Date: 2026-11-25 15:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -769,6 +769,12 @@ msgstr "Chambres"
 msgid "Before"
 msgstr "Avant"
 
+msgid "Belcentra by DMBT Group: accounting, repairs, documents, votes and more for owners and the board."
+msgstr "Belcentra par DMBT Group : comptabilité, réparations, documents, votes et plus pour les copropriétaires et le conseil."
+
+msgid "Belcentra is a product of DMBT Group: a modern platform for smarter condominium management. Tell us about your building."
+msgstr "Belcentra est un produit de DMBT Group : une plateforme moderne pour une gestion de copropriété plus intelligente. Parlez-nous de votre immeuble."
+
 msgid "Bill the units"
 msgstr "Facturer les unités"
 
@@ -1427,12 +1433,6 @@ msgstr "Documents et assurances"
 
 msgid "Documents: see all documents, including managers-only ones"
 msgstr "Documents : voir tous les documents, y compris ceux réservés aux gestionnaires"
-
-msgid "Domora by DMBT Group: accounting, repairs, documents, votes and more for owners and the board."
-msgstr "Domora par DMBT Group : comptabilité, réparations, documents, votes et plus pour les copropriétaires et le conseil."
-
-msgid "Domora is a product of DMBT Group: a modern platform for smarter condominium management. Tell us about your building."
-msgstr "Domora est un produit de DMBT Group : une plateforme moderne pour une gestion de copropriété plus intelligente. Parlez-nous de votre immeuble."
 
 msgid "Done"
 msgstr "Terminé"
@@ -2176,8 +2176,8 @@ msgstr "Le nom est obligatoire."
 msgid "Names differ between the workbook's sheets. These come from the monthly-fee table; correct them before loading."
 msgstr "Les noms diffèrent d’un onglet à l’autre du classeur. Ceux-ci viennent du tableau des frais mensuels; corrigez-les avant le chargement."
 
-msgid "Need help? Contact DMBT support:"
-msgstr "Besoin d’aide? Communiquez avec le soutien DMBT :"
+msgid "Need help? Contact Belcentra support:"
+msgstr "Besoin d’aide? Communiquez avec le soutien Belcentra :"
 
 msgid "Net"
 msgstr "Net"

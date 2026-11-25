@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf %}
 {% from "_icons.html" import icon %}
-{% block head_title %}Domora · {% trans %}Property management, reimagined.{% endtrans %}{% endblock %}
+{% block head_title %}Belcentra · {% trans %}Property management, reimagined.{% endtrans %}{% endblock %}
 {% block body_class %} home-page{% endblock %}
 
 {% macro signin_form(prefix) %}
@@ -19,7 +19,7 @@
 <header class="home-head">
   <a class="home-brand" href="{{ url_for('dashboard.index') }}">
     <img src="{{ url_for('static', filename='brand/logo-96.png') }}" alt="">
-    <span><strong class="wordmark">DOMORA</strong><small>{% trans %}by DMBT Group{% endtrans %}</small></span>
+    <span><strong class="wordmark">BELCENTRA</strong><small>{% trans %}by DMBT Group{% endtrans %}</small></span>
   </a>
   <nav class="home-nav">
     <a href="#features" class="hide-sm">{% trans %}Features{% endtrans %}</a>
@@ -45,7 +45,7 @@
 
   <section class="home-hero">
     <div class="home-hero-text">
-      <p class="eyebrow">Domora · {% trans %}Property management, reimagined.{% endtrans %}</p>
+      <p class="eyebrow">Belcentra · {% trans %}Property management, reimagined.{% endtrans %}</p>
       <h1>{% trans %}Your building,{% endtrans %}<br><span>{% trans %}all in one place.{% endtrans %}</span></h1>
       <p class="lead">{% trans %}Condo fees, payments, repairs, documents and votes for owners, residents and the board — in English and French, on any device.{% endtrans %}</p>
       <div class="card home-card" id="signin">
@@ -103,11 +103,11 @@
 
   <section class="home-contact" id="contact">
     <h2>{% trans %}Want this for your building?{% endtrans %}</h2>
-    <p class="muted">{% trans %}Domora is a product of DMBT Group: a modern platform for smarter condominium management. Tell us about your building.{% endtrans %}</p>
+    <p class="muted">{% trans %}Belcentra is a product of DMBT Group: a modern platform for smarter condominium management. Tell us about your building.{% endtrans %}</p>
     <div class="home-contact-grid">
-      <a class="card" href="mailto:sales@dmbtgroup.com"><span class="muted small">{% trans %}Sales{% endtrans %}</span><strong>sales@dmbtgroup.com</strong></a>
+      <a class="card" href="mailto:sales@belcentra.com"><span class="muted small">{% trans %}Sales{% endtrans %}</span><strong>sales@belcentra.com</strong></a>
       <a class="card" href="tel:+16478739585"><span class="muted small">{% trans %}Phone{% endtrans %}</span><strong>+1 647 873 9585</strong></a>
-      <a class="card" href="https://dmbtgroup.com" target="_blank" rel="noopener"><span class="muted small">DMBT</span><strong>dmbtgroup.com</strong></a>
+      <a class="card" href="https://belcentra.com" target="_blank" rel="noopener"><span class="muted small">{% trans %}Website{% endtrans %}</span><strong>belcentra.com</strong></a>
     </div>
   </section>
 </main>
@@ -115,8 +115,8 @@
 
 {% block footer %}
 <footer class="site-footer">
-  <span><strong>Domora</strong> {% trans %}by DMBT Group{% endtrans %} · © {{ year }} Development Management and Business Tact</span>
-  <a href="mailto:support@dmbtgroup.com">✉︎ support@dmbtgroup.com</a>
+  <span><strong>Belcentra</strong> {% trans %}by DMBT Group{% endtrans %} · © {{ year }} Development Management and Business Tact</span>
+  <a href="mailto:support@belcentra.com">✉︎ support@belcentra.com</a>
   <a href="tel:+16478739585">☏︎ +1 647 873 9585</a>
 </footer>
 {% endblock %}

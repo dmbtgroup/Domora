@@ -160,7 +160,7 @@ def create_app(test_config=None):
         from .i18n import gettext as _
         name = app.config["CONDO_NAME"]
         resp = jsonify({
-            "name": name, "short_name": "Domora", "description": _("A modern platform for smarter condominium management."),
+            "name": name, "short_name": "Belcentra", "description": _("A modern platform for smarter condominium management."),
             "start_url": "/", "scope": "/", "display": "standalone", "orientation": "any",
             "background_color": "#FAF7F2", "theme_color": "#E8612C",
             "icons": [

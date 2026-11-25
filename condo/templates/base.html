@@ -18,7 +18,7 @@
     };
   </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <meta name="description" content="{{ _('Domora by DMBT Group: accounting, repairs, documents, votes and more for owners and the board.') }}">
+  <meta name="description" content="{{ _('Belcentra by DMBT Group: accounting, repairs, documents, votes and more for owners and the board.') }}">
   <meta name="theme-color" content="#E8612C">
   <link rel="manifest" href="{{ url_for('manifest') }}">
   <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='icons/favicon-48.png') }}">
@@ -26,10 +26,10 @@
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Domora">
+  <meta name="apple-mobile-web-app-title" content="Belcentra">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta property="og:title" content="{{ condo_name }}">
-  <meta property="og:site_name" content="Domora">
+  <meta property="og:site_name" content="Belcentra">
   <meta property="og:description" content="{{ _('A modern platform for smarter condominium management.') }}">
   <meta property="og:image" content="{{ url_for('static', filename='icons/icon-512.png', _external=True) }}">
 </head>
@@ -121,12 +121,12 @@ document.addEventListener('keydown', function (e) {
 {% endblock %}
 {% block footer %}
 <footer class="site-footer">
-  <span><strong>Domora</strong> {% trans %}by DMBT Group{% endtrans %}</span>
+  <span><strong>Belcentra</strong> {% trans %}by DMBT Group{% endtrans %}</span>
   <span class="dot" aria-hidden="true">·</span>
-  <span>{% trans %}Need help? Contact DMBT support:{% endtrans %}</span>
-  <a href="mailto:support@dmbtgroup.com">✉︎ support@dmbtgroup.com</a>
+  <span>{% trans %}Need help? Contact Belcentra support:{% endtrans %}</span>
+  <a href="mailto:support@belcentra.com">✉︎ support@belcentra.com</a>
   <a href="tel:+16478739585">☏︎ +1 647 873 9585</a>
-  <a href="https://dmbtgroup.com" target="_blank" rel="noopener">dmbtgroup.com</a>
+  <a href="https://belcentra.com" target="_blank" rel="noopener">belcentra.com</a>
 </footer>
 {% endblock %}
 <script src="{{ url_for('static', filename='uploads.js') }}" defer></script>
