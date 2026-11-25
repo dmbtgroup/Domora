@@ -64,6 +64,7 @@ Then open http://127.0.0.1:5000 and sign in with a demo account:
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | — | When no manager account exists yet, one is created from these at start-up |
 | `CRON_SECRET` | — | Bearer token Vercel Cron sends to `/sheet/cron` |
 | `AUTO_INIT_DB` | on when running on Vercel | Create tables (and the first manager) at start-up |
+| `APP_DATABASE_URL` | — | Overrides `DATABASE_URL` (e.g. a Preview on another database while an integration owns `DATABASE_URL`) |
 | `READ_ONLY` | — | Maintenance window: pages show, nothing can be saved and the cron does nothing |
 
 `postgres://` and `postgresql://` URLs are used with the psycopg 3 driver. Connections are encrypted

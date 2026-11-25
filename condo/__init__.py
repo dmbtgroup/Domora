@@ -6,13 +6,15 @@ from .extensions import csrf, db, login_manager
 
 
 def _database_url(instance_path):
-    """Pick the database URL from DATABASE_URL.
+    """Pick the database URL: APP_DATABASE_URL if set (lets a Preview use another database while
+    DATABASE_URL still belongs to a hosting integration), otherwise DATABASE_URL.
 
     Without one, falls back to a local SQLite file; on Vercel, where the code
     directory is read-only, that file lives in /tmp and is NOT persistent.
     """
-    url = os.environ.get("DATABASE_URL")
+    url = (os.environ.get("APP_DATABASE_URL") or os.environ.get("DATABASE_URL") or "").strip()
     if url:
+        url = _drop_query_params(url, {"pgbouncer"})  # a hint some poolers' links carry; psycopg rejects it
         # SQLAlchemy needs an explicit driver for psycopg 3.
         for prefix in ("postgres://", "postgresql://"):
             if url.startswith(prefix):
@@ -20,6 +22,15 @@ def _database_url(instance_path):
         return url
     folder = "/tmp" if os.environ.get("VERCEL") else instance_path
     return "sqlite:///" + os.path.join(folder, "condo.db")
+
+
+def _drop_query_params(url, names):
+    from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+    parts = urlsplit(url)
+    if not parts.query:
+        return url
+    kept = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k not in names]
+    return urlunsplit(parts._replace(query=urlencode(kept)))
 
 
 def _engine_options(url, serverless):

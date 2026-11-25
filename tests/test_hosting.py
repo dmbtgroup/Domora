@@ -13,8 +13,20 @@ def test_sqlite_is_untouched():
     assert _engine_options("sqlite:////tmp/x.db", serverless=True) == {"pool_pre_ping": True}
 
 
+def test_app_database_url_wins_and_pooler_hints_are_dropped(monkeypatch, tmp_path):
+    from condo import _database_url
+    monkeypatch.setenv("DATABASE_URL", "postgresql://u:p@neon.example/db")
+    monkeypatch.setenv("APP_DATABASE_URL", "postgres://u:p@aws-0-ca-central-1.pooler.supabase.com:6543/postgres?pgbouncer=true")
+    assert _database_url(str(tmp_path)) == "postgresql+psycopg://u:p@aws-0-ca-central-1.pooler.supabase.com:6543/postgres"
+    monkeypatch.setenv("APP_DATABASE_URL", "postgresql://u:p@h/db?sslmode=verify-full&pgbouncer=true")
+    assert _database_url(str(tmp_path)).endswith("/db?sslmode=verify-full")
+    monkeypatch.delenv("APP_DATABASE_URL")
+    assert _database_url(str(tmp_path)) == "postgresql+psycopg://u:p@neon.example/db"
+
+
 def test_only_database_url_is_read(monkeypatch, tmp_path):
     monkeypatch.delenv("DATABASE_URL", raising=False)
+    monkeypatch.delenv("APP_DATABASE_URL", raising=False)
     monkeypatch.setenv("POSTGRES_URL", "postgresql://u:p@old.example/db")
     from condo import _database_url
     assert _database_url(str(tmp_path)).startswith("sqlite:///")
