@@ -21,7 +21,6 @@ jobs:
     env:
       SRC: ${{ secrets.NEON_DIRECT_URL }}
       DST: ${{ secrets.SUPABASE_SESSION_URL }}
-      DUMP: ${{ runner.temp }}/condo.dump
     steps:
       - name: Check the secrets are set
         run: |
@@ -63,13 +62,13 @@ jobs:
 
       - name: Dump from Neon
         run: |
-          pg_dump --no-owner --no-privileges --schema=public --format=custom -d "$SRC" -f "$DUMP"
-          echo "Dump size: $(du -h "$DUMP" | cut -f1)"
+          pg_dump --no-owner --no-privileges --schema=public --format=custom -d "$SRC" -f "$RUNNER_TEMP/condo.dump"
+          echo "Dump size: $(du -h "$RUNNER_TEMP/condo.dump" | cut -f1)"
 
       - name: Restore into Supabase
         run: |
           set +e
-          pg_restore --no-owner --no-privileges --schema=public -d "$DST" "$DUMP" 2> "$RUNNER_TEMP/restore.log"
+          pg_restore --no-owner --no-privileges --schema=public -d "$DST" "$RUNNER_TEMP/condo.dump" 2> "$RUNNER_TEMP/restore.log"
           code=$?
           set -e
           # Show errors without their CONTEXT lines, which can quote row data.
@@ -113,4 +112,4 @@ jobs:
 
       - name: Delete the dump
         if: always()
-        run: rm -f "$DUMP"
+        run: rm -f "$RUNNER_TEMP/condo.dump"
