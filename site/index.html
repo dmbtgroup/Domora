@@ -24,7 +24,7 @@ a:hover { text-decoration: underline; }
 header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 0; }
 .brand { display: flex; align-items: center; gap: 12px; color: inherit; }
 .brand:hover { text-decoration: none; }
-.brand img { width: 56px; height: auto; }
+.brand img { width: 64px; height: auto; display: block; }
 .brand strong { display: block; letter-spacing: .14em; font-size: 1.2rem; color: var(--gold-ink); }
 .brand small { color: var(--muted); font-weight: 600; }
 .lang { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--surface); }
@@ -69,7 +69,7 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
 <body>
 <div class="wrap">
   <header>
-    <a class="brand" href="/"><img src="/logo.png" alt=""><span><strong>BELCENTRA</strong><small data-en>by DMBT Group</small><small data-fr>par DMBT Group</small></span></a>
+    <a class="brand" href="/"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="/logo-anim.webp" type="image/webp"><img src="/logo.png" alt=""></picture><span><strong>BELCENTRA</strong><small data-en>by DMBT Group</small><small data-fr>par DMBT Group</small></span></a>
     <div class="lang" role="group" aria-label="Language / Langue">
       <button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="fr" aria-pressed="false">FR</button>
     </div>

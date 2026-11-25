@@ -55,7 +55,9 @@
       </div>
     </div>
     <div class="home-hero-art" aria-hidden="true">
-      <div class="home-art-logo"><img src="{{ url_for('static', filename='brand/logo-240.png') }}" alt=""></div>
+      <div class="home-art-logo"><picture>
+        <source media="(prefers-reduced-motion: no-preference)" srcset="{{ url_for('static', filename='brand/logo-anim.webp') }}" type="image/webp">
+        <img src="{{ url_for('static', filename='brand/logo-240.png') }}" alt=""></picture></div>
       <div class="home-art-card a">
         <span class="muted small">{% trans %}Condo fees{% endtrans %}</span>
         <strong>{% trans %}Paid this month{% endtrans %}</strong>
