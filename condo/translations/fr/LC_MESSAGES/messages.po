@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-23 13:47+0000\n"
+"POT-Creation-Date: 2026-11-25 02:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -2052,6 +2052,9 @@ msgstr "Menu principal"
 msgid "Maintenance"
 msgstr "Entretien"
 
+msgid "Maintenance in progress: you can look around, but changes can’t be saved for a few minutes."
+msgstr "Maintenance en cours : vous pouvez consulter le portail, mais les changements ne peuvent pas être enregistrés pendant quelques minutes."
+
 msgid "Maintenance request submitted."
 msgstr "Demande d’entretien envoyée."
 
@@ -3678,6 +3681,9 @@ msgstr "Une soumission a été demandée au copropriétaire."
 
 msgid "The password must be at least 8 characters."
 msgstr "Le mot de passe doit contenir au moins 8 caractères."
+
+msgid "The portal is being moved and is read-only for a few minutes. Please try again shortly."
+msgstr "Le portail est en cours de déménagement et ne peut pas être modifié pendant quelques minutes. Veuillez réessayer sous peu."
 
 msgid "The request was closed and points to it."
 msgstr "La demande a été fermée et y renvoie."

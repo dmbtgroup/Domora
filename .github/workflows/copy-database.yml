@@ -1,0 +1,112 @@
+# One-off copy of the condo database from Neon to Supabase (Canada).
+# Runs only when a tag named copy-db-<anything> is pushed; a tag named copy-db-replace-<anything>
+# first empties the tables already in Supabase (for a second attempt).
+# Needs two repository secrets, which are never printed:
+#   NEON_DIRECT_URL       Neon's direct (unpooled) connection string
+#   SUPABASE_SESSION_URL  Supabase's session pooler connection string (port 5432)
+# The dump only exists on the runner for the length of the job and is deleted at the end.
+name: Copy database to Supabase
+
+on:
+  push:
+    tags: ["copy-db-*"]
+
+concurrency:
+  group: copy-database
+  cancel-in-progress: false
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    env:
+      SRC: ${{ secrets.NEON_DIRECT_URL }}
+      DST: ${{ secrets.SUPABASE_SESSION_URL }}
+      DUMP: ${{ runner.temp }}/condo.dump
+    steps:
+      - name: Check the secrets are set
+        run: |
+          [ -n "$SRC" ] || { echo "::error::Missing secret NEON_DIRECT_URL"; exit 1; }
+          [ -n "$DST" ] || { echo "::error::Missing secret SUPABASE_SESSION_URL"; exit 1; }
+
+      - name: Install a PostgreSQL client that matches the servers
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-common >/dev/null
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y >/dev/null
+          sudo apt-get install -y -qq postgresql-client-17 >/dev/null
+          export PATH=/usr/lib/postgresql/17/bin:$PATH
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+          echo "Neon:     $(psql "$SRC" -tAc 'SHOW server_version')"
+          echo "Supabase: $(psql "$DST" -tAc 'SHOW server_version')"
+          src=$(psql "$SRC" -tAc 'SHOW server_version_num'); dst=$(psql "$DST" -tAc 'SHOW server_version_num')
+          [ "${src:0:2}" -le "${dst:0:2}" ] || { echo "::error::Supabase runs an older Postgres than Neon"; exit 1; }
+          [ "${src:0:2}" -le 17 ] || { echo "::error::Neon runs Postgres newer than 17: update this job"; exit 1; }
+
+      - name: Make sure Supabase is empty
+        run: |
+          n=$(psql "$DST" -tAc "SELECT count(*) FROM pg_tables WHERE schemaname = 'public'")
+          if [ "$n" -gt 0 ]; then
+            case "$GITHUB_REF_NAME" in
+              copy-db-replace-*)
+                echo "Removing $n tables from a previous attempt"
+                psql "$DST" -v ON_ERROR_STOP=1 -qc "DO \$\$ DECLARE t text; BEGIN
+                  FOR t IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
+                    EXECUTE format('DROP TABLE IF EXISTS public.%I CASCADE', t); END LOOP;
+                  FOR t IN SELECT sequencename FROM pg_sequences WHERE schemaname = 'public' LOOP
+                    EXECUTE format('DROP SEQUENCE IF EXISTS public.%I CASCADE', t); END LOOP; END \$\$;" ;;
+              *) echo "::error::Supabase already has $n tables. Push a copy-db-replace-… tag to replace them."; exit 1 ;;
+            esac
+          fi
+
+      - name: Dump from Neon
+        run: |
+          pg_dump --no-owner --no-privileges --schema=public --format=custom -d "$SRC" -f "$DUMP"
+          echo "Dump size: $(du -h "$DUMP" | cut -f1)"
+
+      - name: Restore into Supabase
+        run: |
+          set +e
+          pg_restore --no-owner --no-privileges --schema=public -d "$DST" "$DUMP" 2> "$RUNNER_TEMP/restore.log"
+          code=$?
+          set -e
+          # Show errors without their CONTEXT lines, which can quote row data.
+          grep -E '^pg_restore: (error|warning)' "$RUNNER_TEMP/restore.log" | grep -v 'CONTEXT' | cut -c1-300 || true
+          rm -f "$RUNNER_TEMP/restore.log"
+          echo "pg_restore exit code: $code (checked by the row counts below)"
+
+      - name: Compare row counts table by table
+        run: |
+          bad=0
+          for t in $(psql "$SRC" -tAc "SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY 1"); do
+            a=$(psql "$SRC" -tAc "SELECT count(*) FROM public.\"$t\"")
+            b=$(psql "$DST" -tAc "SELECT count(*) FROM public.\"$t\"" 2>/dev/null || echo missing)
+            if [ "$a" = "$b" ]; then printf '%-32s %8s  ok\n' "$t" "$a"; else printf '%-32s %8s  %8s  MISMATCH\n' "$t" "$a" "$b"; bad=1; fi
+          done
+          [ "$bad" = 0 ] || { echo "::error::Row counts differ"; exit 1; }
+
+      - name: Set sequences past the highest id
+        run: |
+          psql "$DST" -v ON_ERROR_STOP=1 -qc "DO \$\$ DECLARE r record; m bigint; BEGIN
+            FOR r IN SELECT s.relname AS seq, t.relname AS tbl, a.attname AS col
+                     FROM pg_class s JOIN pg_namespace n ON n.oid = s.relnamespace
+                     JOIN pg_depend d ON d.objid = s.oid AND d.deptype IN ('a', 'i')
+                     JOIN pg_class t ON t.oid = d.refobjid
+                     JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid
+                     WHERE s.relkind = 'S' AND n.nspname = 'public' LOOP
+              EXECUTE format('SELECT max(%I) FROM public.%I', r.col, r.tbl) INTO m;
+              IF m IS NOT NULL THEN
+                PERFORM setval(format('public.%I', r.seq), GREATEST(m, COALESCE(
+                  (SELECT last_value FROM pg_sequences WHERE schemaname = 'public' AND sequencename = r.seq), 1)));
+              END IF;
+            END LOOP; END \$\$;"
+          echo "Sequences checked."
+
+      - name: Turn on row-level security on every table (hides them from Supabase's web API)
+        run: |
+          psql "$DST" -v ON_ERROR_STOP=1 -qc "DO \$\$ DECLARE t text; BEGIN
+            FOR t IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND NOT rowsecurity LOOP
+              EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t); END LOOP; END \$\$;"
+          psql "$DST" -tAc "SELECT count(*) || ' tables, ' || count(*) FILTER (WHERE rowsecurity) || ' with RLS' FROM pg_tables WHERE schemaname = 'public'"
+
+      - name: Delete the dump
+        if: always()
+        run: rm -f "$DUMP"

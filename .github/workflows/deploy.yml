@@ -1,10 +1,11 @@
-# Deploys Domora to Vercel (condo.dmbtgroup.com) on every push to master.
+# Deploys to Vercel on every push to master (production), or on a preview-<anything> tag (a Preview deploy).
 # Needs one repository secret: VERCEL_TOKEN (a Vercel access token for the artedelara team).
 name: Deploy to Vercel
 
 on:
   push:
     branches: [master]
+    tags: ["preview-*"]
   workflow_dispatch:
 
 concurrency:
@@ -42,11 +43,12 @@ jobs:
           fi
       - run: npm install --global vercel@latest
       - name: Deploy (Vercel builds it, like a Git deploy)
-        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy ${{ github.ref_type == 'tag' && '' || '--prod' }} --yes --token=${{ secrets.VERCEL_TOKEN }}
 
   # The French demo condo (Vercel project domora-demo): the same code with DEMO=1 and no database.
   deploy-demo:
     needs: test
+    if: github.ref_type != 'tag'
     runs-on: ubuntu-latest
     env:
       VERCEL_PROJECT_ID: prj_eoJN8ti0ApsDHU0XyWFIgAOkrhmI

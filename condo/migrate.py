@@ -87,3 +87,20 @@ def upgrade_schema():
             table = sql.split()[1]
             if table in tables:
                 conn.execute(text(sql))
+        lock_down_public_tables(conn)
+
+
+def lock_down_public_tables(conn):
+    """Postgres: turn on row-level security on every table in the public schema, with no policies.
+
+    The app connects as the tables' owner, which RLS doesn't restrict, so the app works as before;
+    any other role (e.g. Supabase's automatic web API) sees no rows. Repeated on each start-up so new
+    tables are covered too."""
+    if conn.dialect.name != "postgresql":
+        return
+    names = conn.execute(text("SELECT c.relname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace "
+                              "WHERE n.nspname = 'public' AND c.relkind = 'r' AND NOT c.relrowsecurity "
+                              "AND pg_get_userbyid(c.relowner) = current_user")).scalars().all()
+    preparer = conn.dialect.identifier_preparer
+    for name in names:
+        conn.execute(text(f"ALTER TABLE public.{preparer.quote(name)} ENABLE ROW LEVEL SECURITY"))

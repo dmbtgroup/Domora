@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-23 13:47+0000\n"
+"POT-Creation-Date: 2026-11-25 02:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2130,6 +2130,11 @@ msgstr ""
 msgid "Maintenance"
 msgstr ""
 
+msgid ""
+"Maintenance in progress: you can look around, but changes can’t be saved "
+"for a few minutes."
+msgstr ""
+
 msgid "Maintenance request submitted."
 msgstr ""
 
@@ -3813,6 +3818,11 @@ msgid "The owner has been asked for a quote."
 msgstr ""
 
 msgid "The password must be at least 8 characters."
+msgstr ""
+
+msgid ""
+"The portal is being moved and is read-only for a few minutes. Please try "
+"again shortly."
 msgstr ""
 
 msgid "The request was closed and points to it."

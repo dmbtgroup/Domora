@@ -102,6 +102,7 @@ document.addEventListener('keydown', function (e) {
 </div>
 {% endif %}
 {% if demo %}<div class="banner">{% trans %}Demo: a made-up condo to try the portal. Changes may be reset at any time.{% endtrans %}</div>
+{% elif read_only %}<div class="banner">{% trans %}Maintenance in progress: you can look around, but changes can’t be saved for a few minutes.{% endtrans %}</div>
 {% elif ephemeral_db %}<div class="banner">{% trans %}No database is connected, so changes are temporary and will be lost. Connect a Postgres database (DATABASE_URL) to keep data.{% endtrans %}</div>{% endif %}
 {% if current_user.is_authenticated and current_user.is_temp_admin and not current_user.is_board %}
 <div class="banner">{% trans %}You're using the temporary administrator account. To make it your own: add yourself in{% endtrans %}

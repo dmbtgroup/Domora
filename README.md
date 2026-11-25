@@ -64,8 +64,13 @@ Then open http://127.0.0.1:5000 and sign in with a demo account:
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | — | When no manager account exists yet, one is created from these at start-up |
 | `CRON_SECRET` | — | Bearer token Vercel Cron sends to `/sheet/cron` |
 | `AUTO_INIT_DB` | on when running on Vercel | Create tables (and the first manager) at start-up |
+| `READ_ONLY` | — | Maintenance window: pages show, nothing can be saved and the cron does nothing |
 
-`postgres://` and `postgresql://` URLs, including the `POSTGRES_URL` that the Neon integration sets, are used automatically with the psycopg 3 driver.
+`postgres://` and `postgresql://` URLs are used with the psycopg 3 driver. Connections are encrypted
+(`sslmode=require` unless the URL says otherwise) and work behind a transaction pooler such as Supabase's
+port 6543 (no prepared statements; on Vercel, no client-side pool). At start-up every table in the `public`
+schema gets row-level security turned on, so nothing is exposed through Supabase's web API; the app
+connects as the tables' owner and isn't affected.
 
 ## Google Sheet sync
 
@@ -117,7 +122,8 @@ The compiled `messages.mo` is committed, so the server needs no build step.
 `app.py` exposes the Flask app; Vercel detects it and runs it with its Flask runtime.
 
 1. Import the GitHub repository as a Vercel project.
-2. Under **Storage**, connect a Neon Postgres database to the project. This sets `DATABASE_URL`. Without a database the site still runs, but on a temporary SQLite file in `/tmp` that gets wiped, and a warning banner is shown.
+2. Create a Postgres database in Canada (Supabase, region Canada (Central)) and set `DATABASE_URL` to its
+   transaction pooler connection string (port 6543). Functions run in Montréal (`yul1`, in `vercel.json`). Without a database the site still runs, but on a temporary SQLite file in `/tmp` that gets wiped, and a warning banner is shown.
 3. Set `SECRET_KEY`, `CONDO_NAME`, `ADMIN_EMAIL` and `ADMIN_PASSWORD`, then redeploy.
 4. Add the custom domain. If its DNS is hosted elsewhere, create a `CNAME` record pointing to `cname.vercel-dns.com`.
 5. Sign in with the admin account and change its password under **My profile**.

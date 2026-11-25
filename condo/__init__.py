@@ -6,13 +6,12 @@ from .extensions import csrf, db, login_manager
 
 
 def _database_url(instance_path):
-    """Pick the database URL.
+    """Pick the database URL from DATABASE_URL.
 
-    Uses DATABASE_URL (or POSTGRES_URL, which the Vercel/Neon integration sets).
     Without one, falls back to a local SQLite file; on Vercel, where the code
     directory is read-only, that file lives in /tmp and is NOT persistent.
     """
-    url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL")
+    url = os.environ.get("DATABASE_URL")
     if url:
         # SQLAlchemy needs an explicit driver for psycopg 3.
         for prefix in ("postgres://", "postgresql://"):
@@ -21,6 +20,21 @@ def _database_url(instance_path):
         return url
     folder = "/tmp" if os.environ.get("VERCEL") else instance_path
     return "sqlite:///" + os.path.join(folder, "condo.db")
+
+
+def _engine_options(url, serverless):
+    """Connection settings. On Postgres: always encrypted, and safe behind a transaction pooler
+    (Supabase's port 6543), which can't keep server-side prepared statements between requests."""
+    options = {"pool_pre_ping": True}
+    if url.startswith("postgresql"):
+        connect_args = {"prepare_threshold": None}
+        if "sslmode=" not in url and "@localhost" not in url and "@127.0.0.1" not in url:
+            connect_args["sslmode"] = "require"
+        options["connect_args"] = connect_args
+        if serverless:
+            from sqlalchemy.pool import NullPool
+            options = {"poolclass": NullPool, "connect_args": connect_args}  # the pooler does the pooling
+    return options
 
 
 def create_app(test_config=None):
@@ -34,15 +48,16 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev-change-me"),
         SQLALCHEMY_DATABASE_URI=_database_url(app.instance_path),
-        SQLALCHEMY_ENGINE_OPTIONS={"pool_pre_ping": True},
         CONDO_NAME=os.environ.get("CONDO_NAME", "Maple Court Condominiums"),
         SESSION_COOKIE_SECURE=on_vercel,
         REMEMBER_COOKIE_SECURE=on_vercel,
         MAX_CONTENT_LENGTH=4 * 1024 * 1024,  # Vercel's request body limit is 4.5 MB
         AUTO_INIT_DB=on_vercel or bool(os.environ.get("AUTO_INIT_DB")),
+        READ_ONLY=bool(os.environ.get("READ_ONLY")),  # maintenance window: pages show, nothing can be saved
     )
     if test_config:
         app.config.update(test_config)
+    app.config.setdefault("SQLALCHEMY_ENGINE_OPTIONS", _engine_options(app.config["SQLALCHEMY_DATABASE_URI"], on_vercel))
     app.config["EPHEMERAL_DB"] = on_vercel and app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite")
 
     db.init_app(app)
@@ -113,7 +128,7 @@ def create_app(test_config=None):
         from datetime import date
 
         from .navigation import back_link
-        return {"condo_name": app.config["CONDO_NAME"], "ephemeral_db": app.config["EPHEMERAL_DB"],
+        return {"condo_name": app.config["CONDO_NAME"], "ephemeral_db": app.config["EPHEMERAL_DB"], "read_only": app.config["READ_ONLY"],
                 "demo": app.config.get("DEMO"),
                 "back": back_link(), "unread": _unread(),
                 "today": date.today(), "nav_board": _nav_board(),
@@ -153,6 +168,13 @@ def create_app(test_config=None):
 
     for code in messages:
         app.register_error_handler(code, handle_error)
+
+    @app.before_request
+    def read_only_window():
+        from flask import request
+        if app.config["READ_ONLY"] and (request.method not in ("GET", "HEAD", "OPTIONS") or request.path == "/sheet/cron"):
+            return render_template("error.html", code=503, message=_l(
+                "The portal is being moved and is read-only for a few minutes. Please try again shortly.")), 503
 
     if app.config["AUTO_INIT_DB"]:
         from .cli import bootstrap

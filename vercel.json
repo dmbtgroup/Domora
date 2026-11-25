@@ -1,3 +1,4 @@
 {
+  "regions": ["yul1"],
   "crons": [{ "path": "/sheet/cron", "schedule": "*/10 * * * *" }]
 }
