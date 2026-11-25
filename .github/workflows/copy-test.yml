@@ -1,0 +1,78 @@
+# Rehearses the database copy with made-up data: the demo condo in a throwaway Postgres 18
+# (like Neon), copied into a throwaway Postgres 17 (like Supabase), then the app runs on the copy.
+# Runs on a push to a copy-test/<anything> branch. Uses no secrets and no real data.
+name: Rehearse the database copy
+
+on:
+  push:
+    branches: ["copy-test/**"]
+
+jobs:
+  rehearse:
+    runs-on: ubuntu-latest
+    services:
+      neon_like:
+        image: postgres:18
+        env: { POSTGRES_PASSWORD: test }
+        ports: ["5418:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 20
+      supabase_like:
+        image: postgres:17
+        env: { POSTGRES_PASSWORD: test }
+        ports: ["5417:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 20
+    env:
+      SRC: postgresql://postgres:test@localhost:5418/postgres
+      DST: postgresql://postgres:test@localhost:5417/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Install the PostgreSQL 18 client
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y >/dev/null
+          sudo apt-get install -y -qq postgresql-client-18 >/dev/null
+          echo "/usr/lib/postgresql/18/bin" >> "$GITHUB_PATH"
+
+      - name: Fill the Postgres 18 database with the demo condo (plus a stored file)
+        run: |
+          DEMO=1 CONDO_NAME=Test DATABASE_URL="$SRC" python -c "from condo import create_app; create_app()"
+          psql "$SRC" -v ON_ERROR_STOP=1 -qc "INSERT INTO stored_file (filename, content_type, data, size, created_at)
+            SELECT 'test.pdf', 'application/pdf', decode(repeat('25504446', 5000), 'hex'), 20000, now()"
+
+      - name: Copy 18 → 17
+        run: scripts/copy_database.sh
+
+      - name: A second copy is refused, then replace mode works
+        run: |
+          if scripts/copy_database.sh; then echo "::error::A second copy should have been refused"; exit 1; fi
+          MODE=replace scripts/copy_database.sh
+
+      - name: The app works on the copy (reads, writes, files)
+        run: |
+          DATABASE_URL="$DST" CONDO_NAME=Test python - <<'PY'
+          from condo import create_app
+          from condo.extensions import db
+          from condo.models import Announcement, StoredFile
+          app = create_app({"WTF_CSRF_ENABLED": False})
+          c = app.test_client()
+          assert c.post("/login", data={"email": "conseil@jardinsduparc.example", "password": "Demo2026!"}).status_code == 302
+          for path in ("/", "/units/", "/accounting/", "/accounting/performance", "/maintenance/", "/maintenance/partners/", "/votes/"):
+              r = c.get(path)
+              assert r.status_code == 200, (path, r.status_code)
+          before = None
+          with app.app_context():
+              before = db.session.scalar(db.select(db.func.max(Announcement.id)))
+              f = db.session.scalar(db.select(StoredFile))
+              assert f is not None and len(f.data) == 20000 and f.data[:4] == b"%PDF", "file bytes survived the copy"
+          r = c.post("/announcements/new", data={"title": "After the copy", "body": "New ids continue"}, follow_redirects=True)
+          assert r.status_code == 200
+          with app.app_context():
+              new = db.session.scalar(db.select(Announcement).where(Announcement.title == "After the copy"))
+              assert new is not None and new.id > before, "new ids continue after the copied ones"
+          print("App works on the copied Postgres 17 database.")
+          PY
