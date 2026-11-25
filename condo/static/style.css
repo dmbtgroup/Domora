@@ -784,3 +784,4 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 @media (max-width: 600px) { .perf-rank a { grid-template-columns: 7rem 1fr 6.5rem; gap: .5rem; } .perf-bar .muted { margin-inline-start: 0; } }
 .stat small span { display: inline; font-size: inherit; font-weight: 600; color: var(--muted); }
 .stat small span.perf-up { color: var(--danger); } .stat small span.perf-down { color: var(--ok); }
+.dash-insurance { margin-top: 1.2rem; }

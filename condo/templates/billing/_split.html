@@ -1,0 +1,15 @@
+{# The "where the money went" bar: one block per cost category (largest five, then "Others"), each opening
+   that category's costs in Performance. `s` comes from billing.cost_split(); `pargs` keeps the period. #}
+{% macro split_bar(s, pargs) %}
+{% macro name(key) %}{{ s.labels[key] if key != '_rest' else ngettext('Other (%(num)s)', 'Others (%(num)s)', s.rest_count) }}{% endmacro %}
+<div class="perf-split" role="img" aria-label="{{ _('Costs by category') }}">
+  {% for key, cents in s.split %}{% set share = cents / s.total %}
+  <a class="perf-c-{{ s.colors.get(key, 'other') }}" style="flex: {{ cents }}" title="{{ name(key) }}: {{ cents|money0 }} ({{ (share * 100)|pct(0) }})"
+     {% if key != '_rest' %}href="{{ url_for('billing.performance', category=key, **pargs) }}#detail"{% endif %}>
+    {% if share >= 0.08 %}<b>{{ (share * 100)|pct(0) }}</b><span>{{ cents|money0 }}</span>{% endif %}</a>
+  {% endfor %}
+</div>
+<div class="perf-legend">
+  {% for key, cents in s.split %}<span><i class="perf-c-{{ s.colors.get(key, 'other') }}"></i>{{ name(key) }} · {{ cents|money0 }}</span>{% endfor %}
+</div>
+{% endmacro %}

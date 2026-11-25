@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% from "_macros.html" import balance, status_badge, priority_badge, insurance_badge %}
+{% from "billing/_split.html" import split_bar %}
 {% block title %}{% trans %}Dashboard{% endtrans %}{% endblock %}
 {% block content %}
 <h1>{% trans %}Management dashboard{% endtrans %}</h1>
-{% if building %}{% set d = building.doc %}
-<div class="card inline-form building-insurance">
-  <strong>{% trans %}Building insurance{% endtrans %}</strong> {{ insurance_badge(building.state) }}
-  <span>{% trans title=d.provider or d.title, valid_until=d.valid_until|fdate('medium') %}{{ title }} · until {{ valid_until }}{% endtrans %}</span>
-  <a class="btn small" href="{{ url_for('documents.download', doc_id=d.id) }}" target="_blank" rel="noopener">{% trans %}View policy{% endtrans %}</a>
-</div>
-{% elif current_user.is_admin %}
-<div class="flash flash-error">{% trans %}No building insurance policy is on file.{% endtrans %} <a href="{{ url_for('documents.new', category='insurance') }}">{% trans %}Upload it in Documents{% endtrans %}</a> {% trans %}so owners and tenants can see it.{% endtrans %}</div>
+{% if costs %}
+<section class="card dash-costs">
+  <div class="card-head"><h2>{% trans label=costs.year %}Where the money went · {{ label }}{% endtrans %}</h2>
+    <a class="btn small" href="{{ url_for('billing.performance', year=costs.year) }}">{% trans %}Performance{% endtrans %}</a></div>
+  {% if costs.total %}{{ split_bar(costs, {'span': 'year', 'year': costs.year}) }}
+  {% else %}<p class="muted">{% trans label=costs.year %}No costs recorded for {{ label }}.{% endtrans %}</p>{% endif %}
+</section>
 {% endif %}
 <div class="stats">
   <a class="stat" href="{{ url_for('units.index') }}"><span>{{ stats.units }}</span>{% trans occupied=stats.occupied %}Units ({{ occupied }} occupied){% endtrans %}</a>
@@ -86,5 +86,16 @@
     {% endfor %}{% endfor %}</ul>
   </section>
   {% endif %}
+</div>
+<div class="dash-insurance">
+{% if building %}{% set d = building.doc %}
+<div class="card inline-form building-insurance">
+  <strong>{% trans %}Building insurance{% endtrans %}</strong> {{ insurance_badge(building.state) }}
+  <span>{% trans title=d.provider or d.title, valid_until=d.valid_until|fdate('medium') %}{{ title }} · until {{ valid_until }}{% endtrans %}</span>
+  <a class="btn small" href="{{ url_for('documents.download', doc_id=d.id) }}" target="_blank" rel="noopener">{% trans %}View policy{% endtrans %}</a>
+</div>
+{% elif current_user.is_admin %}
+<div class="flash flash-error">{% trans %}No building insurance policy is on file.{% endtrans %} <a href="{{ url_for('documents.new', category='insurance') }}">{% trans %}Upload it in Documents{% endtrans %}</a> {% trans %}so owners and tenants can see it.{% endtrans %}</div>
+{% endif %}
 </div>
 {% endblock %}

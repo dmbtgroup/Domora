@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "billing/_split.html" import split_bar %}
 {% block title %}{% trans label=label %}Performance · {{ label }}{% endtrans %}{% endblock %}
 {% macro change(now, before) %}{% if before %}{% set ch = (now / before - 1) * 100 %}<span class="{{ 'perf-up' if ch > 0.5 else 'perf-down' if ch < -0.5 }}">{{ '▲' if ch > 0.5 else '▼' if ch < -0.5 else '·' }} {{ ch|abs|pct(0) }}</span>{% elif now %}<span class="muted">{% trans %}new{% endtrans %}</span>{% else %}<span class="muted">—</span>{% endif %}{% endmacro %}
 {% macro cat_name(key) %}{{ labels[key] if key != '_rest' else ngettext('Other (%(num)s)', 'Others (%(num)s)', rest_count) }}{% endmacro %}
@@ -36,16 +37,7 @@
 {% else %}
 <section class="card">
   <h2>{% trans label=label %}Where the money went · {{ label }}{% endtrans %}</h2>
-  <div class="perf-split" role="img" aria-label="{{ _('Costs by category') }}">
-    {% for key, cents in split %}{% set share = cents / total %}
-    <a class="perf-c-{{ colors.get(key, 'other') }}" style="flex: {{ cents }}" title="{{ cat_name(key) }}: {{ cents|money0 }} ({{ (share * 100)|pct(0) }})"
-       {% if key != '_rest' %}href="{{ url_for('billing.performance', category=key, **pargs) }}#detail"{% endif %}>
-      {% if share >= 0.08 %}<b>{{ (share * 100)|pct(0) }}</b><span>{{ cents|money0 }}</span>{% endif %}</a>
-    {% endfor %}
-  </div>
-  <div class="perf-legend">
-    {% for key, cents in split %}<span><i class="perf-c-{{ colors.get(key, 'other') }}"></i>{{ cat_name(key) }} · {{ cents|money0 }}</span>{% endfor %}
-  </div>
+  {{ split_bar({'split': split, 'total': total, 'rest_count': rest_count, 'labels': labels, 'colors': colors}, pargs) }}
 </section>
 
 <div class="perf-grid">

@@ -16,6 +16,12 @@ from .maintenance import can_decide
 bp = Blueprint("dashboard", __name__)
 
 
+def _costs():
+    """This year's costs by category, for those who see the building's accounting."""
+    from .billing import accounting_scope, cost_split
+    return cost_split() if accounting_scope() == "all" else None
+
+
 @bp.route("/")
 def index():
     if not current_user.is_authenticated:  # the public home page, with sign-in
@@ -57,7 +63,7 @@ def index():
                                awaiting=awaiting, announcements=announcements, upcoming=upcoming,
                                insurance_alerts=insurance_alerts, board=board_members(),
                                reimb_waiting=_reimb_waiting(),
-                               building=current_building_insurance(current_user))
+                               building=current_building_insurance(current_user), costs=_costs())
 
     if current_user.is_staff:
         from ..models import STAFF_PERMISSIONS

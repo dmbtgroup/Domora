@@ -630,6 +630,19 @@ def _by_category(items):
     return out
 
 
+def cost_split(year=None):
+    """This year's costs by category, for the dashboard's "where the money went" bar."""
+    year = year or date.today().year
+    cats = _by_category(_costs_between(date(year, 1, 1), date(year, 12, 31)))
+    ranked = sorted(((k, v) for k, v in cats.items() if v > 0), key=lambda kv: -kv[1])
+    split = ranked[:5]
+    rest = sum(v for _k, v in ranked[5:])
+    if rest > 0:
+        split.append(("_rest", rest))
+    return {"year": year, "total": sum(v for _k, v in ranked), "split": split, "rest_count": max(len(ranked) - 5, 0),
+            "labels": COST_CATEGORIES, "colors": CATEGORY_COLORS}
+
+
 @bp.route("/performance")
 @login_required
 def performance():

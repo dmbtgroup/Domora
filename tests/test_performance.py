@@ -68,3 +68,14 @@ def test_existing_costs_move_to_the_new_categories_once(app):
     cats = [e.category for e in db.session.scalars(db.select(Expense).order_by(Expense.spent_on))]
     assert cats == ["snow", "cleaning", "repairs"]  # a category picked on purpose stays
     assert db.session.get(Setting, "cost_categories_v2") is not None
+
+
+def test_dashboard_shows_costs_on_top_and_building_insurance_last(admin_client):
+    seed()
+    from datetime import date as _d
+    db.session.add(Expense(spent_on=_d.today(), description="Snow removal", amount_cents=-50000, category="snow"))
+    db.session.commit()
+    page = admin_client.get("/").data.decode()
+    assert "Where the money went" in page and 'class="perf-split"' in page
+    assert page.index("Where the money went") < page.index("Units with a balance due")  # costs on top
+    assert page.index("Insurance to follow up") < page.index("No building insurance policy")  # building insurance last
