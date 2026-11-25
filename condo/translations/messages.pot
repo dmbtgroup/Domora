@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 15:18+0000\n"
+"POT-Creation-Date: 2026-11-25 20:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -798,13 +798,13 @@ msgid "Before"
 msgstr ""
 
 msgid ""
-"Belcentra by DMBT Group: accounting, repairs, documents, votes and more "
-"for owners and the board."
+"Belcentra is a modern platform for smarter condominium management. Tell "
+"us about your building."
 msgstr ""
 
 msgid ""
-"Belcentra is a product of DMBT Group: a modern platform for smarter "
-"condominium management. Tell us about your building."
+"Belcentra: accounting, repairs, documents, votes and more for owners and "
+"the board."
 msgstr ""
 
 msgid "Bill the units"
@@ -4377,9 +4377,6 @@ msgstr ""
 
 #, python-format
 msgid "by %(quote_decided_by)s, %(quote_decided_at)s"
-msgstr ""
-
-msgid "by DMBT Group"
 msgstr ""
 
 msgid "by share"

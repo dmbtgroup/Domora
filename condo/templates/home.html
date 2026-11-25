@@ -19,7 +19,7 @@
 <header class="home-head">
   <a class="home-brand" href="{{ url_for('dashboard.index') }}">
     <img src="{{ url_for('static', filename='brand/logo-96.png') }}" alt="">
-    <span><strong class="wordmark">BELCENTRA</strong><small>{% trans %}by DMBT Group{% endtrans %}</small></span>
+    <span><strong class="wordmark">BELCENTRA</strong></span>
   </a>
   <nav class="home-nav">
     <a href="#features" class="hide-sm">{% trans %}Features{% endtrans %}</a>
@@ -105,7 +105,7 @@
 
   <section class="home-contact" id="contact">
     <h2>{% trans %}Want this for your building?{% endtrans %}</h2>
-    <p class="muted">{% trans %}Belcentra is a product of DMBT Group: a modern platform for smarter condominium management. Tell us about your building.{% endtrans %}</p>
+    <p class="muted">{% trans %}Belcentra is a modern platform for smarter condominium management. Tell us about your building.{% endtrans %}</p>
     <div class="home-contact-grid">
       <a class="card" href="mailto:sales@belcentra.com"><span class="muted small">{% trans %}Sales{% endtrans %}</span><strong>sales@belcentra.com</strong></a>
       <a class="card" href="tel:+16478739585"><span class="muted small">{% trans %}Phone{% endtrans %}</span><strong>+1 647 873 9585</strong></a>
@@ -117,7 +117,7 @@
 
 {% block footer %}
 <footer class="site-footer">
-  <span><strong>Belcentra</strong> {% trans %}by DMBT Group{% endtrans %} · © {{ year }} Development Management and Business Tact</span>
+  <span><strong>Belcentra</strong> · © {{ year }} Development Management and Business Tact</span>
   <a href="mailto:support@belcentra.com">✉︎ support@belcentra.com</a>
   <a href="tel:+16478739585">☏︎ +1 647 873 9585</a>
 </footer>

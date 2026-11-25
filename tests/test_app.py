@@ -310,7 +310,7 @@ def test_installable_as_an_app_and_branded_dmbt(client):
     assert data["display"] == "standalone" and any(i["sizes"] == "512x512" for i in data["icons"])
     page = client.get("/login").data.decode()
     assert 'rel="manifest"' in page and "apple-touch-icon" in page
-    assert "Belcentra" in page and "by DMBT Group" in page and "support@belcentra.com" in page
+    assert "Belcentra" in page and "DMBT" not in page.split("<footer")[0] and "support@belcentra.com" in page
 
 
 def test_french_demo_condo_loads_through_the_portal(app):

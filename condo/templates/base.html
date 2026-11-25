@@ -18,7 +18,7 @@
     };
   </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <meta name="description" content="{{ _('Belcentra by DMBT Group: accounting, repairs, documents, votes and more for owners and the board.') }}">
+  <meta name="description" content="{{ _('Belcentra: accounting, repairs, documents, votes and more for owners and the board.') }}">
   <meta name="theme-color" content="#E8612C">
   <link rel="manifest" href="{{ url_for('manifest') }}">
   <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='icons/favicon-48.png') }}">
@@ -121,7 +121,7 @@ document.addEventListener('keydown', function (e) {
 {% endblock %}
 {% block footer %}
 <footer class="site-footer">
-  <span><strong>Belcentra</strong> {% trans %}by DMBT Group{% endtrans %}</span>
+  <span><strong>Belcentra</strong></span>
   <span class="dot" aria-hidden="true">·</span>
   <span>{% trans %}Need help? Contact Belcentra support:{% endtrans %}</span>
   <a href="mailto:support@belcentra.com">✉︎ support@belcentra.com</a>
