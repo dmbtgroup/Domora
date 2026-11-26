@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 20:31+0000\n"
+"POT-Creation-Date: 2026-11-26 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -365,9 +365,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Accounting &amp; condo fees"
-msgstr ""
-
 msgid "Accounting will now record it."
 msgstr ""
 
@@ -601,18 +598,10 @@ msgstr ""
 msgid "Announcement updated."
 msgstr ""
 
-msgid "Announcements and reminders reach everyone, each in their own language."
-msgstr ""
-
 msgid "Annual"
 msgstr ""
 
 msgid "Annual meeting minutes"
-msgstr ""
-
-msgid ""
-"Annual or monthly fees per unit, special contributions with deadlines, "
-"payments and costs with their full history."
 msgstr ""
 
 msgid "Annual total"
@@ -650,9 +639,6 @@ msgid "Approve cost"
 msgstr ""
 
 msgid "Approve repair"
-msgstr ""
-
-msgid "Approve the roof budget?"
 msgstr ""
 
 msgid "Approved"
@@ -798,11 +784,6 @@ msgid "Before"
 msgstr ""
 
 msgid ""
-"Belcentra is a modern platform for smarter condominium management. Tell "
-"us about your building."
-msgstr ""
-
-msgid ""
 "Belcentra: accounting, repairs, documents, votes and more for owners and "
 "the board."
 msgstr ""
@@ -835,6 +816,9 @@ msgid "Board members"
 msgstr ""
 
 msgid "Board of directors"
+msgstr ""
+
+msgid "Board president"
 msgstr ""
 
 msgid "Board rating"
@@ -1096,6 +1080,9 @@ msgstr ""
 msgid "Choose who votes."
 msgstr ""
 
+msgid "Choose who you want to be. No password needed."
+msgstr ""
+
 msgid "Choose your own password (required)"
 msgstr ""
 
@@ -1109,9 +1096,6 @@ msgid "Click a category to see its costs."
 msgstr ""
 
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
-msgstr ""
-
-msgid "Close"
 msgstr ""
 
 msgid "Close request"
@@ -1179,11 +1163,6 @@ msgid ""
 " a month."
 msgstr ""
 
-msgid ""
-"Condo fees, payments, repairs, documents and votes for owners, residents "
-"and the board — in English and French, on any device."
-msgstr ""
-
 #, python-format
 msgid "Condo fees: the current rates end on %(end)s"
 msgstr ""
@@ -1195,9 +1174,6 @@ msgid "Confirm new password"
 msgstr ""
 
 msgid "Confirm one sync first."
-msgstr ""
-
-msgid "Contact"
 msgstr ""
 
 msgid "Contact person"
@@ -1342,9 +1318,6 @@ msgstr ""
 msgid "Decision recorded and the owner notified."
 msgstr ""
 
-msgid "Declaration, minutes, budgets and insurance certificates, always at hand."
-msgstr ""
-
 msgid "Decline"
 msgstr ""
 
@@ -1427,9 +1400,6 @@ msgstr ""
 msgid "Delete this vote and all its ballots? This cannot be undone."
 msgstr ""
 
-msgid "Demo accounts"
-msgstr ""
-
 msgid "Demo: a made-up condo to try the portal. Changes may be reset at any time."
 msgstr ""
 
@@ -1454,9 +1424,6 @@ msgstr ""
 msgid "Directory"
 msgstr ""
 
-msgid "Directory &amp; board"
-msgstr ""
-
 msgid "Directory → Board"
 msgstr ""
 
@@ -1479,9 +1446,6 @@ msgid "Document expiring"
 msgstr ""
 
 msgid "Documents"
-msgstr ""
-
-msgid "Documents &amp; insurance"
 msgstr ""
 
 msgid "Documents: see all documents, including managers-only ones"
@@ -1678,9 +1642,6 @@ msgstr ""
 msgid "Every owner and tenant on file has valid insurance."
 msgstr ""
 
-msgid "Every owner gets their own account"
-msgstr ""
-
 msgid "Every unit's balance matches the sheet."
 msgstr ""
 
@@ -1696,9 +1657,6 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
-msgid "Everything your building needs"
-msgstr ""
-
 #, python-format
 msgid "Exists · fee %(monthly_fee_cents)s"
 msgstr ""
@@ -1707,9 +1665,6 @@ msgid "Expired"
 msgstr ""
 
 msgid "Expiring soon"
-msgstr ""
-
-msgid "Features"
 msgstr ""
 
 msgid "February"
@@ -1936,6 +1891,9 @@ msgid "In progress"
 msgstr ""
 
 msgid "In the app now"
+msgstr ""
+
+msgid "In the demo, every account uses the password Demo2026!"
 msgstr ""
 
 msgid "Inactive"
@@ -2607,7 +2565,7 @@ msgstr ""
 msgid "Notices"
 msgstr ""
 
-msgid "Notices &amp; alerts"
+msgid "Notices and maintenance requests, no finances"
 msgstr ""
 
 msgid "Notices: post and edit notices"
@@ -2635,9 +2593,6 @@ msgstr ""
 msgid ""
 "One home-insurance policy, including civil liability, covers the unit's "
 "owners together:"
-msgstr ""
-
-msgid "One place for the board to manage and for owners to stay informed."
 msgstr ""
 
 msgid "One policy covers all owners of the unit. None on file yet."
@@ -2731,6 +2686,9 @@ msgstr ""
 msgid "Owner"
 msgstr ""
 
+msgid "Owner and treasurer"
+msgstr ""
+
 msgid "Owner approval"
 msgstr ""
 
@@ -2765,21 +2723,8 @@ msgstr ""
 msgid "Owners of selected units"
 msgstr ""
 
-msgid ""
-"Owners vote online, weighted by each unit's share. Results are shown "
-"after the deadline."
-msgstr ""
-
 #, python-format
 msgid "Owners who can approve online: %(owner_accounts)s."
-msgstr ""
-
-msgid "Owners, residents and the board use the same sign-in."
-msgstr ""
-
-msgid ""
-"Owners, tenants and board roles, with each person's access to what they "
-"need."
 msgstr ""
 
 msgid "Ownership share"
@@ -2816,9 +2761,6 @@ msgid "Paid for something for the building? Request it back with the receipt."
 msgstr ""
 
 msgid "Paid on"
-msgstr ""
-
-msgid "Paid this month"
 msgstr ""
 
 msgid "Paid to"
@@ -2864,9 +2806,6 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-msgid "Password for every account:"
-msgstr ""
-
 msgid "Password must be at least 8 characters."
 msgstr ""
 
@@ -2878,6 +2817,9 @@ msgstr ""
 
 #, python-format
 msgid "Password set · %(name)s"
+msgstr ""
+
+msgid "Passwords can't be changed in the demo."
 msgstr ""
 
 msgid "Past deadline"
@@ -3087,15 +3029,9 @@ msgstr ""
 msgid "Projects &amp; Maintenance"
 msgstr ""
 
-msgid "Projects &amp; maintenance"
-msgstr ""
-
 msgid ""
 "Projects are planned work for the building, such as a roof, windows or a "
 "renovation."
-msgstr ""
-
-msgid "Property management, reimagined."
 msgstr ""
 
 msgid "Publish and notify voters"
@@ -3362,11 +3298,6 @@ msgstr ""
 msgid "Requested by %(name)s"
 msgstr ""
 
-msgid ""
-"Requests, projects with budgets, and routine work like snow removal with "
-"reminders before it is due."
-msgstr ""
-
 msgid "Reserved"
 msgstr ""
 
@@ -3430,9 +3361,6 @@ msgid "Routine task deleted."
 msgstr ""
 
 msgid "Routine task updated."
-msgstr ""
-
-msgid "Sales"
 msgstr ""
 
 #, python-format
@@ -3506,6 +3434,9 @@ msgstr ""
 msgid "See all the details"
 msgstr ""
 
+msgid "Sees and manages everything"
+msgstr ""
+
 msgid "Select a unit, or mark this as a common-area issue."
 msgstr ""
 
@@ -3571,9 +3502,6 @@ msgid "Show as a table"
 msgstr ""
 
 msgid "Sign in"
-msgstr ""
-
-msgid "Sign in to your building"
 msgstr ""
 
 msgid "Sign-in account and password"
@@ -3709,6 +3637,9 @@ msgstr ""
 msgid "That dataset was already loaded from this upload."
 msgstr ""
 
+msgid "That demo account isn't available right now."
+msgstr ""
+
 msgid "That doesn't look like a Google Sheets link (…/spreadsheets/d/…)."
 msgstr ""
 
@@ -3755,11 +3686,6 @@ msgid ""
 msgstr ""
 
 msgid "The board asked the owner to get a quote."
-msgstr ""
-
-msgid ""
-"The board creates the accounts. Owners see their unit, their statement "
-"and the building's news."
 msgstr ""
 
 #, python-format
@@ -3863,6 +3789,12 @@ msgstr ""
 msgid ""
 "The website checks the sheet every 10 minutes and updates when it has "
 "changed."
+msgstr ""
+
+msgid "Their unit, notices, votes and requests"
+msgstr ""
+
+msgid "Their unit, plus the accounting"
 msgstr ""
 
 #, python-format
@@ -4185,9 +4117,6 @@ msgid ""
 "reimbursement."
 msgstr ""
 
-msgid "Want this for your building?"
-msgstr ""
-
 msgid "We couldn't find that page."
 msgstr ""
 
@@ -4301,9 +4230,6 @@ msgstr ""
 msgid "Your account is not linked to a unit; report it as a common-area issue."
 msgstr ""
 
-msgid "Your building,"
-msgstr ""
-
 msgid "Your decision"
 msgstr ""
 
@@ -4345,9 +4271,6 @@ msgstr ""
 msgid "after"
 msgstr ""
 
-msgid "all in one place."
-msgstr ""
-
 msgid "and will be asked to choose their own password straight away"
 msgstr ""
 
@@ -4362,9 +4285,6 @@ msgid "balances don't match the sheet"
 msgstr ""
 
 msgid "board only"
-msgstr ""
-
-msgid "board president (sees everything)"
 msgstr ""
 
 #, python-format
@@ -4515,12 +4435,6 @@ msgstr ""
 msgid "owed %(owed)s · credit %(credit)s"
 msgstr ""
 
-msgid "owner"
-msgstr ""
-
-msgid "owner and treasurer"
-msgstr ""
-
 msgid "quote"
 msgstr ""
 
@@ -4549,9 +4463,6 @@ msgid "temporary"
 msgstr ""
 
 msgid "temporary password"
-msgstr ""
-
-msgid "tenant"
 msgstr ""
 
 msgid "the 12 months before"

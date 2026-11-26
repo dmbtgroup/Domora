@@ -1,7 +1,7 @@
 import re
 import secrets
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user
 
 from ..extensions import db
@@ -22,6 +22,9 @@ def _apply_form(user, form, creating):
     role = form.get("role", "owner")
     unit_id = form.get("unit_id") or None
     password = form.get("password", "")
+    if current_app.config.get("DEMO"):  # passwords are fixed in the demo
+        from ..demo import DEMO_PASSWORD
+        password = DEMO_PASSWORD if creating else ""
 
     if not name:
         errors.append(_("Name is required."))
@@ -72,6 +75,13 @@ def _apply_form(user, form, creating):
 _ALPHABET = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
 
+def _demo_locked():
+    if current_app.config.get("DEMO"):
+        flash(_("Passwords can't be changed in the demo."), "error")
+        return True
+    return False
+
+
 def generate_password():
     return "-".join("".join(secrets.choice(_ALPHABET) for _ in range(4)) for _ in range(3))
 
@@ -81,6 +91,8 @@ def generate_password():
 def set_password(user_id):
     """The board sets (or generates) a password for one account."""
     user = db.session.get(User, user_id) or abort(404)
+    if _demo_locked():
+        return redirect(url_for("residents.edit", user_id=user.id))
     if user.id == current_user.id:
         flash(_("Change your own password from My profile."), "info")
         return redirect(url_for("auth.account"))
@@ -107,6 +119,8 @@ def set_password(user_id):
 def reset_password(user_id):
     """One click: a temporary password, shown once, that the person must replace at their next sign-in."""
     user = db.session.get(User, user_id) or abort(404)
+    if _demo_locked():
+        return redirect(url_for("residents.edit", user_id=user.id))
     if user.id == current_user.id:
         flash(_("Change your own password from My profile."), "info")
         return redirect(url_for("auth.account"))

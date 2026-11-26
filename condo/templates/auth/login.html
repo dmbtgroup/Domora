@@ -5,6 +5,7 @@
 <div class="card narrow login">
   <h1><span class="login-logo"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="{{ url_for('static', filename='brand/logo-anim.webp') }}" type="image/webp"><img src="{{ url_for('static', filename='brand/logo-240.png') }}" alt=""></picture></span>{{ condo_name }}</h1>
   <p class="muted">{% trans %}Resident &amp; management portal{% endtrans %}</p>
+  {% if demo %}{% include "_demo_login.html" %}{% else %}
   <form method="post">
     {{ csrf() }}
     <label>{% trans %}Email{% endtrans %} <input type="email" name="email" required autofocus value="{{ request.form.get('email', '') }}"></label>
@@ -13,6 +14,6 @@
     <button class="btn primary full">{% trans %}Sign in{% endtrans %}</button>
   </form>
   <p class="muted login-help">{% trans %}Forgot your password? Ask a board member to reset it for you.{% endtrans %}</p>
-  {% include "_demo_login.html" %}
+  {% endif %}
 </div>
 {% endblock %}

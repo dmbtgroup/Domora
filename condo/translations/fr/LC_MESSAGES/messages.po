@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 20:31+0000\n"
+"POT-Creation-Date: 2026-11-26 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -347,9 +347,6 @@ msgstr "Compte mis à jour."
 msgid "Accounting"
 msgstr "Comptabilité"
 
-msgid "Accounting &amp; condo fees"
-msgstr "Comptabilité et frais de condo"
-
 msgid "Accounting will now record it."
 msgstr "La comptabilité va maintenant l’enregistrer."
 
@@ -577,17 +574,11 @@ msgstr "Avis publié."
 msgid "Announcement updated."
 msgstr "Avis mis à jour."
 
-msgid "Announcements and reminders reach everyone, each in their own language."
-msgstr "Les avis et rappels joignent tout le monde, chacun dans sa langue."
-
 msgid "Annual"
 msgstr "Annuel"
 
 msgid "Annual meeting minutes"
 msgstr "Procès-verbaux des assemblées annuelles"
-
-msgid "Annual or monthly fees per unit, special contributions with deadlines, payments and costs with their full history."
-msgstr "Frais annuels ou mensuels par unité, cotisations spéciales avec échéances, paiements et dépenses avec tout leur historique."
 
 msgid "Annual total"
 msgstr "Total annuel"
@@ -625,9 +616,6 @@ msgstr "Approuver le coût"
 
 msgid "Approve repair"
 msgstr "Approuver la réparation"
-
-msgid "Approve the roof budget?"
-msgstr "Approuver le budget de la toiture?"
 
 msgid "Approved"
 msgstr "Approuvé"
@@ -769,9 +757,6 @@ msgstr "Chambres"
 msgid "Before"
 msgstr "Avant"
 
-msgid "Belcentra is a modern platform for smarter condominium management. Tell us about your building."
-msgstr "Belcentra est une plateforme moderne pour une gestion de copropriété plus intelligente. Parlez-nous de votre immeuble."
-
 msgid "Belcentra: accounting, repairs, documents, votes and more for owners and the board."
 msgstr "Belcentra : comptabilité, réparations, documents, votes et plus pour les copropriétaires et le conseil."
 
@@ -800,6 +785,9 @@ msgstr "Membres du conseil"
 
 msgid "Board of directors"
 msgstr "Conseil d’administration"
+
+msgid "Board president"
+msgstr "Présidente du conseil"
 
 msgid "Board rating"
 msgstr "Évaluation du conseil"
@@ -1053,6 +1041,9 @@ msgstr "Choisissez qui peut le voir."
 msgid "Choose who votes."
 msgstr "Choisissez qui vote."
 
+msgid "Choose who you want to be. No password needed."
+msgstr "Choisissez qui vous voulez être. Aucun mot de passe requis."
+
 msgid "Choose your own password (required)"
 msgstr "Choisissez votre propre mot de passe (obligatoire)"
 
@@ -1067,9 +1058,6 @@ msgstr "Cliquez sur une catégorie pour voir ses dépenses."
 
 msgid "Click one to fill in the form; adjust the dates and contractor, then save."
 msgstr "Cliquez sur une tâche pour remplir le formulaire; ajustez les dates et l’entrepreneur, puis enregistrez."
-
-msgid "Close"
-msgstr "Fermer"
 
 msgid "Close request"
 msgstr "Fermer la demande"
@@ -1134,9 +1122,6 @@ msgstr "Frais de condo"
 msgid "Condo fees saved for %(start)s – %(end)s: %(total)s in total, %(monthly)s a month."
 msgstr "Frais de condo enregistrés pour la période du %(start)s au %(end)s : %(total)s au total, %(monthly)s par mois."
 
-msgid "Condo fees, payments, repairs, documents and votes for owners, residents and the board — in English and French, on any device."
-msgstr "Frais de condo, paiements, réparations, documents et votes pour les copropriétaires, les résidents et le conseil — en français et en anglais, sur tous vos appareils."
-
 #, python-format
 msgid "Condo fees: the current rates end on %(end)s"
 msgstr "Frais de condo : les tarifs actuels prennent fin le %(end)s"
@@ -1149,9 +1134,6 @@ msgstr "Confirmer le nouveau mot de passe"
 
 msgid "Confirm one sync first."
 msgstr "Confirmez d’abord une synchronisation."
-
-msgid "Contact"
-msgstr "Contact"
 
 msgid "Contact person"
 msgstr "Personne-ressource"
@@ -1295,9 +1277,6 @@ msgstr "décembre"
 msgid "Decision recorded and the owner notified."
 msgstr "Décision enregistrée et copropriétaire avisé."
 
-msgid "Declaration, minutes, budgets and insurance certificates, always at hand."
-msgstr "Déclaration de copropriété, procès-verbaux, budgets et certificats d'assurance, toujours à portée de main."
-
 msgid "Decline"
 msgstr "Refuser"
 
@@ -1374,9 +1353,6 @@ msgstr "Supprimer cette unité?"
 msgid "Delete this vote and all its ballots? This cannot be undone."
 msgstr "Supprimer ce vote et tous ses bulletins? Cette action est irréversible."
 
-msgid "Demo accounts"
-msgstr "Comptes de démonstration"
-
 msgid "Demo: a made-up condo to try the portal. Changes may be reset at any time."
 msgstr "Démo : une copropriété fictive pour essayer le portail. Les changements peuvent être effacés à tout moment."
 
@@ -1401,9 +1377,6 @@ msgstr "Administrateur"
 msgid "Directory"
 msgstr "Répertoire"
 
-msgid "Directory &amp; board"
-msgstr "Répertoire et conseil"
-
 msgid "Directory → Board"
 msgstr "Répertoire → Conseil"
 
@@ -1427,9 +1400,6 @@ msgstr "Document bientôt expiré"
 
 msgid "Documents"
 msgstr "Documents"
-
-msgid "Documents &amp; insurance"
-msgstr "Documents et assurances"
 
 msgid "Documents: see all documents, including managers-only ones"
 msgstr "Documents : voir tous les documents, y compris ceux réservés aux gestionnaires"
@@ -1613,9 +1583,6 @@ msgstr "Chaque mois"
 msgid "Every owner and tenant on file has valid insurance."
 msgstr "Tous les copropriétaires et locataires inscrits ont une assurance valide."
 
-msgid "Every owner gets their own account"
-msgstr "Chaque copropriétaire a son propre compte"
-
 msgid "Every unit's balance matches the sheet."
 msgstr "Le solde de chaque unité correspond à la feuille."
 
@@ -1631,9 +1598,6 @@ msgstr "Toutes les personnes connectées"
 msgid "Everything"
 msgstr "Tout"
 
-msgid "Everything your building needs"
-msgstr "Tout ce dont votre immeuble a besoin"
-
 #, python-format
 msgid "Exists · fee %(monthly_fee_cents)s"
 msgstr "Existe · frais %(monthly_fee_cents)s"
@@ -1643,9 +1607,6 @@ msgstr "Expirée"
 
 msgid "Expiring soon"
 msgstr "Expire bientôt"
-
-msgid "Features"
-msgstr "Fonctionnalités"
 
 msgid "February"
 msgstr "février"
@@ -1861,6 +1822,9 @@ msgstr "En cours"
 
 msgid "In the app now"
 msgstr "Dans l’application actuellement"
+
+msgid "In the demo, every account uses the password Demo2026!"
+msgstr "Dans la démo, tous les comptes utilisent le mot de passe Demo2026!"
 
 msgid "Inactive"
 msgstr "Inactif"
@@ -2511,8 +2475,8 @@ msgstr "Rien pour l’instant. Vous serez avisé ici de vos demandes, des approb
 msgid "Notices"
 msgstr "Avis"
 
-msgid "Notices &amp; alerts"
-msgstr "Avis et alertes"
+msgid "Notices and maintenance requests, no finances"
+msgstr "Avis et demandes d’entretien, sans les finances"
 
 msgid "Notices: post and edit notices"
 msgstr "Avis : publier et modifier des avis"
@@ -2538,9 +2502,6 @@ msgstr "Le %(when)s UTC."
 
 msgid "One home-insurance policy, including civil liability, covers the unit's owners together:"
 msgstr "Une seule police d’assurance habitation, incluant la responsabilité civile, couvre ensemble les copropriétaires de l’unité :"
-
-msgid "One place for the board to manage and for owners to stay informed."
-msgstr "Un seul endroit pour que le conseil gère et que les copropriétaires restent informés."
 
 msgid "One policy covers all owners of the unit. None on file yet."
 msgstr "Une seule police couvre tous les copropriétaires de l’unité. Aucune au dossier pour l’instant."
@@ -2631,6 +2592,9 @@ msgstr "Doit"
 msgid "Owner"
 msgstr "Copropriétaire"
 
+msgid "Owner and treasurer"
+msgstr "Copropriétaire et trésorier"
+
 msgid "Owner approval"
 msgstr "Approbation du copropriétaire"
 
@@ -2665,18 +2629,9 @@ msgstr "Les copropriétaires sont avisés d’une nouvelle échéance."
 msgid "Owners of selected units"
 msgstr "Copropriétaires des unités choisies"
 
-msgid "Owners vote online, weighted by each unit's share. Results are shown after the deadline."
-msgstr "Les copropriétaires votent en ligne, selon la quote-part de chaque unité. Les résultats sont affichés après l'échéance."
-
 #, python-format
 msgid "Owners who can approve online: %(owner_accounts)s."
 msgstr "Copropriétaires pouvant approuver en ligne : %(owner_accounts)s."
-
-msgid "Owners, residents and the board use the same sign-in."
-msgstr "Copropriétaires, résidents et conseil utilisent la même connexion."
-
-msgid "Owners, tenants and board roles, with each person's access to what they need."
-msgstr "Copropriétaires, locataires et rôles du conseil, chacun avec accès à ce dont il a besoin."
 
 msgid "Ownership share"
 msgstr "Quote-part"
@@ -2708,9 +2663,6 @@ msgstr "Vous avez payé quelque chose pour l’immeuble? Demandez un rembourseme
 
 msgid "Paid on"
 msgstr "Payé le"
-
-msgid "Paid this month"
-msgstr "Payés ce mois-ci"
 
 msgid "Paid to"
 msgstr "Payé à"
@@ -2755,9 +2707,6 @@ msgstr "Partenaire supprimé."
 msgid "Password"
 msgstr "Mot de passe"
 
-msgid "Password for every account:"
-msgstr "Mot de passe de tous les comptes :"
-
 msgid "Password must be at least 8 characters."
 msgstr "Le mot de passe doit contenir au moins 8 caractères."
 
@@ -2770,6 +2719,9 @@ msgstr "Mot de passe défini"
 #, python-format
 msgid "Password set · %(name)s"
 msgstr "Mot de passe défini · %(name)s"
+
+msgid "Passwords can't be changed in the demo."
+msgstr "Les mots de passe ne peuvent pas être modifiés dans la démo."
 
 msgid "Past deadline"
 msgstr "Échéance dépassée"
@@ -2974,14 +2926,8 @@ msgstr "Projets et entretien"
 msgid "Projects &amp; Maintenance"
 msgstr "Projets et entretien"
 
-msgid "Projects &amp; maintenance"
-msgstr "Projets et entretien"
-
 msgid "Projects are planned work for the building, such as a roof, windows or a renovation."
 msgstr "Les projets sont des travaux planifiés pour l’immeuble, comme la toiture, les fenêtres ou une rénovation."
-
-msgid "Property management, reimagined."
-msgstr "La gestion immobilière, réinventée."
 
 msgid "Publish and notify voters"
 msgstr "Publier et aviser les votants"
@@ -3243,9 +3189,6 @@ msgstr "Demandé par"
 msgid "Requested by %(name)s"
 msgstr "Demandé par %(name)s"
 
-msgid "Requests, projects with budgets, and routine work like snow removal with reminders before it is due."
-msgstr "Demandes, projets avec budgets et travaux courants comme le déneigement, avec rappels avant l'échéance."
-
 msgid "Reserved"
 msgstr "Réservé"
 
@@ -3310,9 +3253,6 @@ msgstr "Tâche d’entretien courant supprimée."
 
 msgid "Routine task updated."
 msgstr "Tâche d’entretien courant mise à jour."
-
-msgid "Sales"
-msgstr "Ventes"
 
 #, python-format
 msgid "Same address as %(same_address_as)s"
@@ -3385,6 +3325,9 @@ msgstr "Sécurité et incendie"
 msgid "See all the details"
 msgstr "Voir tous les détails"
 
+msgid "Sees and manages everything"
+msgstr "Voit et gère tout"
+
 msgid "Select a unit, or mark this as a common-area issue."
 msgstr "Choisissez une unité, ou indiquez qu’il s’agit d’une partie commune."
 
@@ -3449,9 +3392,6 @@ msgstr "Afficher en tableau"
 
 msgid "Sign in"
 msgstr "Se connecter"
-
-msgid "Sign in to your building"
-msgstr "Connectez-vous à votre immeuble"
 
 msgid "Sign-in account and password"
 msgstr "Compte de connexion et mot de passe"
@@ -3582,6 +3522,9 @@ msgstr "Merci, votre vote a été enregistré."
 msgid "That dataset was already loaded from this upload."
 msgstr "Cet ensemble de données a déjà été chargé à partir de ce téléversement."
 
+msgid "That demo account isn't available right now."
+msgstr "Ce compte de démonstration n’est pas disponible pour le moment."
+
 msgid "That doesn't look like a Google Sheets link (…/spreadsheets/d/…)."
 msgstr "Cela ne ressemble pas à un lien Google Sheets (…/spreadsheets/d/…)."
 
@@ -3622,9 +3565,6 @@ msgstr "Le solde à la fin de cette journée, tel que la banque l'indique. Les p
 
 msgid "The board asked the owner to get a quote."
 msgstr "Le conseil a demandé au copropriétaire d’obtenir une soumission."
-
-msgid "The board creates the accounts. Owners see their unit, their statement and the building's news."
-msgstr "Le conseil crée les comptes. Les copropriétaires voient leur unité, leur relevé et les nouvelles de l'immeuble."
 
 #, python-format
 msgid "The board gets a renewal reminder on %(renewal_date)s, two months before these rates end."
@@ -3715,6 +3655,12 @@ msgstr "Les deux mots de passe ne correspondent pas."
 
 msgid "The website checks the sheet every 10 minutes and updates when it has changed."
 msgstr "Le site vérifie la feuille toutes les 10 minutes et se met à jour quand elle a changé."
+
+msgid "Their unit, notices, votes and requests"
+msgstr "Son unité, les avis, les votes et les demandes"
+
+msgid "Their unit, plus the accounting"
+msgstr "Son unité, plus la comptabilité"
 
 #, python-format
 msgid "There are already fees for a period starting in %(year)s."
@@ -4013,9 +3959,6 @@ msgstr "En attente du président"
 msgid "Want the owner to arrange this repair? Ask them for a quote first; once the board approves the cost, they do the repair, pay, and request a reimbursement."
 msgstr "Vous voulez que le copropriétaire s’occupe de cette réparation? Demandez-lui d’abord une soumission; une fois le coût approuvé par le conseil, il fait la réparation, la paie et demande un remboursement."
 
-msgid "Want this for your building?"
-msgstr "Vous voulez ceci pour votre immeuble?"
-
 msgid "We couldn't find that page."
 msgstr "Nous n’avons pas trouvé cette page."
 
@@ -4121,9 +4064,6 @@ msgstr "Votre compte n’est lié à aucune unité."
 msgid "Your account is not linked to a unit; report it as a common-area issue."
 msgstr "Votre compte n’est lié à aucune unité; signalez-le comme un problème de partie commune."
 
-msgid "Your building,"
-msgstr "Votre immeuble,"
-
 msgid "Your decision"
 msgstr "Votre décision"
 
@@ -4163,9 +4103,6 @@ msgstr "par année"
 msgid "after"
 msgstr "après"
 
-msgid "all in one place."
-msgstr "tout au même endroit."
-
 msgid "and will be asked to choose their own password straight away"
 msgstr "et devra choisir son propre mot de passe tout de suite"
 
@@ -4181,9 +4118,6 @@ msgstr "les soldes ne correspondent pas à la feuille"
 
 msgid "board only"
 msgstr "conseil seulement"
-
-msgid "board president (sees everything)"
-msgstr "présidente du conseil (voit tout)"
 
 #, python-format
 msgid "by %(name)s"
@@ -4333,12 +4267,6 @@ msgstr "autre application de courriel"
 msgid "owed %(owed)s · credit %(credit)s"
 msgstr "dû %(owed)s · crédit %(credit)s"
 
-msgid "owner"
-msgstr "copropriétaire"
-
-msgid "owner and treasurer"
-msgstr "copropriétaire et trésorier"
-
 msgid "quote"
 msgstr "soumission"
 
@@ -4365,9 +4293,6 @@ msgstr "temporaire"
 
 msgid "temporary password"
 msgstr "mot de passe temporaire"
-
-msgid "tenant"
-msgstr "locataire"
 
 msgid "the 12 months before"
 msgstr "les 12 mois précédents"

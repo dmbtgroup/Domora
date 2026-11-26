@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from ..extensions import db
@@ -45,6 +45,23 @@ def login():
     return render_template("auth/login.html")
 
 
+@bp.route("/demo/sign-in", methods=["POST"])
+def demo_sign_in():
+    """Demo only: sign in as the role the visitor picked, without typing a password."""
+    from ..demo import DEMO_ROLES
+    if not current_app.config.get("DEMO"):
+        abort(404)
+    email = dict(DEMO_ROLES).get(request.form.get("role", ""))
+    user = db.session.scalar(db.select(User).where(User.email == email)) if email else None
+    if user is None or not user.active:
+        flash(_("That demo account isn't available right now."), "error")
+        return redirect(url_for("auth.login"))
+    if current_user.is_authenticated:
+        logout_user()
+    login_user(user)
+    return redirect(url_for("dashboard.index"))
+
+
 @bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
@@ -70,6 +87,9 @@ def account():
         new = request.form.get("new_password", "")
         confirm = request.form.get("confirm_password", "")
         phone = request.form.get("phone", "").strip()
+        if (new or current) and current_app.config.get("DEMO"):
+            flash(_("Passwords can't be changed in the demo."), "error")
+            return redirect(url_for("auth.account"))
         if new or current:
             if not current_user.check_password(current):
                 flash(_("Current password is incorrect."), "error")

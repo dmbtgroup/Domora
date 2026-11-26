@@ -17,9 +17,10 @@
     {{ csrf() }}
     <h2>{% trans %}Update{% endtrans %}</h2>
     <label>{% trans %}Phone{% endtrans %} <input name="phone" value="{{ current_user.phone or '' }}"></label>
-    <fieldset>
+    <fieldset{% if demo %} disabled class="demo-locked"{% endif %}>
       <legend>{% if current_user.must_change_password %}{% trans %}Choose your own password (required){% endtrans %}{% else %}{% trans %}Change password (optional){% endtrans %}{% endif %}</legend>
       {% if current_user.must_change_password %}<p class="flash flash-info">{% trans %}Your password was set by the board. Enter it as the current password, then choose your own.{% endtrans %}</p>{% endif %}
+      {% if demo %}<p class="demo-note">{% trans %}Passwords can't be changed in the demo.{% endtrans %}</p>{% endif %}
       <label>{% trans %}Current password{% endtrans %} <input type="password" name="current_password"></label>
       <label>{% trans %}New password{% endtrans %} <input type="password" name="new_password" minlength="8"></label>
       <label>{% trans %}Confirm new password{% endtrans %} <input type="password" name="confirm_password"></label>

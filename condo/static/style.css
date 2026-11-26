@@ -697,3 +697,16 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .stat small span { display: inline; font-size: inherit; font-weight: 600; color: var(--muted); }
 .stat small span.perf-up { color: var(--danger); } .stat small span.perf-down { color: var(--ok); }
 .dash-insurance { margin-top: 1.2rem; }
+
+/* Demo: sign in by picking a role; password settings are shown but locked. */
+.demo-pick-intro { margin: .2rem 0 .8rem; color: var(--muted); }
+.demo-roles { display: grid; gap: .6rem; }
+.demo-roles form { margin: 0; }
+.demo-role { display: flex; flex-direction: column; align-items: flex-start; gap: .15rem; width: 100%; text-align: start;
+  padding: .8rem 1rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text);
+  font: inherit; cursor: pointer; }
+.demo-role:hover, .demo-role:focus-visible { border-color: var(--brand); background: var(--gold-soft); }
+.demo-role strong { font-size: 1rem; }
+.demo-role span { color: var(--muted); font-size: .88rem; }
+.demo-locked { opacity: .45; pointer-events: none; user-select: none; }
+.demo-note { margin: .4rem 0 .8rem; padding: .5rem .8rem; border-radius: 8px; background: var(--gold-soft); color: var(--gold-ink); font-size: .9rem; }
