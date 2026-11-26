@@ -90,5 +90,5 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
 body::after { content: ""; position: fixed; right: -60px; bottom: -50px; width: 520px; height: 400px; z-index: 0;
   background: url(/logo.png) no-repeat center / contain; opacity: .09; pointer-events: none; }
 .wrap { position: relative; z-index: 1; }
-@media (prefers-color-scheme: dark) { body::after { opacity: .07; } }
+@media (prefers-color-scheme: dark) { body::after { display: none; } }  /* reads as a dark smudge on the dark background */
 @media (max-width: 760px) { body::after { width: 300px; height: 230px; right: -40px; bottom: -30px; } }
