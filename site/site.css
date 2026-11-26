@@ -74,6 +74,7 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
 .extra { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; text-align: start; }
 .extra strong { font-size: 1.25rem; }
 .extra .tax { font-size: .75rem; color: var(--muted); margin-inline-start: 3px; }
+.extra .was-inline { color: var(--muted); font-size: .95rem; margin-inline-end: 2px; }
 .plan .user-note { margin: 10px 0 0; color: var(--muted); font-size: .85rem; text-align: start; }
 .plan .btn { display: inline-block; margin-top: 18px; background: var(--brand-deep); color: #fff; border-radius: 10px; padding: 12px 22px; font-weight: 700; }
 .plan .btn:hover { text-decoration: none; filter: brightness(1.05); }
