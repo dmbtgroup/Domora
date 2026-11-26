@@ -110,7 +110,7 @@ document.addEventListener('keydown', function (e) {
   then give yourself your position in{% endtrans %} <a href="{{ url_for('directory.board') }}">{% trans %}Directory → Board{% endtrans %}</a>.</div>
 {% endif %}
 {% block shell %}
-{% if not current_user.is_authenticated %}<div class="public-top">{{ lang_switch() }}</div>{% endif %}
+{% if not current_user.is_authenticated %}<div class="public-top"><a class="public-home" href="https://belcentra.com">← belcentra.com</a>{{ lang_switch() }}</div>{% endif %}
 <main class="container">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% for cat, msg in messages %}<div class="flash flash-{{ cat }}">{{ msg }}</div>{% endfor %}

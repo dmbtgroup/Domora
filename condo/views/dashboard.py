@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template, url_for
 from flask_login import current_user
 
 from ..extensions import db
@@ -24,8 +24,8 @@ def _costs():
 
 @bp.route("/")
 def index():
-    if not current_user.is_authenticated:  # the public home page, with sign-in
-        return render_template("home.html", year=datetime.now().year)
+    if not current_user.is_authenticated:  # the condo's sign-in; Belcentra's public page is belcentra.com
+        return redirect(url_for("auth.login"))
     now = datetime.now()
     announcements = db.session.scalars(
         db.select(Announcement).order_by(Announcement.pinned.desc(), Announcement.created_at.desc()).limit(5)

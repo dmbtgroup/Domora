@@ -3,7 +3,7 @@
 {% block title %}{% trans %}Sign in{% endtrans %}{% endblock %}
 {% block content %}
 <div class="card narrow login">
-  <h1><span class="login-logo"><img src="{{ url_for('static', filename='brand/logo-240.png') }}" alt=""></span>{{ condo_name }}</h1>
+  <h1><span class="login-logo"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="{{ url_for('static', filename='brand/logo-anim.webp') }}" type="image/webp"><img src="{{ url_for('static', filename='brand/logo-240.png') }}" alt=""></picture></span>{{ condo_name }}</h1>
   <p class="muted">{% trans %}Resident &amp; management portal{% endtrans %}</p>
   <form method="post">
     {{ csrf() }}

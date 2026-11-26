@@ -44,23 +44,24 @@ def test_requires_login(client):
     assert resp.status_code == 302 and "/login" in resp.headers["Location"]
 
 
-def test_home_page_for_visitors_with_sign_in(client):
-    page = client.get("/").data.decode()
-    assert "all in one place." in page and "Everything your building needs" in page
-    assert page.count('action="/login"') == 2 and 'name="csrf_token"' in page
-    assert "sales@belcentra.com" in page and 'class="rail"' not in page
-    assert 'class="home-brand" href="https://belcentra.com"' in page  # the logo leads to the Belcentra home page
+def test_visitors_get_the_condo_sign_in(client):
+    resp = client.get("/")
+    assert resp.status_code == 302 and resp.headers["Location"] == "/login"
+    page = client.get("/login").data.decode()
+    assert "Test Condo" in page or 'class="card narrow login"' in page
+    assert 'href="https://belcentra.com"' in page and 'name="csrf_token"' in page and 'class="rail"' not in page
+    assert "Want this for your building" not in page  # sales pitch lives on belcentra.com only
     resp = client.post("/login", data={"email": "alice@test.com", "password": "password123"})
     assert resp.headers["Location"] == "/"
-    assert "all in one place." not in client.get("/").data.decode()  # signed in: the dashboard
+    assert client.get("/").status_code == 200  # signed in: the dashboard
     resp = client.post("/logout")
     assert resp.headers["Location"] == "/"
 
 
-def test_home_page_in_french(client):
+def test_sign_in_in_french(client):
     client.get("/language/fr")
-    page = client.get("/").data.decode()
-    assert '<html lang="fr">' in page and "Se connecter" in page and "Tout ce dont votre immeuble a besoin" in page
+    page = client.get("/login").data.decode()
+    assert '<html lang="fr">' in page and "Se connecter" in page
 
 
 def test_bad_login(client):
