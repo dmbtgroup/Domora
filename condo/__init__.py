@@ -74,6 +74,8 @@ def create_app(test_config=None):
     db.init_app(app)
     csrf.init_app(app)
     login_manager.init_app(app)
+    from . import sandbox
+    sandbox.init_app(app)  # demo visitors' private copies; before anything reads the signed-in user
     from . import i18n
     i18n.init_app(app)
 
@@ -197,5 +199,6 @@ def create_app(test_config=None):
         with app.app_context():
             db.create_all()
             demo.load_if_empty(app)
+        app.config["DEMO_SANDBOXES"] = True  # from now on each visitor works on a private copy
 
     return app

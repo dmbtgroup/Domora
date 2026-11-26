@@ -58,6 +58,8 @@ def demo_sign_in():
         return redirect(url_for("auth.login"))
     if current_user.is_authenticated:
         logout_user()
+    from .. import sandbox
+    sandbox.start()
     login_user(user)
     return redirect(url_for("dashboard.index"))
 
@@ -66,6 +68,11 @@ def demo_sign_in():
 @login_required
 def logout():
     logout_user()
+    if current_app.config.get("DEMO"):
+        from .. import sandbox
+        sandbox.end()
+        flash(_("You left the demo. Everything you changed has been reset."), "info")
+        return redirect(url_for("auth.login"))
     flash(_("You have been signed out."), "info")
     return redirect(url_for("dashboard.index"))
 
