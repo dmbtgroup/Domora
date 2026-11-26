@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-title-en="Belcentra · Property management, reimagined." data-title-fr="Belcentra · La gestion immobilière, réinventée.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,70 +9,18 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:title" content="Belcentra">
 <meta property="og:description" content="A modern platform for smarter condominium management.">
-<style>
-:root { --brand: #E8612C; --brand-deep: #C94F1D; --gold: #C9A961; --gold-soft: #F6EDD6; --gold-ink: #6E5320;
-        --bg: #FAF7F2; --surface: #fff; --text: #2A211B; --muted: #7A6D61; --border: #ECE3D6; }
-@media (prefers-color-scheme: dark) {
-  :root { --brand: #F2834F; --brand-deep: #F2834F; --gold: #D4B676; --gold-soft: #3A2F1E; --gold-ink: #EBD9A3;
-          --bg: #16120E; --surface: #211B16; --text: #F3ECE2; --muted: #B3A595; --border: #362C23; }
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-a { color: var(--brand-deep); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 0; }
-.brand { display: flex; align-items: center; gap: 12px; color: inherit; }
-.brand:hover { text-decoration: none; }
-.brand img { width: 64px; height: auto; display: block; }
-.brand strong { display: block; letter-spacing: .14em; font-size: 1.2rem; color: var(--gold-ink); }
-.brand small { color: var(--muted); font-weight: 600; }
-.lang { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--surface); }
-.lang button { border: 0; background: none; color: var(--muted); font: inherit; font-weight: 700; font-size: .85rem; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
-.lang button[aria-pressed="true"] { background: var(--brand-deep); color: #fff; }
-.hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; align-items: center; padding: 40px 0 56px; }
-.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; font-weight: 700; color: var(--gold-ink); margin: 0 0 12px; }
-h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; margin: 0 0 18px; letter-spacing: -.02em; }
-h1 .accent { color: var(--brand); }
-.lead { font-size: 1.15rem; color: var(--muted); margin: 0; max-width: 34em; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgba(60,35,15,.06), 0 8px 24px rgba(60,35,15,.06); }
-.card h2 { margin: 0 0 4px; font-size: 1.25rem; }
-.card > p { margin: 0 0 16px; color: var(--muted); }
-.condo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; color: inherit; margin-top: 10px; }
-.condo:hover { text-decoration: none; border-color: var(--gold); background: var(--gold-soft); }
-.condo strong { display: block; }
-.condo > span:first-child { min-width: 0; }
-.condo small { display: block; overflow-wrap: anywhere; }
-.condo small { color: var(--muted); }
-.condo .go { flex: none; background: var(--brand-deep); color: #fff; border-radius: 8px; padding: 7px 14px; font-weight: 700; font-size: .9rem; }
-.condo.demo .go { background: none; color: var(--brand-deep); border: 1px solid currentColor; }
-.features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 0 0 56px; }
-.features div { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: 12px; padding: 18px; }
-.features h3 { margin: 0 0 6px; font-size: 1.05rem; }
-.features p { margin: 0; color: var(--muted); font-size: .95rem; }
-.contact { padding: 0 0 56px; }
-.contact h2 { margin: 0 0 6px; }
-.contact > p { color: var(--muted); margin: 0 0 16px; }
-.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.contact-grid a { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: inherit; }
-.contact-grid a:hover { text-decoration: none; border-color: var(--gold); }
-.contact-grid small { display: block; color: var(--muted); }
-footer { border-top: 1px solid var(--border); padding: 20px 0 32px; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 6px 16px; }
-html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !important; }
-@media (max-width: 760px) {
-  .hero, .features, .contact-grid { grid-template-columns: minmax(0, 1fr); }
-  .hero { padding-top: 16px; gap: 28px; }
-  .brand img { width: 44px; }
-}
-</style>
+<link rel="stylesheet" href="/site.css">
 </head>
 <body>
 <div class="wrap">
   <header>
     <a class="brand" href="/"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="/logo-anim.webp" type="image/webp"><img src="/logo.png" alt=""></picture><span><strong>BELCENTRA</strong></span></a>
+    <nav class="nav">
+    <a class="navlink" href="/pricing"><span data-en>Pricing</span><span data-fr>Tarifs</span></a>
     <div class="lang" role="group" aria-label="Language / Langue">
       <button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="fr" aria-pressed="false">FR</button>
     </div>
+    </nav>
   </header>
 
   <section class="hero">
@@ -103,7 +51,7 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
 
   <section class="contact" id="contact">
     <h2><span data-en>Want Belcentra for your building?</span><span data-fr>Belcentra pour votre immeuble?</span></h2>
-    <p><span data-en>Tell us about your condo and we'll set up its own portal.</span><span data-fr>Parlez-nous de votre copropriété et nous créerons son propre portail.</span></p>
+    <p><span data-en>Tell us about your condo and we'll set up its own portal.</span><span data-fr>Parlez-nous de votre copropriété et nous créerons son propre portail.</span> <a href="/pricing"><span data-en>See pricing →</span><span data-fr>Voir les tarifs →</span></a></p>
     <div class="contact-grid">
       <a href="mailto:sales@belcentra.com"><small data-en>Sales</small><small data-fr>Ventes</small>sales@belcentra.com</a>
       <a href="mailto:support@belcentra.com"><small>Support</small>support@belcentra.com</a>
@@ -115,21 +63,6 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
     <span><strong>Belcentra</strong> · © <span id="year">2026</span> Development Management and Business Tact</span>
   </footer>
 </div>
-<script>
-(function () {
-  var root = document.documentElement, saved = null;
-  try { saved = localStorage.getItem("lang"); } catch (e) {}
-  function set(lang) {
-    root.lang = lang;
-    document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
-    document.title = lang === "fr" ? "Belcentra · La gestion immobilière, réinventée." : "Belcentra · Property management, reimagined.";
-  }
-  set(saved || ((navigator.language || "").toLowerCase().indexOf("fr") === 0 ? "fr" : "en"));
-  document.querySelectorAll(".lang button").forEach(function (b) {
-    b.addEventListener("click", function () { set(b.dataset.lang); try { localStorage.setItem("lang", b.dataset.lang); } catch (e) {} });
-  });
-  document.getElementById("year").textContent = new Date().getFullYear();
-})();
-</script>
+<script src="/site.js"></script>
 </body>
 </html>

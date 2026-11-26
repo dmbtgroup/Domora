@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" data-title-en="Pricing · Belcentra" data-title-fr="Tarifs · Belcentra">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing · Belcentra</title>
+<meta name="description" content="Belcentra pricing: one simple monthly price per condo, 5 users included, 3 months free.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="/"><picture><source media="(prefers-reduced-motion: no-preference)" srcset="/logo-anim.webp" type="image/webp"><img src="/logo.png" alt=""></picture><span><strong>BELCENTRA</strong></span></a>
+    <nav class="nav">
+    <a class="navlink" href="/pricing" aria-current="page"><span data-en>Pricing</span><span data-fr>Tarifs</span></a>
+    <div class="lang" role="group" aria-label="Language / Langue">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="fr" aria-pressed="false">FR</button>
+    </div>
+    </nav>
+  </header>
+
+  <section class="pricing-hero">
+    <p class="eyebrow"><span data-en>Pricing</span><span data-fr>Tarifs</span></p>
+    <h1><span data-en>One simple price per condo.</span><span data-fr>Un prix simple par copropriété.</span></h1>
+    <p class="lead"><span data-en>Everything included, for buildings of every size. You only pay for the people who sign in.</span><span data-fr>Tout est inclus, pour les immeubles de toutes les tailles. Vous payez seulement pour les personnes qui se connectent.</span></p>
+    <span class="trial"><span data-en>First 3 months free</span><span data-fr>3 premiers mois gratuits</span></span>
+  </section>
+
+  <section class="card plan" id="plan" data-base="29" data-included="5" data-extra="3">
+    <h2><span data-en>Per condo</span><span data-fr>Par copropriété</span></h2>
+    <p class="price"><span class="amount" data-cents="2900"></span><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span>
+      <small>/ <span data-en>month</span><span data-fr>mois</span></small></p>
+    <p class="included"><span data-en>5 users included</span><span data-fr>5 utilisateurs inclus</span></p>
+    <div class="extra">
+      <span><span data-en>Each additional user</span><span data-fr>Chaque utilisateur supplémentaire</span></span>
+      <span><strong class="amount" data-cents="300"></strong><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span> / <span data-en>month</span><span data-fr>mois</span></span>
+    </div>
+    <div class="calc">
+      <label for="users"><span data-en>How many people will sign in?</span><span data-fr>Combien de personnes se connecteront?</span>
+        <input id="users" type="number" min="1" max="999" value="13" inputmode="numeric"></label>
+      <div class="total"><span><span data-en>Your monthly price</span><span data-fr>Votre prix mensuel</span></span>
+        <span><b id="total"></b> <span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span></span></div>
+      <p class="note"><span data-en>A user is anyone with their own sign-in: owners, tenants, board members, your accountant.</span><span data-fr>Un utilisateur est toute personne qui a sa propre connexion : copropriétaires, locataires, membres du conseil, votre comptable.</span></p>
+    </div>
+    <ul class="included-list">
+      <li><span data-en>Condo fees, payments and costs</span><span data-fr>Frais, paiements et dépenses</span></li>
+      <li><span data-en>Where the money goes, by category</span><span data-fr>Où va l’argent, par catégorie</span></li>
+      <li><span data-en>Maintenance, routine work and contractors</span><span data-fr>Entretien, travaux réguliers et entrepreneurs</span></li>
+      <li><span data-en>Weighted online votes</span><span data-fr>Votes en ligne pondérés</span></li>
+      <li><span data-en>Documents and insurance follow-up</span><span data-fr>Documents et suivi des assurances</span></li>
+      <li><span data-en>Notices to everyone, in their language</span><span data-fr>Avis à tous, dans leur langue</span></li>
+      <li><span data-en>English and French</span><span data-fr>Français et anglais</span></li>
+      <li><span data-en>Your data stored in Canada</span><span data-fr>Vos données hébergées au Canada</span></li>
+    </ul>
+    <a class="btn" href="mailto:sales@belcentra.com"><span data-en>Start your 3 free months</span><span data-fr>Commencer vos 3 mois gratuits</span></a>
+  </section>
+
+  <section class="faq">
+    <h3><span data-en>What counts as a user?</span><span data-fr>Qu’est-ce qu’un utilisateur?</span></h3>
+    <p><span data-en>Each person with their own sign-in. People without an account, like owners you only keep in the directory, are free.</span><span data-fr>Chaque personne qui a sa propre connexion. Les personnes sans compte, comme les copropriétaires seulement inscrits au répertoire, sont gratuites.</span></p>
+    <h3><span data-en>How does the free period work?</span><span data-fr>Comment fonctionne la période gratuite?</span></h3>
+    <p><span data-en>Your first 3 months are free, with every feature. Billing starts in the fourth month, monthly, with no commitment.</span><span data-fr>Vos 3 premiers mois sont gratuits, avec toutes les fonctions. La facturation commence le quatrième mois, au mois, sans engagement.</span></p>
+    <h3><span data-en>Are taxes included?</span><span data-fr>Les taxes sont-elles incluses?</span></h3>
+    <p><span data-en>Prices are in Canadian dollars, before GST and QST.</span><span data-fr>Les prix sont en dollars canadiens, avant TPS et TVQ.</span></p>
+  </section>
+
+  <footer>
+    <span><strong>Belcentra</strong> · © <span id="year">2026</span> Development Management and Business Tact</span>
+    <a href="mailto:sales@belcentra.com">sales@belcentra.com</a>
+    <a href="mailto:support@belcentra.com">support@belcentra.com</a>
+  </footer>
+</div>
+<script src="/site.js"></script>
+<script>
+(function () {
+  var plan = document.getElementById("plan"), input = document.getElementById("users"), out = document.getElementById("total");
+  var base = +plan.dataset.base, included = +plan.dataset.included, extra = +plan.dataset.extra;
+  function money(dollars) {
+    var fr = document.documentElement.lang === "fr";
+    return fr ? dollars.toLocaleString("fr-CA") + " $" : "$" + dollars.toLocaleString("en-CA");
+  }
+  function render() {
+    document.querySelectorAll(".amount").forEach(function (el) { el.textContent = money(+el.dataset.cents / 100); });
+    var n = Math.max(1, Math.min(999, parseInt(input.value, 10) || 1));
+    out.textContent = money(base + Math.max(0, n - included) * extra);
+  }
+  input.addEventListener("input", render);
+  document.addEventListener("langchange", render);
+  render();
+})();
+</script>
+</body>
+</html>
