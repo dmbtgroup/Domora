@@ -28,7 +28,7 @@
     <span class="trial"><span data-en>First 3 months free</span><span data-fr>3 premiers mois gratuits</span></span>
   </section>
 
-  <section class="card plan" id="plan" data-base="14.25" data-included="5" data-extra="2.5">
+  <section class="card plan" id="plan">
     <h2><span data-en>Per condo</span><span data-fr>Par copropriété</span></h2>
     <p class="offer"><span data-en>Launch offer: 50% off the condo price</span><span data-fr>Offre de lancement : 50 % de rabais sur le prix par copropriété</span></p>
     <p class="was"><span data-en>Regular price</span><span data-fr>Prix régulier</span> <s class="amount" data-cents="2850"></s></p>
@@ -39,13 +39,7 @@
       <span><span data-en>Each additional user</span><span data-fr>Chaque utilisateur supplémentaire</span></span>
       <span><strong class="amount" data-cents="250"></strong><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span> / <span data-en>month</span><span data-fr>mois</span></span>
     </div>
-    <div class="calc">
-      <label for="users"><span data-en>How many people will sign in?</span><span data-fr>Combien de personnes se connecteront?</span>
-        <input id="users" type="number" min="1" max="999" value="13" inputmode="numeric"></label>
-      <div class="total"><span><span data-en>Your monthly price</span><span data-fr>Votre prix mensuel</span></span>
-        <span><b id="total"></b> <span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span></span></div>
-      <p class="note"><span data-en>A user is anyone with their own sign-in: owners, tenants, board members, your accountant.</span><span data-fr>Un utilisateur est toute personne qui a sa propre connexion : copropriétaires, locataires, membres du conseil, votre comptable.</span></p>
-    </div>
+    <p class="user-note"><span data-en>A user is anyone with their own sign-in: owners, tenants, board members, your accountant.</span><span data-fr>Un utilisateur est toute personne qui a sa propre connexion : copropriétaires, locataires, membres du conseil, votre comptable.</span></p>
     <ul class="included-list">
       <li><span data-en>Condo fees, payments and costs</span><span data-fr>Frais, paiements et dépenses</span></li>
       <li><span data-en>Where the money goes, by category</span><span data-fr>Où va l’argent, par catégorie</span></li>
@@ -77,19 +71,13 @@
 <script src="/site.js"></script>
 <script>
 (function () {
-  var plan = document.getElementById("plan"), input = document.getElementById("users"), out = document.getElementById("total");
-  var base = +plan.dataset.base, included = +plan.dataset.included, extra = +plan.dataset.extra;
   function money(dollars) {
-    var fr = document.documentElement.lang === "fr";
-    var opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+    var fr = document.documentElement.lang === "fr", opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
     return fr ? dollars.toLocaleString("fr-CA", opts) + " $" : "$" + dollars.toLocaleString("en-CA", opts);
   }
   function render() {
     document.querySelectorAll(".amount").forEach(function (el) { el.textContent = money(+el.dataset.cents / 100); });
-    var n = Math.max(1, Math.min(999, parseInt(input.value, 10) || 1));
-    out.textContent = money(base + Math.max(0, n - included) * extra);
   }
-  input.addEventListener("input", render);
   document.addEventListener("langchange", render);
   render();
 })();

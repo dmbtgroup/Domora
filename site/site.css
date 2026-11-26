@@ -74,12 +74,7 @@ html:not([lang="fr"]) [data-fr], html[lang="fr"] [data-en] { display: none !impo
 .extra { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; text-align: start; }
 .extra strong { font-size: 1.25rem; }
 .extra .tax { font-size: .75rem; color: var(--muted); margin-inline-start: 3px; }
-.calc { margin: 18px 0 6px; padding: 16px 18px; border-radius: 12px; background: var(--gold-soft); text-align: start; }
-.calc label { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-weight: 600; }
-.calc input { width: 90px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font: inherit; text-align: end; background: var(--surface); color: var(--text); }
-.calc .total { display: flex; justify-content: space-between; margin-top: 10px; font-size: 1.05rem; }
-.calc .total b { font-size: 1.3rem; }
-.calc .note { margin: 6px 0 0; color: var(--muted); font-size: .85rem; }
+.plan .user-note { margin: 10px 0 0; color: var(--muted); font-size: .85rem; text-align: start; }
 .plan .btn { display: inline-block; margin-top: 18px; background: var(--brand-deep); color: #fff; border-radius: 10px; padding: 12px 22px; font-weight: 700; }
 .plan .btn:hover { text-decoration: none; filter: brightness(1.05); }
 .included-list { columns: 2; gap: 24px; text-align: start; margin: 22px 0 0; padding: 0; list-style: none; }
