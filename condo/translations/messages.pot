@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-26 14:31+0000\n"
+"POT-Creation-Date: 2026-11-26 14:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1078,9 +1078,6 @@ msgid "Choose who can see it."
 msgstr ""
 
 msgid "Choose who votes."
-msgstr ""
-
-msgid "Choose who you want to be. No password needed."
 msgstr ""
 
 msgid "Choose your own password (required)"
@@ -2404,6 +2401,9 @@ msgstr ""
 msgid "No partner matches."
 msgstr ""
 
+msgid "No password needed in the demo."
+msgstr ""
+
 #, python-format
 msgid "No payments in %(label)s."
 msgstr ""
@@ -2563,9 +2563,6 @@ msgid ""
 msgstr ""
 
 msgid "Notices"
-msgstr ""
-
-msgid "Notices and maintenance requests, no finances"
 msgstr ""
 
 msgid "Notices: post and edit notices"
@@ -3434,9 +3431,6 @@ msgstr ""
 msgid "See all the details"
 msgstr ""
 
-msgid "Sees and manages everything"
-msgstr ""
-
 msgid "Select a unit, or mark this as a common-area issue."
 msgstr ""
 
@@ -3502,6 +3496,9 @@ msgid "Show as a table"
 msgstr ""
 
 msgid "Sign in"
+msgstr ""
+
+msgid "Sign in as"
 msgstr ""
 
 msgid "Sign-in account and password"
@@ -3789,12 +3786,6 @@ msgstr ""
 msgid ""
 "The website checks the sheet every 10 minutes and updates when it has "
 "changed."
-msgstr ""
-
-msgid "Their unit, notices, votes and requests"
-msgstr ""
-
-msgid "Their unit, plus the accounting"
 msgstr ""
 
 #, python-format
