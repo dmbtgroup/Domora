@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pricing · Belcentra</title>
-<meta name="description" content="Belcentra pricing: one simple monthly price per condo, 5 users included, 3 months free.">
+<meta name="description" content="Belcentra pricing: one simple monthly price per condo, 5 users included, 3 months free and 50% off at launch.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/site.css">
@@ -28,14 +28,16 @@
     <span class="trial"><span data-en>First 3 months free</span><span data-fr>3 premiers mois gratuits</span></span>
   </section>
 
-  <section class="card plan" id="plan" data-base="29" data-included="5" data-extra="3">
+  <section class="card plan" id="plan" data-base="14.25" data-included="5" data-extra="2.5">
     <h2><span data-en>Per condo</span><span data-fr>Par copropriété</span></h2>
-    <p class="price"><span class="amount" data-cents="2900"></span><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span>
+    <p class="offer"><span data-en>Launch offer: 50% off the condo price</span><span data-fr>Offre de lancement : 50 % de rabais sur le prix par copropriété</span></p>
+    <p class="was"><span data-en>Regular price</span><span data-fr>Prix régulier</span> <s class="amount" data-cents="2850"></s></p>
+    <p class="price"><span class="amount" data-cents="1425"></span><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span>
       <small>/ <span data-en>month</span><span data-fr>mois</span></small></p>
     <p class="included"><span data-en>5 users included</span><span data-fr>5 utilisateurs inclus</span></p>
     <div class="extra">
       <span><span data-en>Each additional user</span><span data-fr>Chaque utilisateur supplémentaire</span></span>
-      <span><strong class="amount" data-cents="300"></strong><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span> / <span data-en>month</span><span data-fr>mois</span></span>
+      <span><strong class="amount" data-cents="250"></strong><span class="tax">+ <span data-en>tax</span><span data-fr>taxes</span></span> / <span data-en>month</span><span data-fr>mois</span></span>
     </div>
     <div class="calc">
       <label for="users"><span data-en>How many people will sign in?</span><span data-fr>Combien de personnes se connecteront?</span>
@@ -79,7 +81,8 @@
   var base = +plan.dataset.base, included = +plan.dataset.included, extra = +plan.dataset.extra;
   function money(dollars) {
     var fr = document.documentElement.lang === "fr";
-    return fr ? dollars.toLocaleString("fr-CA") + " $" : "$" + dollars.toLocaleString("en-CA");
+    var opts = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+    return fr ? dollars.toLocaleString("fr-CA", opts) + " $" : "$" + dollars.toLocaleString("en-CA", opts);
   }
   function render() {
     document.querySelectorAll(".amount").forEach(function (el) { el.textContent = money(+el.dataset.cents / 100); });
