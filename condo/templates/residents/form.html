@@ -31,7 +31,9 @@
     </label>
   </div>
   {% endif %}
-  {% if creating %}
+  {% if creating and demo %}
+  <p class="demo-note">{% trans %}In the demo, every account uses the password Demo2026!{% endtrans %}</p>
+  {% elif creating %}
   <label>{% trans %}Password{% endtrans %}
     <span class="pw-field"><input type="text" name="password" id="pw" minlength="8" required autocomplete="new-password" value="{{ form.get('password', '') }}">
       <button type="button" class="btn small" id="pw-gen">{% trans %}Generate{% endtrans %}</button></span>
@@ -48,7 +50,8 @@
   {% if user.id == current_user.id %}
     <p class="muted">{% trans %}Change your own password from My profile.{% endtrans %} <a href="{{ url_for('auth.account') }}">{% trans %}My profile{% endtrans %}</a></p>
   {% else %}
-  <div class="choice">
+  {% if demo %}<p class="demo-note">{% trans %}Passwords can't be changed in the demo.{% endtrans %}</p>{% endif %}
+  <div class="choice{{ ' demo-locked' if demo }}"{{ ' inert' if demo }}>
     <div>
       <h3>{{ icon('key') }} {% trans %}Set a password{% endtrans %}</h3>
       <p class="muted">{% trans %}Type a password yourself, or generate one, to give to the person.{% endtrans %}</p>

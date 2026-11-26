@@ -43,7 +43,8 @@
     {% if login.id == current_user.id %}
       <p class="muted">{% trans %}Change your own password from My profile.{% endtrans %} <a href="{{ url_for('auth.account') }}">{% trans %}My profile{% endtrans %}</a></p>
     {% else %}
-    <div class="choice">
+    {% if demo %}<p class="demo-note">{% trans %}Passwords can't be changed in the demo.{% endtrans %}</p>{% endif %}
+    <div class="choice{{ ' demo-locked' if demo }}"{{ ' inert' if demo }}>
       <div>
         <h3>{{ icon('key') }} {% trans %}Set a password{% endtrans %}</h3>
         <p class="muted">{% trans %}Type a password yourself, or generate one, to give to the person.{% endtrans %}</p>

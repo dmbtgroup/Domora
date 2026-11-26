@@ -1,12 +1,15 @@
-{% if demo %}
-<div class="demo-login">
-  <strong>{% trans %}Demo accounts{% endtrans %}</strong>
-  <p class="muted small">{% trans %}Password for every account:{% endtrans %} <code>Demo2026!</code></p>
-  <ul>
-    <li><code>conseil@jardinsduparc.example</code> · {% trans %}board president (sees everything){% endtrans %}</li>
-    <li><code>marc.gagnon@demo.example</code> · {% trans %}owner and treasurer{% endtrans %}</li>
-    <li><code>isabelle.cote@demo.example</code> · {% trans %}owner{% endtrans %}</li>
-    <li><code>locataire@demo.example</code> · {% trans %}tenant{% endtrans %}</li>
-  </ul>
+{# Demo sign-in: pick a role, no password to type. #}
+{% from "_macros.html" import csrf %}
+<p class="demo-pick-intro">{% trans %}Choose who you want to be. No password needed.{% endtrans %}</p>
+<div class="demo-roles">
+  {% for key, title, who, hint in [
+      ('president', _('Board president'), 'Sophie Lavoie', _('Sees and manages everything')),
+      ('treasurer', _('Owner and treasurer'), 'Marc Gagnon', _('Their unit, plus the accounting')),
+      ('owner', _('Owner'), 'Isabelle Côté', _('Their unit, notices, votes and requests')),
+      ('tenant', _('Tenant'), 'Thomas Pelletier', _('Notices and maintenance requests, no finances'))] %}
+  <form method="post" action="{{ url_for('auth.demo_sign_in') }}">
+    {{ csrf() }}<input type="hidden" name="role" value="{{ key }}">
+    <button class="demo-role"><strong>{{ title }}</strong><span>{{ who }} · {{ hint }}</span></button>
+  </form>
+  {% endfor %}
 </div>
-{% endif %}

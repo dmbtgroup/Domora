@@ -16,6 +16,13 @@ from .models import (Amenity, Announcement, BankBalance, Expense, MaintenanceReq
 
 DEMO_PASSWORD = "Demo2026!"
 BOARD_EMAIL = "conseil@jardinsduparc.example"
+# What a visitor picks on the demo's sign-in page, and the account it signs them into.
+DEMO_ROLES = [
+    ("president", BOARD_EMAIL),
+    ("treasurer", "marc.gagnon@demo.example"),
+    ("owner", "isabelle.cote@demo.example"),
+    ("tenant", "locataire@demo.example"),
+]
 
 UNITS = [  # number, floor, ownership share, owners: (name, email, phone, board positions)
     ("101", 1, 0.115, [("Sophie Lavoie", BOARD_EMAIL, "514-555-0101", ["president"])]),
