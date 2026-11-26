@@ -38,7 +38,7 @@ def test_passwords_cannot_change_in_the_demo(demo_app):
     c = demo_app.test_client()
     c.post("/demo/sign-in", data={"role": "president"})
     page = c.get("/account").data.decode()
-    assert "demo-locked" in page and "Passwords can" in page
+    assert "demo-locked" in page and "demo-note" in page
     c.post("/account", data={"current_password": demo.DEMO_PASSWORD, "new_password": "something-new",
                              "confirm_password": "something-new", "phone": ""})
     board = db.session.scalar(db.select(User).where(User.email == demo.BOARD_EMAIL))
