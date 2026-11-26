@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-26 14:37+0000\n"
+"POT-Creation-Date: 2026-11-26 14:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4203,6 +4203,9 @@ msgstr ""
 msgid "You have no upcoming bookings."
 msgstr ""
 
+msgid "You left the demo. Everything you changed has been reset."
+msgstr ""
+
 #, python-format
 msgid "You voted: %(choice)s"
 msgstr ""
@@ -4222,6 +4225,11 @@ msgid "Your account is not linked to a unit; report it as a common-area issue."
 msgstr ""
 
 msgid "Your decision"
+msgstr ""
+
+msgid ""
+"Your demo session ended after an hour without activity, and your changes "
+"were reset. Choose a role to start again."
 msgstr ""
 
 msgid ""
