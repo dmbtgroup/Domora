@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-26 14:31+0000\n"
+"POT-Creation-Date: 2026-11-26 14:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1040,9 +1040,6 @@ msgstr "Choisissez qui peut le voir."
 
 msgid "Choose who votes."
 msgstr "Choisissez qui vote."
-
-msgid "Choose who you want to be. No password needed."
-msgstr "Choisissez qui vous voulez être. Aucun mot de passe requis."
 
 msgid "Choose your own password (required)"
 msgstr "Choisissez votre propre mot de passe (obligatoire)"
@@ -2322,6 +2319,9 @@ msgstr "Aucun copropriétaire inscrit."
 msgid "No partner matches."
 msgstr "Aucun partenaire ne correspond."
 
+msgid "No password needed in the demo."
+msgstr "Aucun mot de passe requis dans la démo."
+
 #, python-format
 msgid "No payments in %(label)s."
 msgstr "Aucun paiement en %(label)s."
@@ -2474,9 +2474,6 @@ msgstr "Rien pour l’instant. Vous serez avisé ici de vos demandes, des approb
 
 msgid "Notices"
 msgstr "Avis"
-
-msgid "Notices and maintenance requests, no finances"
-msgstr "Avis et demandes d’entretien, sans les finances"
 
 msgid "Notices: post and edit notices"
 msgstr "Avis : publier et modifier des avis"
@@ -3325,9 +3322,6 @@ msgstr "Sécurité et incendie"
 msgid "See all the details"
 msgstr "Voir tous les détails"
 
-msgid "Sees and manages everything"
-msgstr "Voit et gère tout"
-
 msgid "Select a unit, or mark this as a common-area issue."
 msgstr "Choisissez une unité, ou indiquez qu’il s’agit d’une partie commune."
 
@@ -3392,6 +3386,9 @@ msgstr "Afficher en tableau"
 
 msgid "Sign in"
 msgstr "Se connecter"
+
+msgid "Sign in as"
+msgstr "Se connecter en tant que"
 
 msgid "Sign-in account and password"
 msgstr "Compte de connexion et mot de passe"
@@ -3655,12 +3652,6 @@ msgstr "Les deux mots de passe ne correspondent pas."
 
 msgid "The website checks the sheet every 10 minutes and updates when it has changed."
 msgstr "Le site vérifie la feuille toutes les 10 minutes et se met à jour quand elle a changé."
-
-msgid "Their unit, notices, votes and requests"
-msgstr "Son unité, les avis, les votes et les demandes"
-
-msgid "Their unit, plus the accounting"
-msgstr "Son unité, plus la comptabilité"
 
 #, python-format
 msgid "There are already fees for a period starting in %(year)s."

@@ -1,15 +1,14 @@
 {# Demo sign-in: pick a role, no password to type. #}
 {% from "_macros.html" import csrf %}
-<p class="demo-pick-intro">{% trans %}Choose who you want to be. No password needed.{% endtrans %}</p>
-<div class="demo-roles">
-  {% for key, title, who, hint in [
-      ('president', _('Board president'), 'Sophie Lavoie', _('Sees and manages everything')),
-      ('treasurer', _('Owner and treasurer'), 'Marc Gagnon', _('Their unit, plus the accounting')),
-      ('owner', _('Owner'), 'Isabelle Côté', _('Their unit, notices, votes and requests')),
-      ('tenant', _('Tenant'), 'Thomas Pelletier', _('Notices and maintenance requests, no finances'))] %}
-  <form method="post" action="{{ url_for('auth.demo_sign_in') }}">
-    {{ csrf() }}<input type="hidden" name="role" value="{{ key }}">
-    <button class="demo-role"><strong>{{ title }}</strong><span>{{ who }} · {{ hint }}</span></button>
-  </form>
-  {% endfor %}
-</div>
+<form method="post" action="{{ url_for('auth.demo_sign_in') }}" class="demo-pick">
+  {{ csrf() }}
+  <label>{% trans %}Sign in as{% endtrans %}
+    <select name="role">
+      <option value="president">{{ _('Board president') }} · Sophie Lavoie</option>
+      <option value="treasurer">{{ _('Owner and treasurer') }} · Marc Gagnon</option>
+      <option value="owner" selected>{{ _('Owner') }} · Isabelle Côté</option>
+      <option value="tenant">{{ _('Tenant') }} · Thomas Pelletier</option>
+    </select></label>
+  <button class="btn primary full">{% trans %}Go{% endtrans %}</button>
+  <p class="muted small">{% trans %}No password needed in the demo.{% endtrans %}</p>
+</form>
