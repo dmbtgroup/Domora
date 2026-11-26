@@ -49,6 +49,7 @@ def test_home_page_for_visitors_with_sign_in(client):
     assert "all in one place." in page and "Everything your building needs" in page
     assert page.count('action="/login"') == 2 and 'name="csrf_token"' in page
     assert "sales@belcentra.com" in page and 'class="rail"' not in page
+    assert 'class="home-brand" href="https://belcentra.com"' in page  # the logo leads to the Belcentra home page
     resp = client.post("/login", data={"email": "alice@test.com", "password": "password123"})
     assert resp.headers["Location"] == "/"
     assert "all in one place." not in client.get("/").data.decode()  # signed in: the dashboard
