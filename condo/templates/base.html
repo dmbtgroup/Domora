@@ -131,5 +131,6 @@ document.addEventListener('keydown', function (e) {
 </footer>
 {% endblock %}
 <script src="{{ url_for('static', filename='uploads.js') }}" defer></script>
+<script>window.addEventListener('pageshow', function (e) { if (e.persisted) location.reload(); });</script>
 </body>
 </html>

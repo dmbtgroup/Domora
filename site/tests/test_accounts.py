@@ -218,3 +218,21 @@ def test_email_off_sends_nothing(app):
     with app.test_request_context():
         assert send("p@x.example", "s", "t") is False
     assert not app.extensions.get("sent_mail") or all(m["subject"] == "s" for m in app.extensions["sent_mail"])
+
+
+def test_save_for_this_device_skips_the_code_next_time(app):
+    acc = add("board@x.example", memberships=[("condo5077", "admin", True)])
+    acc.totp_secret, acc.totp_enabled = pyotp.random_base32(), True
+    db.session.commit()
+    c = app.test_client()
+    sign_in(c, "board@x.example")
+    post(c, "/sign-in/code", code=pyotp.TOTP(acc.totp_secret).now(), save_device="on")
+    assert c.get("/condos").headers.get("Cache-Control") == "no-store"
+    post(c, "/sign-out")
+    assert sign_in(c, "board@x.example").headers["Location"].endswith("/condos")  # no code asked
+    other = app.test_client()  # another device still needs the code
+    assert sign_in(other, "board@x.example").headers["Location"].endswith("/sign-in/code")
+    acc.totp_secret = pyotp.random_base32()  # a new two-step key forgets saved devices
+    db.session.commit()
+    post(c, "/sign-out")
+    assert sign_in(c, "board@x.example").headers["Location"].endswith("/sign-in/code")

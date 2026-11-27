@@ -1,3 +1,4 @@
+import hashlib
 import secrets
 from datetime import timedelta
 from functools import wraps
@@ -15,6 +16,7 @@ from .models import Account, db, record, utcnow
 
 bp = Blueprint("views", __name__)
 MAX_FAILURES, LOCK_MINUTES = 5, 15
+DEVICE_COOKIE, DEVICE_DAYS = "bc_device", 30
 
 
 # --- plumbing ----------------------------------------------------------------------------------------------
@@ -25,6 +27,14 @@ def _csrf():
     if request.method == "POST" and request.blueprint == "views":
         if not secrets.compare_digest(request.form.get("csrf", ""), session["csrf"]):
             abort(400)
+
+
+@bp.after_app_request
+def _no_store(response):
+    """Pages seen while signed in are never kept by the browser (Back after signing out shows nothing)."""
+    if (session.get("account_id") or session.get("pending_id")) and request.endpoint != "static":
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @bp.app_context_processor
@@ -52,7 +62,24 @@ def _pending():
     return db.session.get(Account, acc_id) if acc_id else None
 
 
-def _finish(acc):
+def _device_serializer():
+    return URLSafeTimedSerializer(current_app.config["SECRET_KEY"], salt="belcentra-device")
+
+
+def _device_mark(acc):
+    # Tied to the current two-step key: a new key (or two-step turned off) forgets every saved device.
+    return hashlib.sha256((acc.totp_secret or "").encode()).hexdigest()[:16]
+
+
+def _device_saved(acc):
+    try:
+        data = _device_serializer().loads(request.cookies.get(DEVICE_COOKIE, ""), max_age=DEVICE_DAYS * 86400)
+    except BadSignature:
+        return False
+    return data.get("id") == acc.id and secrets.compare_digest(data.get("k", ""), _device_mark(acc))
+
+
+def _finish(acc, save_device=False):
     """Password (and code) accepted: open the session, then whatever is still required."""
     remember = session.get("remember", False)
     session.clear()
@@ -63,10 +90,16 @@ def _finish(acc):
     record("sign-in", acc)
     db.session.commit()
     if acc.needs_two_step and not acc.totp_enabled:
-        return redirect(url_for("views.two_step_setup"))
-    if acc.must_change_password:
-        return redirect(url_for("views.change_password"))
-    return redirect(url_for("views.condos"))
+        response = redirect(url_for("views.two_step_setup"))
+    elif acc.must_change_password:
+        response = redirect(url_for("views.change_password"))
+    else:
+        response = redirect(url_for("views.condos"))
+    if save_device:
+        response.set_cookie(DEVICE_COOKIE, _device_serializer().dumps({"id": acc.id, "k": _device_mark(acc)}),
+                            max_age=DEVICE_DAYS * 86400, secure=current_app.config["SESSION_COOKIE_SECURE"],
+                            httponly=True, samesite="Lax")
+    return response
 
 
 # --- public pages --------------------------------------------------------------------------------------------
@@ -108,7 +141,7 @@ def sign_in():
         session.clear()
         session["csrf"] = secrets.token_urlsafe(24)
         session["remember"] = bool(request.form.get("remember"))
-        if acc.totp_enabled:
+        if acc.totp_enabled and not _device_saved(acc):
             session["pending_id"] = acc.id
             return redirect(url_for("views.sign_in_code"))
         return _finish(acc)
@@ -124,7 +157,7 @@ def sign_in_code():
         code = request.form.get("code", "").replace(" ", "")
         ok = (code.isdigit() and pyotp.TOTP(acc.totp_secret).verify(code, valid_window=1)) or acc.use_recovery_code(code)
         if ok:
-            return _finish(acc)
+            return _finish(acc, save_device=bool(request.form.get("save_device")))
         acc.failed_logins += 1
         if acc.failed_logins >= MAX_FAILURES:
             acc.locked_until, acc.failed_logins = utcnow() + timedelta(minutes=LOCK_MINUTES), 0

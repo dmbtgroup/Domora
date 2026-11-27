@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, request
 
 from .extensions import csrf, db, login_manager
 
@@ -84,6 +84,15 @@ def create_app(test_config=None):
     central.init_app(app)  # demo visitors' private copies; before anything reads the signed-in user
     from . import i18n
     i18n.init_app(app)
+
+    @app.after_request
+    def _no_store_when_signed_in(response):
+        """Signed-in pages are never kept by the browser, so Back after signing out shows nothing private."""
+        from flask_login import current_user
+        if (request.endpoint != "static" and current_user and current_user.is_authenticated
+                and "Cache-Control" not in response.headers):
+            response.headers["Cache-Control"] = "no-store"
+        return response
 
     from . import models  # noqa: F401  (register models)
     from .views import amenities, announcements, auth, billing, dashboard, directory, documents, fees, importer, insurance, notifications, reimbursements, maintenance, owners, partners, residents, sheet, units, votes

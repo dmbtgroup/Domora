@@ -97,3 +97,12 @@ def test_missing_passwords_are_sent_once_when_asked(app, monkeypatch):
     monkeypatch.setattr(central, "_call", fake_call)
     assert central.push_members() == 3
     assert len(sent) == 2 and [m["email"] for m in sent[1]["members"] if "password_hash" in m] == ["alice@test.com"]
+
+
+def test_arriving_from_belcentra_signs_out_there_too(central_app, client):
+    central_app.config["CENTRAL_LOGIN"] = False  # connected, not yet the only way in
+    client.get(f"/auth/handoff?pass={make_pass(nonce='n-6')}")
+    assert client.get("/").headers.get("Cache-Control") == "no-store"
+    assert client.post("/logout").headers["Location"] == "https://acc.example/signed-out"
+    login(client, "alice@test.com")  # the condo's own sign-in page: stays here
+    assert "acc.example" not in client.post("/logout").headers["Location"]

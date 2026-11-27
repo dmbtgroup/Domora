@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from ..extensions import db
@@ -103,6 +103,7 @@ def handoff():
     if current_user.is_authenticated:
         logout_user()
     login_user(user)
+    session["via_central"] = True  # signing out here also signs out of belcentra.com
     if not user.language and data.get("lang") in ("en", "fr"):
         user.language = data["lang"]
         db.session.commit()
@@ -112,9 +113,10 @@ def handoff():
 @bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
+    via_central = session.pop("via_central", False)
     logout_user()
     from .. import central
-    if central.enabled():
+    if central.enabled() or via_central:
         return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/signed-out")
     if current_app.config.get("DEMO"):
         from .. import sandbox
