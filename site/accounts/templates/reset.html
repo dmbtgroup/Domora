@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block box %}
+<h1>{{ t("Choose a new password", "Choisissez un nouveau mot de passe") }}</h1>
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label class="field">{{ t("New password (10 characters or more)", "Nouveau mot de passe (10 caractères ou plus)") }}<input type="password" name="new" required minlength="10" autocomplete="new-password"></label>
+  <label class="field">{{ t("Confirm new password", "Confirmer le nouveau mot de passe") }}<input type="password" name="confirm" required autocomplete="new-password"></label>
+  <button class="btn-full">{{ t("Save", "Enregistrer") }}</button>
+</form>
+{% endblock %}

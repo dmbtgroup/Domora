@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block box %}
+<h1>{{ t("Sign in", "Connexion") }}</h1>
+<p class="sub">{{ t("One account for all your condos.", "Un seul compte pour toutes vos copropriétés.") }}</p>
+<form method="post" action="{{ url_for('views.sign_in') }}">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label class="field">{{ t("Email", "Courriel") }}<input type="email" name="email" value="{{ email }}" required autofocus autocomplete="username"></label>
+  <label class="field">{{ t("Password", "Mot de passe") }}<input type="password" name="password" required autocomplete="current-password"></label>
+  <div class="row"><label><input type="checkbox" name="remember"> {{ t("Keep me signed in", "Rester connecté") }}</label>
+    <a href="{{ url_for('views.forgot') }}">{{ t("Forgot password?", "Mot de passe oublié?") }}</a></div>
+  <button class="btn-full">{{ t("Sign in", "Se connecter") }}</button>
+</form>
+<p class="hint">{{ t("New condo?", "Nouvelle copropriété?") }} <a href="/pricing">{{ t("See pricing", "Voir les tarifs") }}</a> ·
+  {{ t("Just looking?", "Simple curiosité?") }} <a href="https://demo.belcentra.com/">{{ t("Try the demo", "Essayer la démo") }}</a></p>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block box %}
+<h1>{{ t("Two-step sign-in is on", "La connexion en deux étapes est activée") }}</h1>
+<p class="sub">{{ t("Keep these backup codes somewhere safe. Each one works once if you lose your phone. They won't be shown again.", "Gardez ces codes de secours en lieu sûr. Chacun fonctionne une fois si vous perdez votre téléphone. Ils ne seront plus affichés.") }}</p>
+<ul class="codes">{% for c in codes %}<li><code>{{ c }}</code></li>{% endfor %}</ul>
+<a class="btn-full" href="{{ url_for('views.condos') }}">{{ t("I saved them, continue", "Je les ai notés, continuer") }}</a>
+{% endblock %}

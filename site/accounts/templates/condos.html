@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title_en %}Your condos{% endblock %}{% block title_fr %}Vos copropriétés{% endblock %}
+{% block box %}
+<div class="who"><span class="avatar-s">{{ (me.name or me.email)[:1]|upper }}</span><span><b>{{ me.name }}</b>{{ me.email }}</span></div>
+{% if choices %}
+<h1>{{ t("Choose your condo", "Choisissez votre copropriété") }}</h1>
+<form method="get" onsubmit="location.href='/go/' + this.condo.value; return false;">
+  <label class="field">{{ t("Condo", "Copropriété") }}<select name="condo">
+    {% for slug, name, role in choices %}<option value="{{ slug }}">{{ name }}{% if role %} · {{ role }}{% endif %}</option>{% endfor %}
+  </select></label>
+  <button class="btn-full">{{ t("Open", "Ouvrir") }}</button>
+</form>
+{% else %}
+<h1>{{ t("No condo yet", "Aucune copropriété pour l’instant") }}</h1>
+<p class="sub">{{ t("Your account isn't linked to a condo. Ask your board to give you access.", "Votre compte n’est lié à aucune copropriété. Demandez l’accès à votre conseil.") }}</p>
+{% endif %}
+<p class="hint"><a href="{{ url_for('views.change_password') }}">{{ t("Change password", "Changer le mot de passe") }}</a>
+  {% if not me.totp_enabled %} · <a href="{{ url_for('views.two_step_setup') }}">{{ t("Two-step sign-in", "Connexion en deux étapes") }}</a>{% endif %}</p>
+<form method="post" action="{{ url_for('views.sign_out') }}" class="hint"><input type="hidden" name="csrf" value="{{ csrf }}">
+  <button class="linklike">{{ t("Sign out", "Se déconnecter") }}</button></form>
+{% endblock %}

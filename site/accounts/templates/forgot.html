@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block box %}
+<h1>{{ t("Forgot your password?", "Mot de passe oublié?") }}</h1>
+<p class="sub">{{ t("Enter your email and we'll send you a link to choose a new one.", "Entrez votre courriel et nous vous enverrons un lien pour en choisir un nouveau.") }}</p>
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label class="field">{{ t("Email", "Courriel") }}<input type="email" name="email" required autofocus></label>
+  <button class="btn-full">{{ t("Send the link", "Envoyer le lien") }}</button>
+</form>
+<p class="hint"><a href="{{ url_for('views.sign_in') }}">{{ t("Back to sign in", "Retour à la connexion") }}</a></p>
+{% endblock %}
