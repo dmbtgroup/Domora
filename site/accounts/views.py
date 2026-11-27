@@ -175,6 +175,9 @@ def sign_in_code():
 @signed_in
 def two_step_setup():
     acc = _current()
+    changing = acc.totp_enabled
+    if changing and session.get("totp_change_until", 0) < utcnow().timestamp():
+        return redirect(url_for("views.two_step_change"))  # replacing a key needs the password and a code first
     if request.method == "GET" or "totp_setup" not in session:
         session["totp_setup"] = pyotp.random_base32()  # a fresh key each time the page opens
     secret = session["totp_setup"]
@@ -183,7 +186,8 @@ def two_step_setup():
             acc.totp_secret, acc.totp_enabled = secret, True
             codes = acc.new_recovery_codes()
             session.pop("totp_setup", None)
-            record("two-step-on", acc)
+            session.pop("totp_change_until", None)
+            record("two-step-changed" if changing else "two-step-on", acc)
             db.session.commit()
             return render_template("recovery_codes.html", codes=codes)
         flash(t("That code didn't work. Check your phone's time and try the newest code.",
@@ -191,7 +195,36 @@ def two_step_setup():
     uri = pyotp.TOTP(secret).provisioning_uri(name=acc.email, issuer_name="Belcentra")
     qr = segno.make(uri, error="m").svg_inline(scale=5, dark="#2A211B", light="#ffffff", omitsize=True)
     key = " ".join(secret[i:i + 4] for i in range(0, len(secret), 4)).lower()  # lowercase: no O/0 mix-up
-    return render_template("two_step_setup.html", qr=qr, secret=key, required=acc.needs_two_step)
+    return render_template("two_step_setup.html", qr=qr, secret=key, required=acc.needs_two_step, changing=changing)
+
+
+@bp.route("/two-step/change", methods=["GET", "POST"])
+@signed_in
+def two_step_change():
+    """New phone or a key that may have been seen: confirm with the password and a current code, then scan a new one."""
+    acc = _current()
+    if not acc.totp_enabled:
+        return redirect(url_for("views.two_step_setup"))
+    if request.method == "POST":
+        code = request.form.get("code", "").replace(" ", "")
+        ok = acc.check_password(request.form.get("password", "")) and (
+            (code.isdigit() and pyotp.TOTP(acc.totp_secret).verify(code, valid_window=1)) or acc.use_recovery_code(code))
+        if ok:
+            acc.failed_logins = 0
+            db.session.commit()
+            session["totp_change_until"] = utcnow().timestamp() + 600
+            return redirect(url_for("views.two_step_setup"))
+        acc.failed_logins += 1
+        if acc.failed_logins >= MAX_FAILURES:
+            acc.locked_until, acc.failed_logins = utcnow() + timedelta(minutes=LOCK_MINUTES), 0
+            record("locked", acc)
+            db.session.commit()
+            session.clear()
+            flash(t("Too many attempts. Try again in a few minutes.", "Trop de tentatives. Réessayez dans quelques minutes."), "error")
+            return redirect(url_for("views.sign_in"))
+        db.session.commit()
+        flash(t("The password or the code is incorrect.", "Le mot de passe ou le code est incorrect."), "error")
+    return render_template("two_step_change.html")
 
 
 @bp.post("/sign-out")

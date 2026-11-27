@@ -236,3 +236,25 @@ def test_save_for_this_device_skips_the_code_next_time(app):
     db.session.commit()
     post(c, "/sign-out")
     assert sign_in(c, "board@x.example").headers["Location"].endswith("/sign-in/code")
+
+
+def test_change_authenticator_needs_password_and_code(app):
+    acc = add("board@x.example", memberships=[("condo5077", "admin", True)])
+    old = pyotp.random_base32()
+    acc.totp_secret, acc.totp_enabled = old, True
+    db.session.commit()
+    c = app.test_client()
+    sign_in(c, "board@x.example")
+    post(c, "/sign-in/code", code=pyotp.TOTP(old).now())
+    assert c.get("/two-step/setup").headers["Location"].endswith("/two-step/change")  # no shortcut
+    assert "Change authenticator" in c.get("/condos?all=1").data.decode()
+    post(c, "/two-step/change", password="wrong password", code=pyotp.TOTP(old).now())
+    assert c.get("/two-step/setup").status_code == 302
+    assert post(c, "/two-step/change", password="correct horse 1", code=pyotp.TOTP(old).now()).headers["Location"].endswith("/two-step/setup")
+    c.get("/two-step/setup")
+    with c.session_transaction() as s:
+        new = s["totp_setup"]
+    assert db.session.get(Account, acc.id).totp_secret == old  # old key works until the new one is confirmed
+    page = post(c, "/two-step/setup", code=pyotp.TOTP(new).now()).data.decode()
+    assert db.session.get(Account, acc.id).totp_secret == new and page.count("<li") >= 10
+    assert c.get("/two-step/setup").headers["Location"].endswith("/two-step/change")  # one change per confirmation

@@ -19,7 +19,8 @@
     <label>{% trans %}Phone{% endtrans %} <input name="phone" value="{{ current_user.phone or '' }}"></label>
     {% if central_login %}
     <p class="muted">{% trans %}Your password and two-step sign-in are managed with your Belcentra account.{% endtrans %}
-      <a href="{{ accounts_url }}/account/password">{% trans %}Change password{% endtrans %}</a></p>
+      <a href="{{ accounts_url }}/account/password">{% trans %}Change password{% endtrans %}</a> ·
+      <a href="{{ accounts_url }}/two-step/change">{% trans %}Change authenticator{% endtrans %}</a></p>
     {% else %}
     <fieldset{% if demo %} disabled class="demo-locked"{% endif %}>
       <legend>{% if current_user.must_change_password %}{% trans %}Choose your own password (required){% endtrans %}{% else %}{% trans %}Change password (optional){% endtrans %}{% endif %}</legend>

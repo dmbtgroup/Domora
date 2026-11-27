@@ -15,7 +15,7 @@
 <p class="sub">{{ t("Your account isn't linked to a condo. Ask your board to give you access.", "Votre compte n’est lié à aucune copropriété. Demandez l’accès à votre conseil.") }}</p>
 {% endif %}
 <p class="hint"><a href="{{ url_for('views.change_password') }}">{{ t("Change password", "Changer le mot de passe") }}</a>
-  {% if not me.totp_enabled %} · <a href="{{ url_for('views.two_step_setup') }}">{{ t("Two-step sign-in", "Connexion en deux étapes") }}</a>{% endif %}</p>
+  · {% if me.totp_enabled %}<a href="{{ url_for('views.two_step_change') }}">{{ t("Change authenticator", "Changer d’authentificateur") }}</a>{% else %}<a href="{{ url_for('views.two_step_setup') }}">{{ t("Two-step sign-in", "Connexion en deux étapes") }}</a>{% endif %}</p>
 <form method="post" action="{{ url_for('views.sign_out') }}" class="hint"><input type="hidden" name="csrf" value="{{ csrf }}">
   <button class="linklike">{{ t("Sign out", "Se déconnecter") }}</button></form>
 {% endblock %}

@@ -106,3 +106,10 @@ def test_arriving_from_belcentra_signs_out_there_too(central_app, client):
     assert client.post("/logout").headers["Location"] == "https://acc.example/signed-out"
     login(client, "alice@test.com")  # the condo's own sign-in page: stays here
     assert "acc.example" not in client.post("/logout").headers["Location"]
+
+
+def test_belcentra_links_shown_to_people_who_came_from_there(central_app, client):
+    central_app.config["CENTRAL_LOGIN"] = False
+    client.get(f"/auth/handoff?pass={make_pass(nonce='n-7')}")
+    page = client.get("/account").data.decode()
+    assert "acc.example/two-step/change" in page and "acc.example/condos?all=1" in page

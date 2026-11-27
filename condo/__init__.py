@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request
+from flask import Flask, request, session
 
 from .extensions import csrf, db, login_manager
 
@@ -157,7 +157,7 @@ def create_app(test_config=None):
 
         from .navigation import back_link
         return {"condo_name": app.config["CONDO_NAME"], "ephemeral_db": app.config["EPHEMERAL_DB"], "read_only": app.config["READ_ONLY"],
-                "central_login": central.enabled(app), "accounts_url": app.config["ACCOUNTS_URL"],
+                "central_login": central.enabled(app) or bool(session.get("via_central")), "accounts_url": app.config["ACCOUNTS_URL"],
                 "demo": app.config.get("DEMO"),
                 "back": back_link(), "unread": _unread(),
                 "today": date.today(), "nav_board": _nav_board(),

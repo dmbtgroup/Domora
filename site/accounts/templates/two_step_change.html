@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block box %}
+<h1>{{ t("Change authenticator", "Changer d’authentificateur") }}</h1>
+<p class="sub">{{ t("Confirm it's you, then scan a new code with your authenticator app.", "Confirmez que c’est bien vous, puis balayez un nouveau code avec votre application d’authentification.") }}</p>
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label class="field">{{ t("Password", "Mot de passe") }}<input type="password" name="password" required autofocus autocomplete="current-password"></label>
+  <label class="field">{{ t("Current 6-digit code or a backup code", "Code actuel à 6 chiffres ou un code de secours") }}<input name="code" inputmode="numeric" autocomplete="one-time-code" required class="code-input"></label>
+  <button class="btn-full">{{ t("Continue", "Continuer") }}</button>
+</form>
+<p class="hint"><a href="{{ url_for('views.condos') }}">{{ t("Back", "Retour") }}</a></p>
+{% endblock %}

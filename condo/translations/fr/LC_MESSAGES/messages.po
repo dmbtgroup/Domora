@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-27 02:33+0000\n"
+"POT-Creation-Date: 2026-11-27 14:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -911,6 +911,9 @@ msgstr "Certificat (PDF ou photo, 4 Mo maximum)"
 
 msgid "Change"
 msgstr "Modifier"
+
+msgid "Change authenticator"
+msgstr "Changer d’authentificateur"
 
 msgid "Change my vote"
 msgstr "Modifier mon vote"
