@@ -25,6 +25,13 @@ def central_app(app, monkeypatch):
     return app
 
 
+@pytest.fixture
+def admin_client(central_app, client):
+    """With central sign-in on, the board member arrives from belcentra.com."""
+    client.get(f"/auth/handoff?pass={make_pass(email='admin@test.com', nonce='n-admin', lang='en')}")
+    return client
+
+
 def make_pass(**over):
     data = {"email": "alice@test.com", "name": "Alice", "aud": "condo5077", "nonce": "n-1", "admin": False, "lang": "fr"}
     data.update(over)
@@ -56,8 +63,10 @@ def test_belcentra_admin_gets_an_admin_account_here(central_app, client):
 
 def test_sign_in_and_out_go_through_belcentra(central_app, client):
     assert client.get("/login").headers["Location"] == "https://acc.example/sign-in"
-    assert client.get("/login?local=1").status_code == 200  # emergency fallback
-    login(client, "alice@test.com")
+    assert client.get("/login?local=1").headers["Location"] == "https://acc.example/sign-in"  # no way around it
+    assert client.post("/login", data={"email": "alice@test.com", "password": "password"}).headers["Location"] == "https://acc.example/sign-in"
+    assert client.get("/units/").status_code == 302  # still signed out
+    client.get(f"/auth/handoff?pass={make_pass(nonce='n-9')}")
     assert client.post("/logout").headers["Location"] == "https://acc.example/signed-out"
 
 

@@ -24,7 +24,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard.index"))
     from .. import central
-    if central.enabled() and request.method == "GET" and not request.args.get("local"):
+    if central.enabled():  # belcentra.com is the only way in: no password sign-in here at all
         return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/sign-in")
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
