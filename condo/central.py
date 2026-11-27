@@ -66,7 +66,14 @@ def push_members(with_passwords=()):
     if not configured():
         return None
     status, data = _call("/api/members/sync", {"members": members(with_passwords)})
-    return data.get("members") if status == 200 else None
+    if status != 200:
+        return None
+    need = set(data.get("need_passwords") or ()) - (set() if with_passwords == "all" else set(with_passwords))
+    if need:  # belcentra.com has no password yet for these: send their current ones, once
+        status, data = _call("/api/members/sync", {"members": members(need)})
+        if status != 200:
+            return None
+    return data.get("members")
 
 
 def set_password(user):

@@ -57,7 +57,9 @@ def sync_members():
             m.active = False
     record("member-sync", None, f"{slug}: {len(listed)} listed")
     db.session.commit()
-    return jsonify(ok=True, members=len(listed))
+    # Accounts still without a password: the condo sends those hashes once (first move to central sign-in).
+    need = sorted(e for e, m in listed.items() if m.active and not m.account.password_hash)
+    return jsonify(ok=True, members=len(listed), need_passwords=need)
 
 
 @bp.post("/password")

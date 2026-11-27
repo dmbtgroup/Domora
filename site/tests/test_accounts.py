@@ -185,3 +185,21 @@ def test_signing_out_of_a_condo_ends_the_belcentra_session(app):
     sign_in(c, "o@x.example")
     assert c.get("/signed-out").headers["Location"].endswith("/sign-in")
     assert c.get("/condos").headers["Location"].startswith("/sign-in")
+
+
+def test_sync_asks_for_missing_passwords_once(app):
+    c = app.test_client()
+    r = _api(c, "/api/members/sync", "condo5077", "k-5077", {"members": [{"email": "a@x.example", "role": "Owner"}]})
+    assert r.get_json()["need_passwords"] == ["a@x.example"]
+    from werkzeug.security import generate_password_hash
+    m = {"email": "a@x.example", "role": "Owner", "password_hash": generate_password_hash("their own pw 1")}
+    assert _api(c, "/api/members/sync", "condo5077", "k-5077", {"members": [m]}).get_json()["need_passwords"] == []
+
+
+def test_platform_admin_from_settings(monkeypatch):
+    monkeypatch.setenv("PLATFORM_ADMIN_EMAIL", "Admin@Belcentra.example")
+    monkeypatch.setenv("PLATFORM_ADMIN_PASSWORD", "first password 1")
+    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite://", "SECRET_KEY": "t", "CONDOS": CONDOS})
+    with app.app_context():
+        acc = db.session.scalar(db.select(Account))
+        assert acc.email == "admin@belcentra.example" and acc.is_platform_admin and acc.must_change_password

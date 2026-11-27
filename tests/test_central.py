@@ -84,3 +84,16 @@ def test_board_reset_refused_for_people_in_other_condos(central_app, admin_clien
 def test_off_by_default(app, client):
     assert client.get("/login").status_code == 200
     assert client.get(f"/auth/handoff?pass={make_pass()}").status_code == 404
+
+
+def test_missing_passwords_are_sent_once_when_asked(app, monkeypatch):
+    app.config.update(CONDO_SLUG="condo5077", BELCENTRA_KEY=KEY)
+    sent = []
+
+    def fake_call(path, payload):
+        sent.append(payload)
+        need = [] if any("password_hash" in m for m in payload["members"]) else ["alice@test.com"]
+        return 200, {"members": len(payload["members"]), "need_passwords": need}
+    monkeypatch.setattr(central, "_call", fake_call)
+    assert central.push_members() == 3
+    assert len(sent) == 2 and [m["email"] for m in sent[1]["members"] if "password_hash" in m] == ["alice@test.com"]

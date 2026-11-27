@@ -68,4 +68,21 @@ def create_app(test_config=None):
 
     with app.app_context():
         db.create_all()
+        _ensure_platform_admin()
     return app
+
+
+def _ensure_platform_admin():
+    """PLATFORM_ADMIN_EMAIL / PLATFORM_ADMIN_PASSWORD: create the Belcentra administrator once, if missing."""
+    from .models import Account
+    email = (os.environ.get("PLATFORM_ADMIN_EMAIL") or "").strip().lower()
+    password = os.environ.get("PLATFORM_ADMIN_PASSWORD") or ""
+    if not email or len(password) < 10:
+        return
+    acc = db.session.scalar(db.select(Account).where(Account.email == email))
+    if acc is None:
+        acc = Account(email=email, name="Belcentra", is_platform_admin=True, must_change_password=True)
+        acc.set_password(password)
+        db.session.add(acc)
+    acc.is_platform_admin = True
+    db.session.commit()
