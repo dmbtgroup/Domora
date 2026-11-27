@@ -25,7 +25,7 @@ jobs:
           python-version: "3.13"
       - name: Test the account service
         working-directory: site
-        run: pip install -q -r requirements.txt && python -m pytest -q
+        run: pip install -q -r requirements.txt pytest && python -m pytest -q
       - run: npm install --global vercel@latest
       - name: Deploy site/
         run: vercel deploy site --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
