@@ -188,7 +188,7 @@ def test_signing_out_of_a_condo_ends_the_belcentra_session(app):
     add("o@x.example", memberships=[("condo5077", "Owner", False)])
     c = app.test_client()
     sign_in(c, "o@x.example")
-    assert c.get("/signed-out").headers["Location"].endswith("/sign-in")
+    assert c.get("/signed-out").headers["Location"] == "/"  # belcentra.com home page
     assert c.get("/condos").headers["Location"].startswith("/sign-in")
 
 
@@ -278,3 +278,11 @@ def test_terms_must_be_accepted_once_per_version(app):
     for path in ("/terms", "/privacy"):  # public pages, both languages
         page = c.get(path).data.decode()
         assert "support@belcentra.com" in page and "data-fr" in page
+
+
+def test_sign_out_goes_to_the_home_page(app):
+    add("o@x.example", memberships=[("condo5077", "Owner", False)])
+    c = app.test_client()
+    sign_in(c, "o@x.example")
+    assert post(c, "/sign-out").headers["Location"] == "/"
+    assert c.get("/condos").headers["Location"].startswith("/sign-in")

@@ -256,8 +256,7 @@ def sign_out():
         record("sign-out", acc)
         db.session.commit()
     session.clear()
-    flash(t("You are signed out.", "Vous êtes déconnecté."), "info")
-    return redirect(url_for("views.sign_in"))
+    return redirect(url_for("views.home"))
 
 
 @bp.get("/signed-out")
@@ -268,8 +267,7 @@ def signed_out():
         record("sign-out", acc, "from a condo")
         db.session.commit()
     session.clear()
-    flash(t("You are signed out.", "Vous êtes déconnecté."), "info")
-    return redirect(url_for("views.sign_in"))
+    return redirect(url_for("views.home"))
 
 
 # --- condos ----------------------------------------------------------------------------------------------------
