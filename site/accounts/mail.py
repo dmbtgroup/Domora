@@ -1,4 +1,4 @@
-"""Emails from no-reply@belcentra.com through Resend; without an API key they are only logged."""
+"""Emails from no-reply@belcentra.com through Resend. Nothing is sent unless MAIL_ENABLED=1 and an API key is set."""
 import json
 import urllib.request
 
@@ -7,8 +7,8 @@ from flask import current_app
 
 def send(to, subject, text):
     key = current_app.config.get("RESEND_API_KEY")
-    if not key:
-        current_app.logger.info("Email not sent (no RESEND_API_KEY): to=%s subject=%s", to, subject)
+    if not (key and current_app.config.get("MAIL_ENABLED")):
+        current_app.logger.info("Email not sent (email is off): subject=%s", subject)
         current_app.extensions.setdefault("sent_mail", []).append({"to": to, "subject": subject, "text": text})
         return False
     body = json.dumps({"from": current_app.config["MAIL_FROM"], "to": [to], "subject": subject, "text": text}).encode()

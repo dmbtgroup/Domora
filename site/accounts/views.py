@@ -265,6 +265,8 @@ def _reset_serializer():
 
 @bp.route("/password/forgot", methods=["GET", "POST"])
 def forgot():
+    if not current_app.config.get("MAIL_ENABLED"):
+        return render_template("forgot.html", mail_off=True)
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         acc = db.session.scalar(db.select(Account).where(Account.email == email))

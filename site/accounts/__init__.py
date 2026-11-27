@@ -53,6 +53,7 @@ def create_app(test_config=None):
         SESSION_COOKIE_SECURE=on_vercel, SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
         PERMANENT_SESSION_LIFETIME=timedelta(days=30),
         CONDOS=json.loads(os.environ.get("CONDOS") or "{}"),
+        MAIL_ENABLED=os.environ.get("MAIL_ENABLED") == "1",
         RESEND_API_KEY=os.environ.get("RESEND_API_KEY", ""),
         MAIL_FROM=os.environ.get("MAIL_FROM", "Belcentra <no-reply@belcentra.com>"),
         PUBLIC_URL=os.environ.get("PUBLIC_URL", "https://belcentra.com"),

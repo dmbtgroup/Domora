@@ -17,7 +17,8 @@ CONDOS = {"condo5077": {"name": "Condo 5077", "url": "https://condo5077.example"
 
 @pytest.fixture
 def app():
-    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite://", "SECRET_KEY": "test", "CONDOS": CONDOS})
+    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite://", "SECRET_KEY": "test", "CONDOS": CONDOS,
+                      "MAIL_ENABLED": True})
     with app.app_context():
         db.create_all()
         yield app
@@ -203,3 +204,17 @@ def test_platform_admin_from_settings(monkeypatch):
     with app.app_context():
         acc = db.session.scalar(db.select(Account))
         assert acc.email == "admin@belcentra.example" and acc.is_platform_admin and acc.must_change_password
+
+
+def test_email_off_sends_nothing(app):
+    app.config["MAIL_ENABLED"] = False
+    app.config["RESEND_API_KEY"] = "re_test"
+    add("p@x.example")
+    c = app.test_client()
+    page = c.get("/password/forgot").get_data(as_text=True)
+    assert "board member" in page and 'name="email"' not in page
+    post(c, "/password/forgot", email="p@x.example")
+    from accounts.mail import send
+    with app.test_request_context():
+        assert send("p@x.example", "s", "t") is False
+    assert not app.extensions.get("sent_mail") or all(m["subject"] == "s" for m in app.extensions["sent_mail"])
