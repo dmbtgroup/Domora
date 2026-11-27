@@ -142,8 +142,9 @@ def sign_in_code():
 @signed_in
 def two_step_setup():
     acc = _current()
-    secret = session.get("totp_setup") or pyotp.random_base32()
-    session["totp_setup"] = secret
+    if request.method == "GET" or "totp_setup" not in session:
+        session["totp_setup"] = pyotp.random_base32()  # a fresh key each time the page opens
+    secret = session["totp_setup"]
     if request.method == "POST":
         if pyotp.TOTP(secret).verify(request.form.get("code", "").replace(" ", ""), valid_window=1):
             acc.totp_secret, acc.totp_enabled = secret, True
@@ -155,8 +156,9 @@ def two_step_setup():
         flash(t("That code didn't work. Check your phone's time and try the newest code.",
                 "Ce code n’a pas fonctionné. Vérifiez l’heure de votre téléphone et essayez le plus récent."), "error")
     uri = pyotp.TOTP(secret).provisioning_uri(name=acc.email, issuer_name="Belcentra")
-    qr = segno.make(uri, error="m").svg_inline(scale=5, dark="#2A211B", light="#ffffff")
-    return render_template("two_step_setup.html", qr=qr, secret=secret, required=acc.needs_two_step)
+    qr = segno.make(uri, error="m").svg_inline(scale=5, dark="#2A211B", light="#ffffff", omitsize=True)
+    key = " ".join(secret[i:i + 4] for i in range(0, len(secret), 4)).lower()  # lowercase: no O/0 mix-up
+    return render_template("two_step_setup.html", qr=qr, secret=key, required=acc.needs_two_step)
 
 
 @bp.post("/sign-out")

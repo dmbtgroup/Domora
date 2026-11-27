@@ -114,7 +114,7 @@ body::after { content: ""; position: fixed; right: -60px; bottom: -50px; width: 
 .msg-error { background: #FDECEA; color: #8A1C12; }
 .msg-info, .msg-success { background: var(--gold-soft); color: var(--gold-ink); }
 .steps { padding-inline-start: 20px; margin: 0 0 12px; } .steps li { margin-bottom: 10px; }
-.qr { margin: 10px 0 6px; } .qr svg { width: 180px; height: 180px; }
+.qr { margin: 10px 0 6px; } .qr svg { width: 200px; height: 200px; display: block; }
 .small { font-size: .85rem; } .muted { color: var(--muted); }
 .codes { columns: 2; list-style: none; padding: 0; margin: 0 0 18px; } .codes li { padding: 4px 0; }
 a.btn-full { text-decoration: none; } a.btn-full:hover { text-decoration: none; filter: brightness(1.05); }
