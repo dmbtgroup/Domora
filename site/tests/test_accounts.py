@@ -9,7 +9,8 @@ import pytest
 from itsdangerous import URLSafeTimedSerializer
 
 from accounts import create_app
-from accounts.models import Account, Membership, db
+from accounts.models import Account, Membership, TermsAcceptance, db
+from accounts.views import TERMS_VERSION
 
 CONDOS = {"condo5077": {"name": "Condo 5077", "url": "https://condo5077.example", "key": "k-5077"},
           "jardins": {"name": "Les Jardins du Parc", "url": "https://jardins.example", "key": "k-jardins"}}
@@ -25,13 +26,16 @@ def app():
         db.session.remove()
 
 
-def add(email, password="correct horse 1", memberships=(), admin=False):
+def add(email, password="correct horse 1", memberships=(), admin=False, terms=True):
     acc = Account(email=email, name=email.split("@")[0].title(), is_platform_admin=admin)
     acc.set_password(password)
     for condo, role, board in memberships:
         acc.memberships.append(Membership(condo=condo, role=role, board=board))
     db.session.add(acc)
     db.session.commit()
+    if terms:
+        db.session.add(TermsAcceptance(account_id=acc.id, version=TERMS_VERSION))
+        db.session.commit()
     return acc
 
 
@@ -258,3 +262,19 @@ def test_change_authenticator_needs_password_and_code(app):
     page = post(c, "/two-step/setup", code=pyotp.TOTP(new).now()).data.decode()
     assert db.session.get(Account, acc.id).totp_secret == new and page.count("<li") >= 10
     assert c.get("/two-step/setup").headers["Location"].endswith("/two-step/change")  # one change per confirmation
+
+
+def test_terms_must_be_accepted_once_per_version(app):
+    acc = add("owner@x.example", memberships=[("condo5077", "owner", False)], terms=False)
+    c = app.test_client()
+    assert sign_in(c, "owner@x.example").headers["Location"].endswith("/condos")
+    assert c.get("/condos").headers["Location"].endswith("/terms/accept")
+    assert c.get("/go/condo5077").headers["Location"].endswith("/terms/accept")  # no way around it
+    post(c, "/terms/accept")  # box not ticked
+    assert c.get("/condos").headers["Location"].endswith("/terms/accept")
+    post(c, "/terms/accept", accept="on")
+    assert "condo5077" in c.get("/condos").headers["Location"]
+    assert db.session.scalar(db.select(TermsAcceptance).where(TermsAcceptance.account_id == acc.id)).version == TERMS_VERSION
+    for path in ("/terms", "/privacy"):  # public pages, both languages
+        page = c.get(path).data.decode()
+        assert "support@belcentra.com" in page and "data-fr" in page

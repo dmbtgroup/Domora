@@ -12,11 +12,13 @@ from itsdangerous import BadSignature, URLSafeTimedSerializer
 from . import t
 from .handoff import condo, make_pass
 from .mail import send
-from .models import Account, db, record, utcnow
+from .models import Account, TermsAcceptance, db, record, utcnow
 
 bp = Blueprint("views", __name__)
 MAX_FAILURES, LOCK_MINUTES = 5, 15
 DEVICE_COOKIE, DEVICE_DAYS = "bc_device", 30
+# Raise TERMS_VERSION whenever the terms or the privacy policy change: everyone accepts again at next sign-in.
+TERMS_VERSION, TERMS_UPDATED = "2026-11-27", ("November 27, 2026", "27 novembre 2026")
 
 
 # --- plumbing ----------------------------------------------------------------------------------------------
@@ -112,6 +114,26 @@ def home():
 @bp.get("/pricing")
 def pricing():
     return render_template("pricing.html")
+
+
+def _legal(doc, title_en, title_fr):
+    return render_template("legal.html", doc=doc, title_en=title_en, title_fr=title_fr,
+                           updated_en=TERMS_UPDATED[0], updated_fr=TERMS_UPDATED[1])
+
+
+@bp.get("/terms")
+def terms():
+    return _legal("terms", "Terms of use", "Conditions d’utilisation")
+
+
+@bp.get("/privacy")
+def privacy():
+    return _legal("privacy", "Privacy policy", "Politique de confidentialité")
+
+
+def _accepted_terms(acc):
+    return db.session.scalar(db.select(TermsAcceptance.id).where(
+        TermsAcceptance.account_id == acc.id, TermsAcceptance.version == TERMS_VERSION)) is not None
 
 
 # --- sign-in -------------------------------------------------------------------------------------------------
@@ -258,7 +280,27 @@ def _gates(acc):
         return redirect(url_for("views.two_step_setup"))
     if acc.must_change_password:
         return redirect(url_for("views.change_password"))
+    if not _accepted_terms(acc):
+        return redirect(url_for("views.accept_terms"))
     return None
+
+
+@bp.route("/terms/accept", methods=["GET", "POST"])
+@signed_in
+def accept_terms():
+    acc = _current()
+    if _accepted_terms(acc):
+        return redirect(url_for("views.condos"))
+    if request.method == "POST":
+        if request.form.get("accept"):
+            ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()
+            db.session.add(TermsAcceptance(account_id=acc.id, version=TERMS_VERSION, ip=ip[:64]))
+            record("terms-accepted", acc, TERMS_VERSION)
+            db.session.commit()
+            return redirect(url_for("views.condos"))
+        flash(t("Tick the box to accept the terms and continue.", "Cochez la case pour accepter les conditions et continuer."), "error")
+    returning = db.session.scalar(db.select(TermsAcceptance.id).where(TermsAcceptance.account_id == acc.id)) is not None
+    return render_template("accept_terms.html", returning=returning)
 
 
 def _choices(acc):

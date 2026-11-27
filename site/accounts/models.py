@@ -82,6 +82,16 @@ class Event(db.Model):
     ip = db.Column(db.String(64))
 
 
+class TermsAcceptance(db.Model):
+    """Who accepted which version of the terms of use and privacy policy, and when (kept as proof)."""
+    id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.Integer, db.ForeignKey("account.id", ondelete="CASCADE"), nullable=False, index=True)
+    version = db.Column(db.String(20), nullable=False)
+    accepted_at = db.Column(db.DateTime, nullable=False, default=utcnow)
+    ip = db.Column(db.String(64))
+    __table_args__ = (db.UniqueConstraint("account_id", "version"),)
+
+
 def record(kind, account=None, detail=None):
     from flask import has_request_context, request
     ip = (request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0].strip()

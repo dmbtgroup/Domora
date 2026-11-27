@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title_en %}Terms of use{% endblock %}{% block title_fr %}Conditions d’utilisation{% endblock %}
+{% block box %}
+<h1>{{ t("Updated terms", "Conditions mises à jour") if returning else t("Before you continue", "Avant de continuer") }}</h1>
+<p class="sub">{{ t("Please read and accept the terms of use and the privacy policy of Belcentra.", "Veuillez lire et accepter les conditions d’utilisation et la politique de confidentialité de Belcentra.") }}</p>
+<ul class="doc-links">
+  <li><a href="{{ url_for('views.terms') }}" target="_blank" rel="noopener">{{ t("Terms of use", "Conditions d’utilisation") }} ↗</a></li>
+  <li><a href="{{ url_for('views.privacy') }}" target="_blank" rel="noopener">{{ t("Privacy policy", "Politique de confidentialité") }} ↗</a></li>
+</ul>
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <div class="row"><label><input type="checkbox" name="accept" required> {{ t("I have read and I accept the terms of use and the privacy policy.", "J’ai lu et j’accepte les conditions d’utilisation et la politique de confidentialité.") }}</label></div>
+  <button class="btn-full">{{ t("Continue", "Continuer") }}</button>
+</form>
+<form method="post" action="{{ url_for('views.sign_out') }}" class="hint"><input type="hidden" name="csrf" value="{{ csrf }}">
+  <button class="linklike">{{ t("Sign out", "Se déconnecter") }}</button></form>
+{% endblock %}
