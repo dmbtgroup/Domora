@@ -20,7 +20,8 @@
     {% if central_login %}
     <p class="muted">{% trans %}Your password and two-step sign-in are managed with your Belcentra account.{% endtrans %}
       <a href="{{ accounts_url }}/account/password">{% trans %}Change password{% endtrans %}</a> ·
-      <a href="{{ accounts_url }}/two-step/change">{% trans %}Change authenticator{% endtrans %}</a></p>
+      {% if session.get('two_step_on') %}<a href="{{ accounts_url }}/two-step/change">{% trans %}Change authenticator{% endtrans %}</a>
+      {% else %}<a href="{{ accounts_url }}/two-step/setup">{% trans %}Two-step sign-in{% endtrans %}</a>{% endif %}</p>
     {% else %}
     <fieldset{% if demo %} disabled class="demo-locked"{% endif %}>
       <legend>{% if current_user.must_change_password %}{% trans %}Choose your own password (required){% endtrans %}{% else %}{% trans %}Change password (optional){% endtrans %}{% endif %}</legend>

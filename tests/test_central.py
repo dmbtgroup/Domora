@@ -112,4 +112,7 @@ def test_belcentra_links_shown_to_people_who_came_from_there(central_app, client
     central_app.config["CENTRAL_LOGIN"] = False
     client.get(f"/auth/handoff?pass={make_pass(nonce='n-7')}")
     page = client.get("/account").data.decode()
-    assert "acc.example/two-step/change" in page and "acc.example/condos?all=1" in page
+    assert "acc.example/two-step/setup" in page and "acc.example/condos?all=1" in page  # two-step not on yet
+    client.post("/logout")
+    client.get(f"/auth/handoff?pass={make_pass(nonce='n-8', two_step=True)}")
+    assert "acc.example/two-step/change" in client.get("/account").data.decode()

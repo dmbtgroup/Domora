@@ -104,6 +104,7 @@ def handoff():
         logout_user()
     login_user(user)
     session["via_central"] = True  # signing out here also signs out of belcentra.com
+    session["two_step_on"] = bool(data.get("two_step"))
     if not user.language and data.get("lang") in ("en", "fr"):
         user.language = data["lang"]
         db.session.commit()

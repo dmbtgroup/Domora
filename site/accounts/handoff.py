@@ -20,7 +20,8 @@ def make_pass(account, slug, role=""):
     """A signed pass for one person, one condo, valid a minute, usable once (the condo keeps the nonce)."""
     c = condo(slug)
     data = {"email": account.email, "name": account.name, "aud": slug, "nonce": secrets.token_urlsafe(16),
-            "admin": bool(account.is_platform_admin), "lang": account.language or ""}
+            "admin": bool(account.is_platform_admin), "lang": account.language or "",
+            "two_step": bool(account.totp_enabled)}
     token = URLSafeTimedSerializer(c["key"], salt=SALT).dumps(data)
     return c["url"].rstrip("/") + "/auth/handoff?pass=" + token
 
