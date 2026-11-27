@@ -703,3 +703,4 @@ td.row-del, th.row-del { width: 1%; padding-left: 0; text-align: right; }
 .demo-pick p { margin: .6rem 0 0; }
 .demo-locked { opacity: .45; pointer-events: none; user-select: none; }
 .demo-note { margin: .4rem 0 .8rem; padding: .5rem .8rem; border-radius: 8px; background: var(--gold-soft); color: var(--gold-ink); font-size: .9rem; }
+.page-top-switch { margin-inline-start: .8rem; color: var(--muted); font-size: .85rem; font-weight: 600; }

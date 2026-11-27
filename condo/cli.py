@@ -38,6 +38,18 @@ def bootstrap():
 
 
 def register_cli(app):
+    @app.cli.command("push-accounts")
+    @click.option("--with-passwords", is_flag=True, help="Also send password hashes (first move to central sign-in).")
+    def push_accounts(with_passwords):
+        """Send this condo's sign-ins to belcentra.com."""
+        from . import central
+        if not central.configured():
+            raise click.ClickException("Set CONDO_SLUG and BELCENTRA_KEY first.")
+        count = central.push_members(with_passwords="all" if with_passwords else ())
+        if count is None:
+            raise click.ClickException("belcentra.com could not be reached or refused the call.")
+        click.echo(f"belcentra.com recorded {count} sign-ins.")
+
     @app.cli.command("init-db")
     @click.option("--drop", is_flag=True, help="Drop all existing tables first.")
     def init_db(drop):

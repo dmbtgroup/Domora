@@ -26,6 +26,9 @@ jobs:
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
+      - name: belcentra.com account service tests
+        working-directory: site
+        run: pip install -q -r requirements.txt && python -m pytest -q
 
   deploy:
     needs: test

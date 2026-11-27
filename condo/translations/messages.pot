@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-26 14:42+0000\n"
+"POT-Creation-Date: 2026-11-27 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,6 +91,12 @@ msgstr ""
 
 #, python-format
 msgid "%(name)s added."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(name)s also uses Belcentra for other condos, so only they can change "
+"their password: “Forgot password?” on the Belcentra sign-in page."
 msgstr ""
 
 #, python-format
@@ -945,6 +951,9 @@ msgid "Change"
 msgstr ""
 
 msgid "Change my vote"
+msgstr ""
+
+msgid "Change password"
 msgstr ""
 
 msgid "Change password (optional)"
@@ -3590,6 +3599,9 @@ msgstr ""
 msgid "Submitted"
 msgstr ""
 
+msgid "Switch condo"
+msgstr ""
+
 msgid "Sync preview"
 msgstr ""
 
@@ -3650,6 +3662,9 @@ msgid "That file is too large (the limit is 4 MB)."
 msgstr ""
 
 msgid "That request could not be processed."
+msgstr ""
+
+msgid "That sign-in link has expired. Please sign in again."
 msgstr ""
 
 msgid "That time overlaps an existing booking."
@@ -4230,6 +4245,11 @@ msgstr ""
 msgid ""
 "Your demo session ended after an hour without activity, and your changes "
 "were reset. Choose a role to start again."
+msgstr ""
+
+msgid ""
+"Your password and two-step sign-in are managed with your Belcentra "
+"account."
 msgstr ""
 
 msgid ""

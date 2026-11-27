@@ -109,6 +109,8 @@ def set_password(user_id):
         user.set_password(password)
         user.must_change_password = bool(request.form.get("must_change"))
         db.session.commit()
+        if not _central_password(user):
+            return redirect(url_for("residents.edit", user_id=user.id))
         return render_template("residents/password_done.html", user=user,
                                password=password if generated else None)
     return render_template("residents/password.html", user=user, form={"must_change": True})
@@ -128,7 +130,19 @@ def reset_password(user_id):
     user.set_password(password)
     user.must_change_password = True
     db.session.commit()
+    if not _central_password(user):
+        return redirect(url_for("residents.edit", user_id=user.id))
     return render_template("residents/password_done.html", user=user, password=password, reset=True)
+
+
+def _central_password(user):
+    """Pass the new password on to belcentra.com; refused when this person's sign-in also opens other condos."""
+    from .. import central
+    if central.set_password(user):
+        return True
+    flash(_("%(name)s also uses Belcentra for other condos, so only they can change their password: "
+            "“Forgot password?” on the Belcentra sign-in page.", name=user.name), "error")
+    return False
 
 
 def _role_choices(user):

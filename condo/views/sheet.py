@@ -164,6 +164,11 @@ def cron():
         db.session.rollback()
         current_app.logger.exception("Fee renewal check failed")
     try:
+        from .. import central
+        central.push_members()  # keeps belcentra.com's list of sign-ins current, whatever changed it
+    except Exception:
+        current_app.logger.exception("Sending sign-ins to belcentra.com failed")
+    try:
         status = sheet_sync.run_auto_sync()
         Setting.put("sheet_last_error", None)
         db.session.commit()

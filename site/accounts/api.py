@@ -31,24 +31,33 @@ def _account(email, name=""):
     return acc
 
 
-@bp.post("/members")
-def members():
-    """Add or update one person's place in the calling condo (and create their account if new)."""
+@bp.post("/members/sync")
+def sync_members():
+    """The calling condo's complete list of sign-ins. Everyone listed gets an account (created if new) and
+    their place in this condo; anyone this condo no longer lists loses access to it. Password hashes, when
+    sent, only fill in accounts that don't have a password yet (first move to central sign-in)."""
     slug, data = _payload()
-    acc = _account(data.get("email"), data.get("name"))
-    if data.get("name"):
-        acc.name = data["name"]
-    if data.get("password_hash") and not acc.password_hash:
-        acc.password_hash = data["password_hash"]  # first sign-in account: keeps the condo's password
-        acc.must_change_password = bool(data.get("must_change"))
-    m = next((m for m in acc.memberships if m.condo == slug), None)
-    if m is None:
-        m = Membership(condo=slug)
-        acc.memberships.append(m)
-    m.role, m.board, m.active = (data.get("role") or "")[:80], bool(data.get("board")), bool(data.get("active", True))
-    record("member-sync", acc, f"{slug}: {m.role} active={m.active}")
+    listed = {}
+    for item in data.get("members", []):
+        acc = _account(item.get("email"), item.get("name"))
+        if item.get("name"):
+            acc.name = item["name"]
+        if item.get("password_hash") and not acc.password_hash:
+            acc.password_hash = item["password_hash"]
+            acc.must_change_password = bool(item.get("must_change"))
+        m = next((m for m in acc.memberships if m.condo == slug), None)
+        if m is None:
+            m = Membership(condo=slug)
+            acc.memberships.append(m)
+        m.role, m.board, m.active = (item.get("role") or "")[:80], bool(item.get("board")), bool(item.get("active", True))
+        listed[acc.email] = m
+    db.session.flush()
+    for m in db.session.scalars(db.select(Membership).where(Membership.condo == slug)):
+        if m.account.email not in listed and m.active:
+            m.active = False
+    record("member-sync", None, f"{slug}: {len(listed)} listed")
     db.session.commit()
-    return jsonify(ok=True)
+    return jsonify(ok=True, members=len(listed))
 
 
 @bp.post("/password")

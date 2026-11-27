@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-26 14:42+0000\n"
+"POT-Creation-Date: 2026-11-27 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -89,6 +89,10 @@ msgstr "%(name)s a été ajouté(e) à l’unité %(number)s."
 #, python-format
 msgid "%(name)s added."
 msgstr "%(name)s a été ajouté(e)."
+
+#, python-format
+msgid "%(name)s also uses Belcentra for other condos, so only they can change their password: “Forgot password?” on the Belcentra sign-in page."
+msgstr "%(name)s utilise aussi Belcentra pour d’autres copropriétés : seule cette personne peut changer son mot de passe, avec « Mot de passe oublié? » sur la page de connexion Belcentra."
 
 #, python-format
 msgid "%(name)s booked for %(start)s–%(end)s."
@@ -910,6 +914,9 @@ msgstr "Modifier"
 
 msgid "Change my vote"
 msgstr "Modifier mon vote"
+
+msgid "Change password"
+msgstr "Changer le mot de passe"
 
 msgid "Change password (optional)"
 msgstr "Changer le mot de passe (facultatif)"
@@ -3475,6 +3482,9 @@ msgstr "Envoyer la demande"
 msgid "Submitted"
 msgstr "Envoyé"
 
+msgid "Switch condo"
+msgstr "Changer de copropriété"
+
 msgid "Sync preview"
 msgstr "Aperçu de la synchronisation"
 
@@ -3536,6 +3546,9 @@ msgstr "Ce fichier est trop volumineux (la limite est de 4 Mo)."
 
 msgid "That request could not be processed."
 msgstr "Cette requête n’a pas pu être traitée."
+
+msgid "That sign-in link has expired. Please sign in again."
+msgstr "Ce lien de connexion a expiré. Veuillez vous reconnecter."
 
 msgid "That time overlaps an existing booking."
 msgstr "Cette plage chevauche une réservation existante."
@@ -4063,6 +4076,9 @@ msgstr "Votre décision"
 
 msgid "Your demo session ended after an hour without activity, and your changes were reset. Choose a role to start again."
 msgstr "Votre session de démonstration a pris fin après une heure d’inactivité et vos changements ont été réinitialisés. Choisissez un rôle pour recommencer."
+
+msgid "Your password and two-step sign-in are managed with your Belcentra account."
+msgstr "Votre mot de passe et la connexion en deux étapes sont gérés avec votre compte Belcentra."
 
 msgid "Your password was set by the board. Enter it as the current password, then choose your own."
 msgstr "Votre mot de passe a été défini par le conseil. Entrez-le comme mot de passe actuel, puis choisissez le vôtre."

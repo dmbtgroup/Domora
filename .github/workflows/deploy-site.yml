@@ -1,4 +1,4 @@
-# Deploys the public Belcentra home page (site/, belcentra.com) to the Vercel project belcentra-site.
+# Deploys belcentra.com (site/: public pages and the account service) to the Vercel project belcentra-site.
 # Runs when site/ changes on master, or on a push to a site-release/<anything> branch.
 name: Deploy belcentra.com
 
@@ -20,6 +20,12 @@ jobs:
       VERCEL_PROJECT_ID: prj_58ATbqAkI8jKLquB1BtE6jtzibH7
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Test the account service
+        working-directory: site
+        run: pip install -q -r requirements.txt && python -m pytest -q
       - run: npm install --global vercel@latest
       - name: Deploy site/
         run: vercel deploy site --prod --yes --token=${{ secrets.VERCEL_TOKEN }}

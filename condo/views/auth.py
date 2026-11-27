@@ -23,6 +23,9 @@ def _safe_next(target):
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard.index"))
+    from .. import central
+    if central.enabled() and request.method == "GET" and not request.args.get("local"):
+        return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/sign-in")
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
@@ -64,10 +67,55 @@ def demo_sign_in():
     return redirect(url_for("dashboard.index"))
 
 
+@bp.route("/auth/handoff")
+def handoff():
+    """Arriving from belcentra.com with a one-time pass: signed for this condo, under a minute old, unused."""
+    from itsdangerous import BadSignature, URLSafeTimedSerializer
+    from sqlalchemy.exc import IntegrityError
+    from .. import central
+    from ..models import HandoffNonce
+    if not central.configured():
+        abort(404)
+    try:
+        data = URLSafeTimedSerializer(current_app.config["BELCENTRA_KEY"], salt=central.PASS_SALT).loads(
+            request.args.get("pass", ""), max_age=60)
+    except BadSignature:
+        data = None
+    if not data or data.get("aud") != current_app.config["CONDO_SLUG"] or not data.get("nonce"):
+        flash(_("That sign-in link has expired. Please sign in again."), "error")
+        return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/sign-in")
+    try:
+        db.session.add(HandoffNonce(nonce=str(data["nonce"])[:64]))
+        db.session.commit()
+    except IntegrityError:  # already used
+        db.session.rollback()
+        abort(403)
+    email = (data.get("email") or "").strip().lower()
+    user = db.session.scalar(db.select(User).where(db.func.lower(User.email) == email))
+    if user is None and data.get("admin"):
+        # A Belcentra administrator: gets an administrator account here on first visit.
+        user = User(email=email, name=data.get("name") or email, role="admin")
+        user.password_hash = "!central"  # never signs in with a password here
+        db.session.add(user)
+        db.session.commit()
+    if user is None or not user.active:
+        abort(403)
+    if current_user.is_authenticated:
+        logout_user()
+    login_user(user)
+    if not user.language and data.get("lang") in ("en", "fr"):
+        user.language = data["lang"]
+        db.session.commit()
+    return redirect(url_for("dashboard.index"))
+
+
 @bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
+    from .. import central
+    if central.enabled():
+        return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/signed-out")
     if current_app.config.get("DEMO"):
         from .. import sandbox
         sandbox.end()
@@ -80,6 +128,9 @@ def logout():
 @bp.before_app_request
 def require_new_password():
     """Someone whose password was set by the board must choose their own before going on."""
+    from .. import central
+    if central.enabled():
+        return None  # belcentra.com makes them choose their own password
     if (current_user.is_authenticated and getattr(current_user, "must_change_password", False)
             and request.endpoint not in ("auth.account", "auth.logout", "static")):
         flash(_("Please choose your own password to continue."), "info")
@@ -94,6 +145,9 @@ def account():
         new = request.form.get("new_password", "")
         confirm = request.form.get("confirm_password", "")
         phone = request.form.get("phone", "").strip()
+        from .. import central
+        if (new or current) and central.enabled():
+            return redirect(current_app.config["ACCOUNTS_URL"].rstrip("/") + "/account/password")
         if (new or current) and current_app.config.get("DEMO"):
             flash(_("Passwords can't be changed in the demo."), "error")
             return redirect(url_for("auth.account"))

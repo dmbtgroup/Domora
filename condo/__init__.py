@@ -64,7 +64,11 @@ def create_app(test_config=None):
         REMEMBER_COOKIE_SECURE=on_vercel,
         MAX_CONTENT_LENGTH=4 * 1024 * 1024,  # Vercel's request body limit is 4.5 MB
         AUTO_INIT_DB=on_vercel or bool(os.environ.get("AUTO_INIT_DB")),
-        READ_ONLY=bool(os.environ.get("READ_ONLY")),  # maintenance window: pages show, nothing can be saved
+        READ_ONLY=bool(os.environ.get("READ_ONLY")),
+        CENTRAL_LOGIN=bool(os.environ.get("CENTRAL_LOGIN")),  # sign in at belcentra.com (see central.py)
+        CONDO_SLUG=os.environ.get("CONDO_SLUG", ""),
+        BELCENTRA_KEY=os.environ.get("BELCENTRA_KEY", ""),
+        ACCOUNTS_URL=os.environ.get("ACCOUNTS_URL", "https://belcentra.com"),  # maintenance window: pages show, nothing can be saved
     )
     if test_config:
         app.config.update(test_config)
@@ -75,7 +79,9 @@ def create_app(test_config=None):
     csrf.init_app(app)
     login_manager.init_app(app)
     from . import sandbox
-    sandbox.init_app(app)  # demo visitors' private copies; before anything reads the signed-in user
+    sandbox.init_app(app)
+    from . import central
+    central.init_app(app)  # demo visitors' private copies; before anything reads the signed-in user
     from . import i18n
     i18n.init_app(app)
 
@@ -142,6 +148,7 @@ def create_app(test_config=None):
 
         from .navigation import back_link
         return {"condo_name": app.config["CONDO_NAME"], "ephemeral_db": app.config["EPHEMERAL_DB"], "read_only": app.config["READ_ONLY"],
+                "central_login": central.enabled(app), "accounts_url": app.config["ACCOUNTS_URL"],
                 "demo": app.config.get("DEMO"),
                 "back": back_link(), "unread": _unread(),
                 "today": date.today(), "nav_board": _nav_board(),

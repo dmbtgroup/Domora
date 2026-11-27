@@ -96,7 +96,8 @@ document.addEventListener('keydown', function (e) {
 });
 </script>
 <div class="page-top">
-  <a class="page-top-name" href="{{ url_for('dashboard.index') }}"><img src="{{ url_for('static', filename='brand/logo-96.png') }}" alt="" class="page-top-logo">{{ condo_name }}</a>
+  <span class="page-top-left"><a class="page-top-name" href="{{ url_for('dashboard.index') }}"><img src="{{ url_for('static', filename='brand/logo-96.png') }}" alt="" class="page-top-logo">{{ condo_name }}</a>
+  {% if central_login %}<a class="page-top-switch" href="{{ accounts_url }}/condos?all=1" title="{{ _('Switch condo') }}">⇄ {% trans %}Switch condo{% endtrans %}</a>{% endif %}</span>
   <span class="page-top-right">{{ lang_switch() }}
   <a class="page-top-user" href="{{ url_for('auth.account') }}"><strong>{{ current_user.name }}</strong> <span class="tag">{{ current_user.role_label }}</span></a></span>
 </div>

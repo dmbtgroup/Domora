@@ -17,6 +17,10 @@
     {{ csrf() }}
     <h2>{% trans %}Update{% endtrans %}</h2>
     <label>{% trans %}Phone{% endtrans %} <input name="phone" value="{{ current_user.phone or '' }}"></label>
+    {% if central_login %}
+    <p class="muted">{% trans %}Your password and two-step sign-in are managed with your Belcentra account.{% endtrans %}
+      <a href="{{ accounts_url }}/account/password">{% trans %}Change password{% endtrans %}</a></p>
+    {% else %}
     <fieldset{% if demo %} disabled class="demo-locked"{% endif %}>
       <legend>{% if current_user.must_change_password %}{% trans %}Choose your own password (required){% endtrans %}{% else %}{% trans %}Change password (optional){% endtrans %}{% endif %}</legend>
       {% if current_user.must_change_password %}<p class="flash flash-info">{% trans %}Your password was set by the board. Enter it as the current password, then choose your own.{% endtrans %}</p>{% endif %}
@@ -25,6 +29,7 @@
       <label>{% trans %}New password{% endtrans %} <input type="password" name="new_password" minlength="8"></label>
       <label>{% trans %}Confirm new password{% endtrans %} <input type="password" name="confirm_password"></label>
     </fieldset>
+    {% endif %}
     <button class="btn primary">{% trans %}Save{% endtrans %}</button>
   </form>
 </div>

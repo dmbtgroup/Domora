@@ -164,14 +164,24 @@ def test_condos_sync_members_with_signed_calls(app):
     c = app.test_client()
     from werkzeug.security import generate_password_hash
     h = generate_password_hash("from the condo 1")
-    assert _api(c, "/api/members", "condo5077", "k-5077",
-                {"email": "New@x.example", "name": "New Owner", "role": "Owner", "board": False, "password_hash": h}).status_code == 200
+    member = {"email": "New@x.example", "name": "New Owner", "role": "Owner", "board": False, "password_hash": h}
+    assert _api(c, "/api/members/sync", "condo5077", "k-5077", {"members": [member]}).status_code == 200
     assert sign_in(c, "new@x.example", "from the condo 1").status_code == 302  # kept the condo's password
-    assert _api(c, "/api/members", "condo5077", "wrong-key", {"email": "x@x.example"}).status_code == 403
-    assert _api(c, "/api/members", "jardins", "k-5077", {"email": "x@x.example"}).status_code == 403
-    _api(c, "/api/members", "jardins", "k-jardins", {"email": "new@x.example", "role": "Tenant"})
+    assert _api(c, "/api/members/sync", "condo5077", "wrong-key", {"members": []}).status_code == 403
+    assert _api(c, "/api/members/sync", "jardins", "k-5077", {"members": []}).status_code == 403
+    _api(c, "/api/members/sync", "jardins", "k-jardins", {"members": [{"email": "new@x.example", "role": "Tenant"}]})
     # condo5077's board can't reset a password that also opens another condo
     resp = _api(c, "/api/password", "condo5077", "k-5077", {"email": "new@x.example", "password_hash": h, "must_change": True})
     assert resp.status_code == 409
-    _api(c, "/api/members", "jardins", "k-jardins", {"email": "new@x.example", "role": "Tenant", "active": False})
+    _api(c, "/api/members/sync", "jardins", "k-jardins", {"members": []})  # jardins no longer lists them
+    m = db.session.scalar(db.select(Membership).where(Membership.condo == "jardins"))
+    assert m.active is False
     assert _api(c, "/api/password", "condo5077", "k-5077", {"email": "new@x.example", "password_hash": h, "must_change": True}).status_code == 200
+
+
+def test_signing_out_of_a_condo_ends_the_belcentra_session(app):
+    add("o@x.example", memberships=[("condo5077", "Owner", False)])
+    c = app.test_client()
+    sign_in(c, "o@x.example")
+    assert c.get("/signed-out").headers["Location"].endswith("/sign-in")
+    assert c.get("/condos").headers["Location"].startswith("/sign-in")

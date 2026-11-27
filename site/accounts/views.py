@@ -170,6 +170,18 @@ def sign_out():
     return redirect(url_for("views.sign_in"))
 
 
+@bp.get("/signed-out")
+def signed_out():
+    """Where a condo sends people when they sign out there: end the Belcentra session too."""
+    acc = _current()
+    if acc:
+        record("sign-out", acc, "from a condo")
+        db.session.commit()
+    session.clear()
+    flash(t("You are signed out.", "Vous êtes déconnecté."), "info")
+    return redirect(url_for("views.sign_in"))
+
+
 # --- condos ----------------------------------------------------------------------------------------------------
 
 def _gates(acc):

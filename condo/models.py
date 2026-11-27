@@ -574,6 +574,12 @@ class Expense(db.Model):
         return COST_CATEGORIES[self.category_key]
 
 
+class HandoffNonce(db.Model):
+    """One-time passes from belcentra.com already used here (each works once)."""
+    nonce = db.Column(db.String(64), primary_key=True)
+    used_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+
 class Setting(db.Model):
     """Small key/value store for app-wide settings (e.g. the linked Google Sheet)."""
     key = db.Column(db.String(64), primary_key=True)
